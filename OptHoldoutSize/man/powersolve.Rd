@@ -2,9 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_aspre.R
 \name{powersolve}
 \alias{powersolve}
-\title{Fit power law curve
-Find least-squares solution: MLE of (a,b,c) under model
-y= ax^-b + c + e, e~N(0,s^2)}
+\title{Fit power law curve}
 \usage{
 powersolve(x, y, init = c(1, 1, 0.1), ...)
 }
@@ -21,7 +19,8 @@ powersolve(x, y, init = c(1, 1, 0.1), ...)
 MLE values of (a,b,c)
 }
 \description{
-Fit power law curve
+Find least-squares solution: MLE of (a,b,c) under model
+\verb{y= ax^-b + c + e; e~N(0,s^2)}
 }
 \examples{
 

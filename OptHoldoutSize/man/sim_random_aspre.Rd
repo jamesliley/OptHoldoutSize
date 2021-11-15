@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_aspre.R
 \name{sim_random_aspre}
 \alias{sim_random_aspre}
-\title{Generate random population of individuals (e.g., newly pregnant women) with given population parameters}
+\title{Simulate random dataset similar to ASPRE training data}
 \usage{
 sim_random_aspre(n, params = params_aspre)
 }
@@ -15,9 +15,8 @@ sim_random_aspre(n, params = params_aspre)
 
 }
 \description{
-Simulate random dataset similar to ASPRE training data
-}
-\details{
+Generate random population of individuals (e.g., newly pregnant women) with given population parameters
+
 Assumes independence of parameter variation. This is not a realistic assumption, but is satisfactory for our purposes.
 }
 \examples{

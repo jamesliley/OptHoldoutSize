@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_estimation.R
 \name{optimal_holdout_size}
 \alias{optimal_holdout_size}
-\title{Compute optimal holdout size for updating a predictive score given appropriate parameters of cost function}
+\title{Estimate optimal holdout size}
 \usage{
 optimal_holdout_size(
   N,
@@ -30,9 +30,8 @@ optimal_holdout_size(
 List/data frame of dimension (number of evaluations) x (4 + n_par) containing input data and results. Columns \code{size} and \code{cost} are optimal holdout size and cost at this size respectively. Parameters N, k1, theta.1, theta.2,...,theta.{n_par} are input data.
 }
 \description{
-Estimates optimal holdout size
-}
-\details{
+Compute optimal holdout size for updating a predictive score given appropriate parameters of cost function
+
 Evaluates empirical minimisation of cost function \verb{l(n;k1,N,theta) = k1 n + k2(n;theta) (N-n)}.
 
 The function will return \code{Inf} if no minimum exists. It does not check if the minimum is unique, but this can be guaranteed using the assumptions for theorem 1 in the manuscript.

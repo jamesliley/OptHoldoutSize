@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_simulation.R
 \name{split_data}
 \alias{split_data}
-\title{Split data into holdout and intervention set}
+\title{Split data}
 \usage{
 split_data(X, frac)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_simulation.R
 \name{oracle_pred}
 \alias{oracle_pred}
-\title{Estimate baseline predictions}
+\title{Generate responses}
 \usage{
 oracle_pred(X, coefs, num_vars = 3, noise = TRUE)
 }
@@ -19,7 +19,7 @@ oracle_pred(X, coefs, num_vars = 3, noise = TRUE)
 
 }
 \description{
-Generate response
+Probably for deprecation
 }
 \examples{
 

@@ -2,8 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_aspre.R
 \name{sens10}
 \alias{sens10}
-\title{Computes sensitivity of a risk score at a threshold at which
-10\% of samples (or some proportion pi_int) are above it.}
+\title{Sensitivity at theshold quantile 10\%}
 \usage{
 sens10(Y, Ypred, pi_int = 0.1)
 }
@@ -18,7 +17,7 @@ sens10(Y, Ypred, pi_int = 0.1)
 Sensitivity at this threshold
 }
 \description{
-Sensitivity at theshold quantile 10\%
+Computes sensitivity of a risk score at a threshold at which 10\% of samples (or some proportion pi_int) are above the threshold.
 }
 \examples{
 

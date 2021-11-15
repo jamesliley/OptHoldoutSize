@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_simulation.R
 \name{gen_resp}
 \alias{gen_resp}
-\title{Generate random outcome (response) according to a ground-truth logistic model}
+\title{Generate response}
 \usage{
 gen_resp(X, coefs = NA, coefs_sd = 1, retprobs = FALSE)
 }
@@ -19,7 +19,7 @@ gen_resp(X, coefs = NA, coefs_sd = 1, retprobs = FALSE)
 Vector of length dim(X)\link{1} with outcome classes (if retprobs==FALSE) or outcome probabilities (if retprobs==TRUE)
 }
 \description{
-Generate response
+Generate random outcome (response) according to a ground-truth logistic model
 }
 \examples{
 

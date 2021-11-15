@@ -6,7 +6,6 @@
 ## October 2021
 ##
 
-## TODO - annotate roxygen style
 ## TODO - new file with functions for learning curve estimation
 ## TODO - add basic error handlers, add random seeds
 
@@ -14,11 +13,11 @@
 ## Functions for general simulation of random dataset                         ##
 ################################################################################
 
-##' Generate coefficients corresponding to an imperfect risk score, interpretable
-##'  as 'baseline' behaviour in the absence of a risk score
+##' Coefficients for imperfect risk score
 ##'
 ##' @name gen_dr_coefs
-##' @description Coefficients for imperfect risk score
+##' @description Generate coefficients corresponding to an imperfect risk score, interpretable
+##'  as 'baseline' behaviour in the absence of a risk score
 ##' @keywords simulation
 ##' @param coefs Original coefficients
 ##' @param noise Set to TRUE to add Gaussian noise to coefficients
@@ -51,7 +50,7 @@ gen_dr_coefs <- function(coefs, noise = TRUE, num_vars = 2, max_dr_powers = 1) {
 ##' Generate matrix of random observations
 ##'
 ##' @name gen_preds
-##' @description Matrix of random predictors
+##' @description Generate matrix of random observations. Observations are unit Gaussian-distributed.
 ##' @keywords simulation
 ##' @param nobs Number of observations (samples)
 ##' @param npreds Number of predictors
@@ -72,10 +71,10 @@ gen_preds <- function(nobs, npreds, ninters = 0) {
 }
 
 
-##' Generate random outcome (response) according to a ground-truth logistic model
+##' Generate response
 ##'
 ##' @name gen_resp
-##' @description Generate response
+##' @description Generate random outcome (response) according to a ground-truth logistic model
 ##' @keywords simulation
 ##' @param X Matrix of observations
 ##' @param coefs Vector of coefficients for logistic model. If NA, random coefficients are generated. Defaults to NA
@@ -112,10 +111,10 @@ gen_resp <- function(X, coefs = NA, coefs_sd = 1, retprobs = FALSE) {
 
 
 ####### Consider revising - this is not specific to baseline predictions; it could be replaced by a function to just calculate logistic probabilities.
-##' Estimate baseline predictions
+##' Generate responses
 ##'
 ##' @name oracle_pred
-##' @description Generate response
+##' @description Probably for deprecation
 ##' @keywords simulation
 ##' @param X Matrix of observations
 ##' @param coefs Vector of coefficients for logistic model.
@@ -153,7 +152,7 @@ oracle_pred <- function(X, coefs, num_vars = 3, noise = TRUE) {
 }
 
 
-##' Split data into holdout and intervention set
+##' Split data
 ##'
 ##' @name split_data
 ##' @description Split data into holdout and intervention sets
@@ -204,10 +203,10 @@ model_train <- function(train_data, model_family = "log_reg",...) {
 
 
 ## TODO: update to check class of trained_model rather than model_family variable
-##' Make predictions given a model
+##' Make predictions
 ##'
 ##' @name model_predict
-##' @description Make predictions according to a model
+##' @description Make predictions according to a given model
 ##' @keywords simulation
 ##' @param data_test Data for which predictions are to be computed
 ##' @param trained_model Model for which predictions are to be made

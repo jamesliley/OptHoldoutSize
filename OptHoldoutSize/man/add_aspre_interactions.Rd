@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_aspre.R
 \name{add_aspre_interactions}
 \alias{add_aspre_interactions}
-\title{Add various interaction terms to X. Interaction terms correspond to those in ASPRE,}
+\title{Add interaction terms corresponding to ASPRE model}
 \usage{
 add_aspre_interactions(X)
 }
@@ -13,7 +13,7 @@ add_aspre_interactions(X)
 New data frame containing interaction terms.
 }
 \description{
-Adds interaction terms corresponding to ASPRE model
+Add various interaction terms to X. Interaction terms correspond to those in ASPRE.
 }
 \examples{
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_estimation.R
 \name{ci_ohs}
 \alias{ci_ohs}
-\title{Compute confidence interval for optimal holdout size given a set of n_e estimates of parameters.}
+\title{Confidence interval for optimal holdout size}
 \usage{
 ci_ohs(
   N,
@@ -42,10 +42,9 @@ ci_ohs(
 A vector of length two containing lower and upper limits of confidence interval.
 }
 \description{
-Estimates confidence interval for optimal holdout size
-}
-\details{
-This can be done either asymptotically or empirically (using bootstrap resampling)
+Compute confidence interval for optimal holdout size given a set of n_e estimates of parameters.
+
+This can be done either asymptotically, using a method analogous to the Fisher information matrix, or empirically (using bootstrap resampling)
 }
 \examples{
 ## We will assume that our observations of N, k1, and theta=(a,b,c) are distributed with mean mu_par and variance sigma_par

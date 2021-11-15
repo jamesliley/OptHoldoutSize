@@ -17,7 +17,7 @@ gen_preds(nobs, npreds, ninters = 0)
 Data frame of observations
 }
 \description{
-Matrix of random predictors
+Generate matrix of random observations. Observations are unit Gaussian-distributed.
 }
 \examples{
 

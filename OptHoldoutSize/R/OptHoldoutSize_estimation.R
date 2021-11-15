@@ -16,16 +16,17 @@
 ## Optimal holdout size, confidence interval, and gradient                    ##
 ################################################################################
 
-##' Compute optimal holdout size for updating a predictive score given appropriate parameters of cost function
+##' Estimate optimal holdout size
+##'
+##'
+##' @name optimal_holdout_size
+##' @description Compute optimal holdout size for updating a predictive score given appropriate parameters of cost function
 ##'
 ##' Evaluates empirical minimisation of cost function ``l(n;k1,N,theta) = k1 n + k2(n;theta) (N-n)``.
 ##'
 ##' The function will return `Inf` if no minimum exists. It does not check if the minimum is unique, but this can be guaranteed using the assumptions for theorem 1 in the manuscript.
 ##'
 ##' This calls the function `optimize` from package `stats`.
-##'
-##' @name optimal_holdout_size
-##' @description Estimates optimal holdout size
 ##' @keywords estimation
 ##' @param N Total number of samples on which the predictive score will be used/fitted. Can be a vector.
 ##' @param k1 Cost value in the absence of a predictive score. Can be a vector.
@@ -115,18 +116,13 @@ optimal_holdout_size=function(
 
 
 
-# Confidence interval for OHS and cost given samples of k1,N,theta. Option of empirical
-#  or asymptotic. In examples show that asymptotic is close when variation is small and
-#  possibly show validity.
 
-
-
-##' Compute confidence interval for optimal holdout size given a set of n_e estimates of parameters.
-##'
-##' This can be done either asymptotically or empirically (using bootstrap resampling)
+##' Confidence interval for optimal holdout size
 ##'
 ##' @name ci_ohs
-##' @description Estimates confidence interval for optimal holdout size
+##' @description Compute confidence interval for optimal holdout size given a set of n_e estimates of parameters.
+##'
+##' This can be done either asymptotically, using a method analogous to the Fisher information matrix, or empirically (using bootstrap resampling)
 ##' @keywords estimation
 ##' @param N Vector of estimates of total number of samples on which the predictive score will be used/fitted. Can be a vector.
 ##' @param k1 Vector of estimates of cost value in the absence of a predictive score. Can be a vector.
@@ -300,13 +296,13 @@ ci_ohs=function(
 
 
 
-##' Compute gradient of optimal holdout size assuming a power-law form of k2
-##'
-##' Assumes cost function is ``l(n;k1,N,theta) = k1 n + k2(n;theta) (N-n)`` with ``k2(n;theta)=k2(n;a,b,c)= a n^(-b) + c``
+##' Gradient of optimal holdout size (power law)
 ##'
 ##'
 ##' @name grad_nstar_powerlaw
-##' @description Estimates gradient of optimal holdout size with power-law learning curve
+##' @description Compute gradient of optimal holdout size assuming a power-law form of k2
+##'
+##' Assumes cost function is ``l(n;k1,N,theta) = k1 n + k2(n;theta) (N-n)`` with ``k2(n;theta)=k2(n;a,b,c)= a n^(-b) + c``
 ##' @keywords estimation
 ##' @param N Total number of samples on which the predictive score will be used/fitted. Can be a vector.
 ##' @param k1 Cost value in the absence of a predictive score. Can be a vector.

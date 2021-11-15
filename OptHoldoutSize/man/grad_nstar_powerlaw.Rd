@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_estimation.R
 \name{grad_nstar_powerlaw}
 \alias{grad_nstar_powerlaw}
-\title{Compute gradient of optimal holdout size assuming a power-law form of k2}
+\title{Gradient of optimal holdout size (power law)}
 \usage{
 grad_nstar_powerlaw(N, k1, theta)
 }
@@ -17,9 +17,8 @@ grad_nstar_powerlaw(N, k1, theta)
 List/data frame of dimension (number of evaluations) x 5 containing partial derivatives of nstar (optimal holdout size) with respect to N, k1, a, b, c respectively.
 }
 \description{
-Estimates gradient of optimal holdout size with power-law learning curve
-}
-\details{
+Compute gradient of optimal holdout size assuming a power-law form of k2
+
 Assumes cost function is \verb{l(n;k1,N,theta) = k1 n + k2(n;theta) (N-n)} with \verb{k2(n;theta)=k2(n;a,b,c)= a n^(-b) + c}
 }
 \examples{

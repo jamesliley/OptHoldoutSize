@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_simulation.R
 \name{model_predict}
 \alias{model_predict}
-\title{Make predictions given a model}
+\title{Make predictions}
 \usage{
 model_predict(
   data_test,
@@ -30,7 +30,7 @@ model_predict(
 Vector of predictions
 }
 \description{
-Make predictions according to a model
+Make predictions according to a given model
 }
 \examples{
 

@@ -2,8 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_simulation.R
 \name{gen_dr_coefs}
 \alias{gen_dr_coefs}
-\title{Generate coefficients corresponding to an imperfect risk score, interpretable
-as 'baseline' behaviour in the absence of a risk score}
+\title{Coefficients for imperfect risk score}
 \usage{
 gen_dr_coefs(coefs, noise = TRUE, num_vars = 2, max_dr_powers = 1)
 }
@@ -20,7 +19,8 @@ gen_dr_coefs(coefs, noise = TRUE, num_vars = 2, max_dr_powers = 1)
 
 }
 \description{
-Coefficients for imperfect risk score
+Generate coefficients corresponding to an imperfect risk score, interpretable
+as 'baseline' behaviour in the absence of a risk score
 }
 \examples{
 

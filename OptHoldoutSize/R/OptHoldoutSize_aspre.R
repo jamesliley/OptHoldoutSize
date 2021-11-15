@@ -15,11 +15,11 @@
 ## Functions for ASPRE-related analyses                                       ##
 ################################################################################
 
-##' Computes sensitivity of a risk score at a threshold at which
-##'  10% of samples (or some proportion pi_int) are above it.
+##' Sensitivity at theshold quantile 10%
+##'
 ##'
 ##' @name sens10
-##' @description Sensitivity at theshold quantile 10%
+##' @description Computes sensitivity of a risk score at a threshold at which 10% of samples (or some proportion pi_int) are above the threshold.
 ##' @keywords aspre
 ##' @param Y True labels (1 or 0)
 ##' @param Ypred Predictions (univariate; real numbers)
@@ -47,11 +47,10 @@ sens10=function(Y,Ypred,pi_int=0.1) {
 
 
 ##' Fit power law curve
-##' Find least-squares solution: MLE of (a,b,c) under model
-##'  y= ax^-b + c + e, e~N(0,s^2)
 ##'
 ##' @name powersolve
-##' @description Fit power law curve
+##' @description  Find least-squares solution: MLE of (a,b,c) under model
+##'  ``y= ax^-b + c + e; e~N(0,s^2)``
 ##' @keywords aspre
 ##' @param x x values
 ##' @param y y values
@@ -82,16 +81,25 @@ powersolve=function(x,y,init=c(1,1,0.1),...) {
 
 
 
-##' Find approximate standard error matrix for (a,b,c) under power law model
+##' Standard error matrix for learning curve parameters (power law)
+##'
+##'
+##' @name powersolve_se
+##' @description Find approximate standard error matrix for ``(a,b,c)`` under power law model for learning curve.
+##'
 ##' Assumes that
-##'  y= ax^-b + c + e, e~N(0,s^2)
+##'
+##'   ``y= ax^-b + c + e, e~N(0,s^2)``
 ##'
 ##' Standard error can be computed either asymptotically using Fisher information (`method='fisher'`) or boostrapped (`method='bootstrap'`)
 ##'
-##' These estimate different quantities: the asymptotic method estimates Var[MLE(a,b,c)|X] and the boostrap method estimates Var[MLE(a,b,c)].
+##' These estimate different quantities: the asymptotic method estimates
 ##'
-##' @name powersolve_se
-##' @description Standard error matrix for power law curve
+##' ``Var[MLE(a,b,c)|X]``
+##'
+##' and the boostrap method estimates
+##'
+##' ``Var[MLE(a,b,c)]``.
 ##' @keywords aspre
 ##' @param x X values (typically training set sizes)
 ##' @param y Y values (typically observed cost per individual/sample)
@@ -199,12 +207,13 @@ powersolve_se=function(x,y,method='fisher',init=c(1,1,0.1),n_boot=1000,seed=NULL
 
 
 
-##' Generate random population of individuals (e.g., newly pregnant women) with given population parameters
+##' Simulate random dataset similar to ASPRE training data
 ##'
-##' Assumes independence of parameter variation. This is not a realistic assumption, but is satisfactory for our purposes.
 ##'
 ##' @name sim_random_aspre
-##' @description Simulate random dataset similar to ASPRE training data
+##' @description Generate random population of individuals (e.g., newly pregnant women) with given population parameters
+##'
+##' Assumes independence of parameter variation. This is not a realistic assumption, but is satisfactory for our purposes.
 ##' @keywords aspre
 ##' @param n size of population
 ##' @param pars list of parameters
@@ -243,11 +252,12 @@ sim_random_aspre=function(n,params=params_aspre) {
 }
 
 
-##' Add various interaction terms to X. Interaction terms correspond to those in ASPRE,
+##' Add interaction terms corresponding to ASPRE model
+##'
 ##'
 ##' @name add_aspre_interactions
 ##' @keywords aspre
-##' @description Adds interaction terms corresponding to ASPRE model
+##' @description Add various interaction terms to X. Interaction terms correspond to those in ASPRE.
 ##' @param X data frame
 ##' @return New data frame containing interaction terms.
 ##' @examples
@@ -279,13 +289,15 @@ add_aspre_interactions=function(X) {
 }
 
 
-##' Computes ASPRE model prediction on a matrix X of covariates
+##' Computes ASPRE score
 ##'
-##' Full ASPRE model, from https://www.nejm.org/doi/suppl/10.1056/NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf
-##' Model is to predict gestational age at PE, eg higher=lower PE risk, so coefficients are negated for model to predict PE risk
 ##'
 ##' @name aspre
-##' @description Computes ASPRE score give matrix of covariates
+##' @description Computes ASPRE model prediction on a matrix `X` of covariates
+##'
+##' Full ASPRE model from https://www.nejm.org/doi/suppl/10.1056/NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf
+##'
+##' Model is to predict gestational age at PE; that is, a higher score indicates a lower PE risk, so coefficients are negated for model to predict PE risk.
 ##' @keywords aspre
 ##' @param X matrix, assumed to be output of sim_random_aspre with parameter params=params_aspre and transformed using add_aspre_interactions
 ##' @return vector of scores.

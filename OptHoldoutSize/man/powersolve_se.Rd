@@ -2,9 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_aspre.R
 \name{powersolve_se}
 \alias{powersolve_se}
-\title{Find approximate standard error matrix for (a,b,c) under power law model
-Assumes that
-y= ax^-b + c + e, e~N(0,s^2)}
+\title{Standard error matrix for learning curve parameters (power law)}
 \usage{
 powersolve_se(
   x,
@@ -35,12 +33,21 @@ powersolve_se(
 Standard error matrix; approximate covariance matrix of MLE(a,b,c)
 }
 \description{
-Standard error matrix for power law curve
-}
-\details{
+Find approximate standard error matrix for \verb{(a,b,c)} under power law model for learning curve.
+
+Assumes that
+
+\verb{y= ax^-b + c + e, e~N(0,s^2)}
+
 Standard error can be computed either asymptotically using Fisher information (\code{method='fisher'}) or boostrapped (\code{method='bootstrap'})
 
-These estimate different quantities: the asymptotic method estimates Var\link{MLE(a,b,c)|X} and the boostrap method estimates Var\link{MLE(a,b,c)}.
+These estimate different quantities: the asymptotic method estimates
+
+\code{Var[MLE(a,b,c)|X]}
+
+and the boostrap method estimates
+
+\code{Var[MLE(a,b,c)]}.
 }
 \examples{
 

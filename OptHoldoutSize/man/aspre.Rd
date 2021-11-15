@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_aspre.R
 \name{aspre}
 \alias{aspre}
-\title{Computes ASPRE model prediction on a matrix X of covariates}
+\title{Computes ASPRE score}
 \usage{
 aspre(X)
 }
@@ -13,11 +13,11 @@ aspre(X)
 vector of scores.
 }
 \description{
-Computes ASPRE score give matrix of covariates
-}
-\details{
-Full ASPRE model, from https://www.nejm.org/doi/suppl/10.1056/NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf
-Model is to predict gestational age at PE, eg higher=lower PE risk, so coefficients are negated for model to predict PE risk
+Computes ASPRE model prediction on a matrix \code{X} of covariates
+
+Full ASPRE model from https://www.nejm.org/doi/suppl/10.1056/NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf
+
+Model is to predict gestational age at PE; that is, a higher score indicates a lower PE risk, so coefficients are negated for model to predict PE risk.
 }
 \examples{
 
