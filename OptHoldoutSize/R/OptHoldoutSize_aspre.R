@@ -21,14 +21,25 @@
 ##' @name sens10
 ##' @description Sensitivity at theshold quantile 10%
 ##' @keywords aspre
-##' @param Y True labels
-##' @param Ypred Predictions
-##' @param pi Compute sensitivity when a proportion pi_int of samples exceed threshold, default 0.1
+##' @param Y True labels (1 or 0)
+##' @param Ypred Predictions (univariate; real numbers)
+##' @param pi_int Compute sensitivity when a proportion pi_int of samples exceed threshold, default 0.1
 ##' @return Sensitivity at this threshold
 ##' @examples
 ##'
-##' # Lorem Ipsum
-sens10=function(Y,Ypred,pi_int=pi_intervention) {
+##' # Simulate
+##' set.seed(32142)
+##'
+##' N=1000
+##' X=rnorm(N); Y=rbinom(N,1,prob=logit(X/2))
+##'
+##' pi_int=0.1
+##' q10=quantile(X,1-pi_int) # 10% of X values are above this threshold
+##'
+##' print(length(which(Y==1 & X>q10))/length(which(X>q10)))
+##' print(sens10(Y,X,pi_int))
+##'
+sens10=function(Y,Ypred,pi_int=0.1) {
   qa=quantile(Ypred,1-pi_int)
   return(mean(Y*(Ypred >= qa))/pi_int)
 }
@@ -49,16 +60,148 @@ sens10=function(Y,Ypred,pi_int=pi_intervention) {
 ##' @return MLE values of (a,b,c)
 ##' @examples
 ##'
-##' # Lorem Ipsum
-powersolve=function(x,y,init=c(1,-0.8,0.0165),...) {
-  fabc=function(abc) sum( (y- (abc[1]*(x^(abc[2])) + abc[3]))^2 )
-  out=optim(par=init,fn=fabc,...)
+##' # Retrieval of original values
+##' A_true=2; B_true=1.5; C_true=0.3; sigma=1
+##'
+##' X=abs(rnorm(10000,mean=4))
+##' Y=A_true*(X^(-B_true)) + C_true + rnorm(length(X),sd=sigma)
+##'
+##' c(A_true,B_true,C_true)
+##' powersolve(X[1:10],Y[1:10])$par
+##' powersolve(X[1:100],Y[1:100])$par
+##' powersolve(X[1:1000],Y[1:1000])$par
+##' powersolve(X[1:10000],Y[1:10000])$par
+powersolve=function(x,y,init=c(1,1,0.1),...) {
+  fabc=function(abc) {
+    out=sum( (y- (abc[1]*(x^(-abc[2])) + abc[3]))^2 )
+    if (is.finite(out)) return(out) else return(1e10)
+  }
+  out=suppressWarnings(optim(par=init,fn=fabc,lower=c(0,0,0),...))
   return(out)
 }
 
 
-##' Generate random population of parameters where properties match that of params
-##' Assume independence of parameter variation for simplicity.
+
+##' Find approximate standard error matrix for (a,b,c) under power law model
+##' Assumes that
+##'  y= ax^-b + c + e, e~N(0,s^2)
+##'
+##' Standard error can be computed either asymptotically using Fisher information (`method='fisher'`) or boostrapped (`method='bootstrap'`)
+##'
+##' These estimate different quantities: the asymptotic method estimates Var[MLE(a,b,c)|X] and the boostrap method estimates Var[MLE(a,b,c)].
+##'
+##' @name powersolve_se
+##' @description Standard error matrix for power law curve
+##' @keywords aspre
+##' @param x X values (typically training set sizes)
+##' @param y Y values (typically observed cost per individual/sample)
+##' @param method One of 'fisher' (for asymptotic variance via Fisher Information) or 'bootstrap' (for Bootstrap)
+##' @param init Initial values of (a,b,c) to start when computing MLE
+##' @param n_boot Number of bootstrap resamples. Only used if method='bootstrap'. Defaults to 1000
+##' @param seed Random seed for bootstrap resamples. Defaults to NULL.
+##' @param ... further parameters passed to optim
+##' @return Standard error matrix; approximate covariance matrix of MLE(a,b,c)
+##' @examples
+##'
+##' A_true=10; B_true=1.5; C_true=0.3; sigma=0.1
+##'
+##' set.seed(31525)
+##'
+##' X=1+3*rchisq(10000,df=5)
+##' Y=A_true*(X^(-B_true)) + C_true + rnorm(length(X),sd=sigma)
+##'
+##' # 'Observations' - 100 samples
+##' obs=sample(length(X),100,rep=F)
+##' Xobs=X[obs]; Yobs=Y[obs]
+##'
+##' # True covariance matrix of MLE of a,b,c on these x values
+##' ntest=1000
+##' abc_mat_xfix=matrix(0,ntest,3)
+##' abc_mat_xvar=matrix(0,ntest,3)
+##' E1=A_true*(Xobs^(-B_true)) + C_true
+##' for (i in 1:ntest) {
+##'   Y1=E1 + rnorm(length(Xobs),sd=sigma)
+##'   abc_mat_xfix[i,]=powersolve(Xobs,Y1)$par # Estimate (a,b,c) with same X
+##'
+##'   X2=1+3*rchisq(length(Xobs),df=5)
+##'   Y2=A_true*(X2^(-B_true)) + C_true + rnorm(length(Xobs),sd=sigma)
+##'   abc_mat_xvar[i,]=powersolve(X2,Y2)$par # Estimate (a,b,c) with variable X
+##' }
+##'
+##' Ve1=var(abc_mat_xfix) # empirical variance of MLE(a,b,c)|X
+##' Vf=powersolve_se(Xobs,Yobs,method='fisher') # estimated SE matrix, asymptotic
+##'
+##' Ve2=var(abc_mat_xvar) # empirical variance of MLE(a,b,c)
+##' Vb=powersolve_se(Xobs,Yobs,method='bootstrap') # estimated SE matrix, bootstrap
+##'
+##' cat("Empirical variance of MLE(a,b,c)|X\n")
+##' print(Ve1)
+##' cat("\n")
+##' cat("Asymptotic variance of MLE(a,b,c)|X\n")
+##' print(Vf)
+##' cat("\n\n")
+##' cat("Empirical variance of MLE(a,b,c)\n")
+##' print(Ve2)
+##' cat("\n")
+##' cat("Bootstrap-estimated variance of MLE(a,b,c)\n")
+##' print(Vb)
+##' cat("\n\n")
+##'
+powersolve_se=function(x,y,method='fisher',init=c(1,1,0.1),n_boot=1000,seed=NULL,...) {
+  if (method=="fisher") {
+    ## Inverse Fisher Information Matrix - straightforward to compute analytically
+    FI_mat=function(x,a,b,c,s)
+      -(1/(s^2))*cbind(
+        c(-x^(-2*b),a*(x^(-2*b))*log(x),-x^(-b),0),
+        c(a*(x^(-2*b))*log(x),-(a^2)*(x^(-2*b))*(log(x)^2),a*(x^(-b))*log(x),0),
+        c(-x^(-b),a*(x^(-b))*log(x),-1,0),
+        c(0,0,0,-2))
+
+    ## Need to estimate s as well
+    fabcs=function(abcs) {
+      out=-(sum( -((y- (abcs[1]*(x^(-abcs[2])) + abcs[3]))^2 / (2*(abcs[4]^2))) - log(sqrt(2*3.1415)*abcs[4])))
+      if (is.finite(out)) return(out) else return(1e10)
+    }
+
+    abcs=suppressWarnings(optim(par=c(init,1),fn=fabcs,lower=c(0,0,0,1e-5),...))$par
+
+    fmat=matrix(0,4,4); for (i in 1:length(x)) fmat=fmat + FI_mat(x[i],abcs[1],abcs[2],abcs[3],abcs[4])
+
+    vmat=solve(fmat)[1:3,1:3]
+
+    return(vmat)
+  }
+  if (method=="bootstrap") {
+
+    # Estimation function
+    fabc=function(abc,X,Y) {
+      out=sum( (Y- (abc[1]*(X^(-abc[2])) + abc[3]))^2 )
+      if (is.finite(out)) return(out) else return(1e10)
+    }
+
+    # set seed
+    if (!is.null(seed)) set.seed(seed)
+
+    # Compute bootstrap resamples
+    xboot=matrix(0,n_boot,3)
+    for (i in 1:n_boot) {
+      sub=sample(length(x),length(x),replace=TRUE)
+      xboot[i,]=suppressWarnings(optim(par=init,fn=fabc,X=x[sub],Y=y[sub],lower=c(0,0,0),...))$par[1:3]
+    }
+
+    vmat=var(xboot)
+    return(vmat)
+  }
+}
+
+
+
+
+
+
+##' Generate random population of individuals (e.g., newly pregnant women) with given population parameters
+##'
+##' Assumes independence of parameter variation. This is not a realistic assumption, but is satisfactory for our purposes.
 ##'
 ##' @name sim_random_aspre
 ##' @description Simulate random dataset similar to ASPRE training data
@@ -71,7 +214,12 @@ powersolve=function(x,y,init=c(1,-0.8,0.0165),...) {
 ##' # Load ASPRE related data
 ##' data(params_aspre)
 ##'
-##' # etc
+##' X=sim_random_aspre(1000,params_aspre)
+##'
+##' print(c(median(X$age),params_aspre$age$median))
+##'
+##' print(rbind(table(X$parity)/1000,params_aspre$parity$freq))
+##'
 sim_random_aspre=function(n,params=params_aspre) {
   out=list()
   ind=1
@@ -104,7 +252,15 @@ sim_random_aspre=function(n,params=params_aspre) {
 ##' @return New data frame containing interaction terms.
 ##' @examples
 ##'
-##' # Lorem Ipsum
+##' # Load ASPRE related data
+##' data(params_aspre)
+##'
+##' X=sim_random_aspre(1000,params_aspre)
+##' Xnew=add_aspre_interactions(X)
+##'
+##' print(colnames(X))
+##' print(colnames(Xnew))
+##'
 add_aspre_interactions=function(X) {
 
   # Pre-processing
@@ -135,7 +291,16 @@ add_aspre_interactions=function(X) {
 ##' @return vector of scores.
 ##' @examples
 ##'
-##' # Lorem Ipsum
+##' # Load ASPRE related data
+##' data(params_aspre)
+##'
+##' X=sim_random_aspre(1000,params_aspre)
+##' Xnew=add_aspre_interactions(X)
+##'
+##' aspre_score=aspre(Xnew)
+##'
+##' plot(density(aspre_score))
+##'
 aspre=function(X) {
 
   X1pred=data.frame(
@@ -208,27 +373,4 @@ aspre=function(X) {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Possibly include confidence interval for OHS and cost given point estimates of k1, N, theta and an estimate
-#  of sigma, assuming normality. Option of empirical or asymptotic.
-
-##' To include
-##'   Functions to find asymptotic confidence interval (given sigma estimate)
-##'   Function to find bootstrap confidence interval; maybe given sampler
-##'   Function to generate simulated data
-##'   Functions to call simulated ASPRE data and model
 

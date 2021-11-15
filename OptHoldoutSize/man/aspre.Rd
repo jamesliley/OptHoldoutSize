@@ -21,6 +21,15 @@ Model is to predict gestational age at PE, eg higher=lower PE risk, so coefficie
 }
 \examples{
 
-# Lorem Ipsum
+# Load ASPRE related data
+data(params_aspre)
+
+X=sim_random_aspre(1000,params_aspre)
+Xnew=add_aspre_interactions(X)
+
+aspre_score=aspre(Xnew)
+
+plot(density(aspre_score))
+
 }
 \keyword{aspre}

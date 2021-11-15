@@ -17,6 +17,14 @@ Adds interaction terms corresponding to ASPRE model
 }
 \examples{
 
-# Lorem Ipsum
+# Load ASPRE related data
+data(params_aspre)
+
+X=sim_random_aspre(1000,params_aspre)
+Xnew=add_aspre_interactions(X)
+
+print(colnames(X))
+print(colnames(Xnew))
+
 }
 \keyword{aspre}

@@ -5,14 +5,14 @@
 \title{Computes sensitivity of a risk score at a threshold at which
 10\% of samples (or some proportion pi_int) are above it.}
 \usage{
-sens10(Y, Ypred, pi_int = pi_intervention)
+sens10(Y, Ypred, pi_int = 0.1)
 }
 \arguments{
-\item{Y}{True labels}
+\item{Y}{True labels (1 or 0)}
 
-\item{Ypred}{Predictions}
+\item{Ypred}{Predictions (univariate; real numbers)}
 
-\item{pi}{Compute sensitivity when a proportion pi_int of samples exceed threshold, default 0.1}
+\item{pi_int}{Compute sensitivity when a proportion pi_int of samples exceed threshold, default 0.1}
 }
 \value{
 Sensitivity at this threshold
@@ -22,6 +22,17 @@ Sensitivity at theshold quantile 10\%
 }
 \examples{
 
-# Lorem Ipsum
+# Simulate
+set.seed(32142)
+
+N=1000
+X=rnorm(N); Y=rbinom(N,1,prob=logit(X/2))
+
+pi_int=0.1
+q10=quantile(X,1-pi_int) # 10\% of X values are above this threshold
+
+print(length(which(Y==1 & X>q10))/length(which(X>q10)))
+print(sens10(Y,X,pi_int))
+
 }
 \keyword{aspre}

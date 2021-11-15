@@ -6,7 +6,7 @@
 Find least-squares solution: MLE of (a,b,c) under model
 y= ax^-b + c + e, e~N(0,s^2)}
 \usage{
-powersolve(x, y, init = c(1, -0.8, 0.0165), ...)
+powersolve(x, y, init = c(1, 1, 0.1), ...)
 }
 \arguments{
 \item{x}{x values}
@@ -25,6 +25,16 @@ Fit power law curve
 }
 \examples{
 
-# Lorem Ipsum
+# Retrieval of original values
+A_true=2; B_true=1.5; C_true=0.3; sigma=1
+
+X=abs(rnorm(10000,mean=4))
+Y=A_true*(X^(-B_true)) + C_true + rnorm(length(X),sd=sigma)
+
+c(A_true,B_true,C_true)
+powersolve(X[1:10],Y[1:10])$par
+powersolve(X[1:100],Y[1:100])$par
+powersolve(X[1:1000],Y[1:1000])$par
+powersolve(X[1:10000],Y[1:10000])$par
 }
 \keyword{aspre}

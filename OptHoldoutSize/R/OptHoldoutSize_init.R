@@ -16,8 +16,9 @@
 ## Packages and scripts                                                       ##
 ################################################################################
 
-require(matrixStats)    # Matrix row- and column-wise operations
-require(mnormt)         # Multivariate normal distributions
+require("matrixStats")  # Matrix row- and column-wise operations
+require("mnormt")       # Multivariate normal distributions
+require("mvtnorm")      # Multivariate normal and t distributions
 require("dplyr")        # Syntax
 require("ranger")       # Random forests
 
