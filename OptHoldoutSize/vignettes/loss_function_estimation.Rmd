@@ -1,0 +1,224 @@
+---
+title: "Loss function estimation"
+author: "Sami Haidar-Wehbe, Sam Emerson, Louis Aslett, James Liley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Loss function estimation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette describes the estimation of a function describing the expected cost per sample when using a training set of a given size. Since the estimation of the cost of a given predictive score is likely to be expensive (in terms of the effort needed to estimate it) we generally presume that we wish to minimise the number of times we need to do this, bearing in mind that the ultimate goal is estimation of the optimal holdout size (OHS).
+
+We do this using a greedy algorithm. We presume a form of the cost function given by:
+
+$$
+cost = a n^{-b} + c
+$$
+
+parametrised by `a,b,c`. Given estimates of the joint standard error of `a,b,c` and parameters `N`, `k1`, and assuming asymptotic normality of estimators, we may evaluate the asymptotic standard error of the OHS (although the finite-sample standard error does not generally exist). 
+
+In this vignette, we demonstrate the usefulness of this approach by showing that selection of subsequent points using a greedy algorithm leads to faster convergence of the OHS estimate. 
+
+## Setup
+
+We specify parameters for this simulation
+
+```{r,echo=T}
+
+# Set seed
+set.seed(21423)
+
+# Kernel width and Gaussian process variance
+kw0=5000
+vu0=1e7
+
+# Include legend on plots or not; inclusion can obscure plot elements on small figures
+inc_legend=FALSE
+
+# Suppose we have population size and cost-per-sample without a risk score as follows
+N=100000
+k1=0.4
+
+# Suppose that true values of a,b,c are given by
+theta_true=c(10000,1.2,0.2)
+theta_lower=c(1,0.5,0.1) # lower bounds for estimating theta
+theta_upper=c(20000,2,0.5) # upper bounds for estimating theta
+
+# We will presume that these are the values of n for which cost can potentially be evaluated.
+n=seq(1000,N,length=300)
+
+```
+
+We will start by presuming we have estimates of cost `d0` at five values `nset0` of `n`, along with estimates of their variance `var_w0`
+
+```{r, echo=T}
+nstart=5 # Start with this many points
+vwmin=0.001; vwmax=0.02
+nset0=round(runif(nstart,1000,N/2))
+var_w0=runif(nstart,vwmin,vwmax)
+d0=rnorm(nstart,mean=powerlaw_mean_fn(nset0,theta_true),sd=sqrt(var_w0))
+```
+
+We make an initial estimate of the parameters `(a,b,c)` of the learning curve (where we presume `cost=a n^(-b) + c`)
+
+```{r,echo=T}
+theta0=powersolve(nset0,d0,y_var=var_w0,lower=theta_lower,upper=theta_upper,init=theta_true,control=list(parscale=theta_true))$par
+```
+
+We now define two functions. The first evaluates the variance in OHS if we were to resample costs at our candidate values of `n`; that is, it evaluates
+
+$$
+var\left(OHS|\mathbf{n},var(cost(\mathbf{n}))\right)
+$$
+
+# Resample nx values d using holdout sizes nset and variances var_w and compute OHS
+ntri=function(nset,var_w,nx=100) {
+  out=rep(0,nx)
+  for (i in 1:nx) {
+    d1=rnorm(length(nset),mean=powerlaw_mean_fn(nset,theta_true),sd=sqrt(var_w0))
+    theta1=powersolve(nset,d1,y_var=var_w,lower=theta_lower,upper=theta_upper,init=theta_true,control=list(parscale=theta_true))$par
+    out[i]=optimal_holdout_size(N,k1,theta1)$size
+  }
+  return(out)
+}
+
+# Resample nx values d using holdout sizes nset and variances var_w and compute OHS
+ntri1=function(nset,var_w,d,nx=100) {
+  out=rep(0,nx)
+  nl=length(nset)
+  for (i in 1:nx) {
+    d[nl]=rnorm(1,mean=powerlaw_mean_fn(nset[nl],theta_true),sd=sqrt(var_w[nl]))
+    theta1=powersolve(nset,d,y_var=var_w,lower=theta_lower,upper=theta_upper,init=theta_true,control=list(parscale=theta_true))$par
+    out[i]=optimal_holdout_size(N,k1,theta1)$size
+  }
+  return(out)
+}
+
+
+
+
+
+nset=nset0; d=d0; var_w=var_w0; theta=theta0
+nsetr=nset0; dr=d0; var_wr=var_w0; thetar=theta0
+
+n_iter=50; nx=100
+ohs_e=matrix(0,n_iter,nx)
+ohs_e[1,]=ntri(nset,var_w,nx)
+
+ohs_r=matrix(0,n_iter,nx)
+ohs_r[1,]=ntri(nset,var_w,nx)
+
+ohs_e1=matrix(0,n_iter,nx)
+ohs_e1[1,]=ntri1(nset,var_w,d,nx)
+
+ohs_r1=matrix(0,n_iter,nx)
+ohs_r1[1,]=ntri1(nset,var_w,d,nx)
+
+
+# Empirical improvement function: returns width of asymptotic confidence interval of OHS
+emp_imp=function(n,nset,d,var_w,N,k1,theta) {
+  out=rep(0,length(n))
+  for (i in 1:length(n)) {
+    nsetx=c(nset,n[i]); var_wx=c(var_w,mean(var_w)); dx=c(d,rnorm(1,mean=powerlaw_mean_fn(n[i],theta),sd=sqrt(mean(var_w))))
+    thetax=powersolve(nsetx,dx,y_var=var_wx,lower=theta_lower,upper=theta_upper,init=theta_true,control=list(parscale=theta_true))$par
+    covx=powersolve_se(nsetx,dx,y_var=var_wx,method="fisher",lower=theta_lower,upper=theta_upper,init=theta_true,control=list(parscale=c(theta_true,vwmax)))
+    cov_all=matrix(0,5,5); cov_all[3:5,3:5]=covx
+    if (!is.na(cov_all[1,1])) {
+     cx=ci_ohs(N,k1,thetax,sigma=cov_all,mode="asymptotic",grad_nstar=grad_nstar_powerlaw)
+     out[i]=max(cx)-min(cx)
+    } else out[i]=Inf
+  }
+  return(out)
+}
+
+
+for (i in 2:n_iter) {
+
+  ## Find next point to add using emulation
+  if (use_em) {
+    exp_imp_em <- exp_imp_fn(n,nset=nset,d=d,
+      var_w = var_w, N=N,k1=k1,theta=theta,k_width=kw0,var_u=vu0)
+    n_new=n[which.max(exp_imp_em)]
+  } else {
+    exp_imp_em <- nextpoint(n,nset=nset,d=d,var_w = var_w, N=N,k1=k1,theta=theta0,nmed=10,
+                            lower=theta_lower,upper=theta_upper,
+                            init=theta_true)
+    n_new=round(n[which.min(exp_imp_em)])
+  }
+
+  ## Estimate cost at new point with error
+  var_w_new=runif(1,vwmin,vwmax)
+  d_new=rnorm(1,mean=powerlaw_mean_fn(n_new,theta_true),sd=sqrt(var_w_new))
+
+  nset=c(nset,n_new)
+  var_w=c(var_w,var_w_new)
+  d=c(d,d_new)
+
+  theta=powersolve(nset,d,y_var=var_w,lower=theta_lower,upper=theta_upper,init=theta_true,control=list(parscale=theta_true))$par
+
+  ohs_e[i,]=ntri(nset,var_w,nx)
+  ohs_e1[i,]=ntri1(nset,var_w,d,nx)
+
+
+  ## Choose next point to add randomly
+  n_newr=round(runif(1,1000,N))
+
+  ## Estimate cost at new point with error
+  var_wr_new=runif(1,vwmin,vwmax)
+  dr_new=rnorm(1,mean=powerlaw_mean_fn(n_newr,theta_true),sd=sqrt(var_wr_new))
+
+  nsetr=c(nsetr,n_newr)
+  var_wr=c(var_wr,var_wr_new)
+  dr=c(dr,dr_new)
+
+  ohs_r[i,]=ntri(nsetr,var_wr,nx)
+  ohs_r1[i,]=ntri1(nsetr,var_wr,dr,nx)
+
+  print(i)
+}
+
+par(mfrow=c(1,2))
+ohs_true=optimal_holdout_size(N,k1,theta_true)$size
+
+
+alpha=0.1
+plot(0,xlim=c(0,n_iter),ylim=c(0,80000),type="n")
+abline(h=ohs_true,col="blue",lty=2)
+points(1:n_iter,rowMeans(ohs_e),pch=16,cex=0.5,col="red")
+segments(
+  1:n_iter,apply(ohs_e,1,function(x) quantile(x,alpha/2)),
+  1:n_iter,apply(ohs_e,1,function(x) quantile(x,1-alpha/2)),
+  col="red"
+)
+points(1:n_iter+0.5,rowMeans(ohs_r),pch=16,cex=0.5)
+segments(
+  1:n_iter+0.5,apply(ohs_r,1,function(x) quantile(x,alpha/2)),
+  1:n_iter+0.5,apply(ohs_r,1,function(x) quantile(x,1-alpha/2)),
+  col="black"
+)
+
+
+plot(0,xlim=c(0,n_iter),ylim=range(ohs_e1,ohs_r1),type="n")
+abline(h=ohs_true,col="blue",lty=2)
+points(1:n_iter,rowMeans(ohs_e1),pch=16,cex=0.5,col="red")
+segments(
+  1:n_iter,apply(ohs_e1,1,function(x) quantile(x,alpha/2)),
+  1:n_iter,apply(ohs_e1,1,function(x) quantile(x,1-alpha/2)),
+  col="red"
+)
+points(1:n_iter+0.5,rowMeans(ohs_r1),pch=16,cex=0.5)
+segments(
+  1:n_iter+0.5,apply(ohs_r1,1,function(x) quantile(x,alpha/2)),
+  1:n_iter+0.5,apply(ohs_r1,1,function(x) quantile(x,1-alpha/2)),
+  col="black"
+)
+

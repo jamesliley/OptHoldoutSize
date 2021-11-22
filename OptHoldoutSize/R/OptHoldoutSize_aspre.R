@@ -50,19 +50,21 @@ sens10=function(Y,Ypred,pi_int=0.1) {
 ##'
 ##' @name powersolve
 ##' @description  Find least-squares solution: MLE of (a,b,c) under model
-##'  ``y= ax^-b + c + e; e~N(0,s^2)``
+##'  ``y_i= a x_i^-b + c + e_i; e_i~N(0,s^2 y_var_i^2)``
 ##' @keywords aspre
-##' @param x x values
-##' @param y y values
-##' @param init initial values of (a,b,c) to start
-##' @param ... further parameters passed to optim
+##' @param x X values
+##' @param y Y values
+##' @param init Initial values of (a,b,c) to start. Default c(20000,2,0.1)
+##' @param y_var Optional parameter giving sampling variance of each y value. Defaults to 1.
+##' @param estimate_s Parameter specifying whether to also estimate s (as above). Defaults to FALSE (no).
+##' @param ... further parameters passed to optim. We suggest specifying lower and upper bounds for (a,b,c); e.g. lower=c(1,0,0),upper=c(10000,3,1)
 ##' @return MLE values of (a,b,c)
 ##' @examples
 ##'
 ##' # Retrieval of original values
-##' A_true=2; B_true=1.5; C_true=0.3; sigma=1
+##' A_true=2000; B_true=1.5; C_true=0.3; sigma=0.002
 ##'
-##' X=abs(rnorm(10000,mean=4))
+##' X=1000*abs(rnorm(10000,mean=4))
 ##' Y=A_true*(X^(-B_true)) + C_true + rnorm(length(X),sd=sigma)
 ##'
 ##' c(A_true,B_true,C_true)
@@ -70,12 +72,21 @@ sens10=function(Y,Ypred,pi_int=0.1) {
 ##' powersolve(X[1:100],Y[1:100])$par
 ##' powersolve(X[1:1000],Y[1:1000])$par
 ##' powersolve(X[1:10000],Y[1:10000])$par
-powersolve=function(x,y,init=c(1,1,0.1),...) {
-  fabc=function(abc) {
-    out=sum( (y- (abc[1]*(x^(-abc[2])) + abc[3]))^2 )
-    if (is.finite(out)) return(out) else return(1e10)
+powersolve=function(x,y,init=c(20000,2,0.1),y_var=rep(1,length(y)),estimate_s=FALSE,...) {
+  sc=mean(x)^2 # scale by this to avoid overflow errors
+  if (!estimate_s) {
+    fabc=function(abc) {
+      out=sum( ((y- (abc[1]*(x^(-abc[2])) + abc[3]))^2)/(y_var))
+      if (is.finite(out)) return(out) else return(1e10)
+    }
+    out=suppressWarnings(optim(par=init,fn=fabc,...))
+  } else {
+    fabcs=function(abcs) {
+      out=-(sum( -((y- (abcs[1]*(x^(-abcs[2])) + abcs[3]))^2 / (2*y_var*(abcs[4]^2))) - log(sqrt(2*3.1415*y_var)*abcs[4])))
+      if (is.finite(out)) return(out) else return(1e10)
+    }
+    out=suppressWarnings(optim(par=c(init,0.05),fn=fabcs,...))
   }
-  out=suppressWarnings(optim(par=init,fn=fabc,lower=c(0,0,0),...))
   return(out)
 }
 
@@ -89,25 +100,27 @@ powersolve=function(x,y,init=c(1,1,0.1),...) {
 ##'
 ##' Assumes that
 ##'
-##'   ``y= ax^-b + c + e, e~N(0,s^2)``
+##'   ``y_i= a x_i^-b + c + e, e~N(0,s^2 y_var_i^2)``
 ##'
 ##' Standard error can be computed either asymptotically using Fisher information (`method='fisher'`) or boostrapped (`method='bootstrap'`)
 ##'
 ##' These estimate different quantities: the asymptotic method estimates
 ##'
-##' ``Var[MLE(a,b,c)|X]``
+##' ``Var[MLE(a,b,c)|X,y_var]``
 ##'
 ##' and the boostrap method estimates
 ##'
 ##' ``Var[MLE(a,b,c)]``.
+##'
 ##' @keywords aspre
 ##' @param x X values (typically training set sizes)
 ##' @param y Y values (typically observed cost per individual/sample)
 ##' @param method One of 'fisher' (for asymptotic variance via Fisher Information) or 'bootstrap' (for Bootstrap)
-##' @param init Initial values of (a,b,c) to start when computing MLE
+##' @param init Initial values of (a,b,c) to start when computing MLE. Default c(20000,2,0.1)
+##' @param y_var Optional parameter giving sampling variance of each y value. Defaults to 1.
 ##' @param n_boot Number of bootstrap resamples. Only used if method='bootstrap'. Defaults to 1000
 ##' @param seed Random seed for bootstrap resamples. Defaults to NULL.
-##' @param ... further parameters passed to optim
+##' @param ... further parameters passed to optim. We suggest specifying lower and upper bounds; since optim is called on (a*1000^-b,b,c), bounds should be relative to this; for instance, lower=c(0,0,0),upper=c(100,3,1)
 ##' @return Standard error matrix; approximate covariance matrix of MLE(a,b,c)
 ##' @examples
 ##'
@@ -155,37 +168,30 @@ powersolve=function(x,y,init=c(1,1,0.1),...) {
 ##' print(Vb)
 ##' cat("\n\n")
 ##'
-powersolve_se=function(x,y,method='fisher',init=c(1,1,0.1),n_boot=1000,seed=NULL,...) {
+powersolve_se=function(x,y,method='fisher',init=c(20000,2,0.1),y_var=rep(1,length(y)),n_boot=1000,seed=NULL,...) {
   if (method=="fisher") {
-    ## Inverse Fisher Information Matrix - straightforward to compute analytically
-    FI_mat=function(x,a,b,c,s)
-      -(1/(s^2))*cbind(
+    ## Fisher Information Matrix - straightforward to compute analytically
+    FI_mat=function(x,v,a,b,c,s)
+      -(1/(s^2 * v))*cbind(
         c(-x^(-2*b),a*(x^(-2*b))*log(x),-x^(-b),0),
         c(a*(x^(-2*b))*log(x),-(a^2)*(x^(-2*b))*(log(x)^2),a*(x^(-b))*log(x),0),
         c(-x^(-b),a*(x^(-b))*log(x),-1,0),
-        c(0,0,0,-2))
+        c(0,0,0,-2*v))
 
-    ## Need to estimate s as well
-    fabcs=function(abcs) {
-      out=-(sum( -((y- (abcs[1]*(x^(-abcs[2])) + abcs[3]))^2 / (2*(abcs[4]^2))) - log(sqrt(2*3.1415)*abcs[4])))
-      if (is.finite(out)) return(out) else return(1e10)
+    ## Need to estimate s as well; call powersolve
+    abcs=powersolve(x,y,y_var=y_var,init=init,estimate_s=TRUE,...)$par
+
+    fmat=matrix(0,4,4); for (i in 1:length(x)) fmat=fmat + FI_mat(x[i],y_var[i],abcs[1],abcs[2],abcs[3],abcs[4])
+
+    # Check if fmat is invertible
+    if ("matrix" %in% class(try(solve(fmat),silent=T))) {
+      vmat=solve(fmat)[1:3,1:3]
+      return(vmat)
+    } else {
+      return(matrix(NA,3,3))
     }
-
-    abcs=suppressWarnings(optim(par=c(init,1),fn=fabcs,lower=c(0,0,0,1e-5),...))$par
-
-    fmat=matrix(0,4,4); for (i in 1:length(x)) fmat=fmat + FI_mat(x[i],abcs[1],abcs[2],abcs[3],abcs[4])
-
-    vmat=solve(fmat)[1:3,1:3]
-
-    return(vmat)
   }
   if (method=="bootstrap") {
-
-    # Estimation function
-    fabc=function(abc,X,Y) {
-      out=sum( (Y- (abc[1]*(X^(-abc[2])) + abc[3]))^2 )
-      if (is.finite(out)) return(out) else return(1e10)
-    }
 
     # set seed
     if (!is.null(seed)) set.seed(seed)
@@ -194,17 +200,13 @@ powersolve_se=function(x,y,method='fisher',init=c(1,1,0.1),n_boot=1000,seed=NULL
     xboot=matrix(0,n_boot,3)
     for (i in 1:n_boot) {
       sub=sample(length(x),length(x),replace=TRUE)
-      xboot[i,]=suppressWarnings(optim(par=init,fn=fabc,X=x[sub],Y=y[sub],lower=c(0,0,0),...))$par[1:3]
+      xboot[i,]=powersolve(x[sub],y[sub],y_var=y_var[sub],init=init,...)$par
     }
 
     vmat=var(xboot)
     return(vmat)
   }
 }
-
-
-
-
 
 
 ##' Simulate random dataset similar to ASPRE training data

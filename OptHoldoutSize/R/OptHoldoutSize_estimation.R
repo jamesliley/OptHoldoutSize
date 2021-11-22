@@ -31,7 +31,7 @@
 ##' @param N Total number of samples on which the predictive score will be used/fitted. Can be a vector.
 ##' @param k1 Cost value in the absence of a predictive score. Can be a vector.
 ##' @param theta Parameters for function k2(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.
-##' @param k2 Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``k2(n,c(a,b,c))=a n^(-b) + c``.
+##' @param k2 Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
 ##' @param round_result Set to TRUE to solve over integral sizes
 ##' @param ... Passed to function `optimize`
 ##' @return List/data frame of dimension (number of evaluations) x (4 + n_par) containing input data and results. Columns `size` and `cost` are optimal holdout size and cost at this size respectively. Parameters N, k1, theta.1, theta.2,...,theta.{n_par} are input data.
@@ -58,7 +58,7 @@ optimal_holdout_size=function(
   N,
   k1,
   theta,
-  k2 = function(n,par) par[1]*(n^(-par[2])) + par[3],
+  k2 = powerlaw,
   round_result=FALSE,
   ...
 ) {
@@ -120,9 +120,12 @@ optimal_holdout_size=function(
 ##' Confidence interval for optimal holdout size
 ##'
 ##' @name ci_ohs
-##' @description Compute confidence interval for optimal holdout size given a set of n_e estimates of parameters.
+##' @description Compute confidence interval for optimal holdout size given either a standard error covariance matrix or a set of n_e estimates of parameters.
 ##'
 ##' This can be done either asymptotically, using a method analogous to the Fisher information matrix, or empirically (using bootstrap resampling)
+##'
+##' If sigma (covariance matrix) is specified and method='bootstrap', a confidence interval is generated assuming a Gaussian distribution of (N,k1,theta). To estimate a confidence interval assuming a non-Gaussian distribution, simulate values under the requisite distribution and use then as parameters N,k1, theta, with sigma set to NULL.
+##'
 ##' @keywords estimation
 ##' @param N Vector of estimates of total number of samples on which the predictive score will be used/fitted. Can be a vector.
 ##' @param k1 Vector of estimates of cost value in the absence of a predictive score. Can be a vector.
@@ -130,6 +133,7 @@ optimal_holdout_size=function(
 ##' @param alpha Construct 1-alpha confidence interval. Defaults to 0.05
 ##' @param k2 Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``k2(n,c(a,b,c))=a n^(-b) + c``.
 ##' @param grad_nstar Function giving partial derivatives of optimal holdout set, taking three arguments: N, k1, and theta. Only used for asymptotic confidence intervals. F NULL, estimated empirically
+##' @param sigma Standard error covariance matrix for (N,k1,theta), in that order. If NULL, will derive as sample covariance matrix of parameters. Must be of the correct size and positive definite.
 ##' @param n_boot Number of bootstrap resamples for empirical estimate.
 ##' @param seed Random seed for bootstrap resamples. Defaults to NULL.
 ##' @param mode One of 'asymptotic' or 'empirical'. Defaults to 'empirical'
@@ -217,8 +221,9 @@ ci_ohs=function(
   k1,
   theta,
   alpha=0.05,
-  k2 = function(n,par) par[1]*(n^(-par[2])) + par[3],
+  k2 = powerlaw,
   grad_nstar=NULL,
+  sigma=NULL,
   n_boot=10000,
   seed=NULL,
   mode="empirical",
@@ -226,9 +231,8 @@ ci_ohs=function(
 ) {
 
   ## Error handlers
-  if (length(N)<5) stop("At least five samples necessary for estimation")
+  if (length(N)<5 & is.null(sigma)) stop("At least five samples necessary for estimation if parameter sigma not specified")
   if (!(is.numeric(N) & is.numeric(k1) & is.numeric(theta))) stop("Parameters N, k1 and theta must be numeric")
-  if (!((length(N)==dim(theta)[1]) & (length(N)==length(k1)))) stop("Parameters N and k1 must have same length, which must match the first dimension of parameter theta")
   if (!is.function(k2)) stop("Parameter k2 must be a function taking two arguments: n and theta")
   if (length(as.list(args(k2)))!=3) stop("Parameter k2 must be a function taking two arguments: n and theta")
   if (!is.null(grad_nstar)) {
@@ -241,8 +245,14 @@ ci_ohs=function(
   if (alpha <= 0 | alpha>=1) stop("Parameter alpha must be >0 and <1")
 
   if (mode=="asymptotic") {
-    par_mat=cbind(N,k1,theta)
-    mu=colMeans(par_mat)
+    if (is.null(sigma)) {
+      par_mat=cbind(N,k1,theta)
+      mu=colMeans(par_mat)
+      sigma_hat=var(par_mat)
+    } else {
+      mu=c(N,k1,theta)
+      sigma_hat=sigma
+    }
 
     ## Determine function for grad_nstar if not specified
     if (is.null(grad_nstar)) {
@@ -252,18 +262,17 @@ ci_ohs=function(
         par2=par2 + dx*diag(dim(par2)[1]) # parameters, shifted by dx one-at-a-time
         ohs2=optimal_holdout_size(N=par2[,1],k1=par2[,2],theta=par2[,3:dim(par2)[2]],k2=k2)$size
         ohs1=optimal_holdout_size(N,k1,theta,k2=k2)$size
-        return((ohs2-ohs1)/dx)
+        return(t((ohs2-ohs1)/dx))
       }
     }
 
     # Parameters for asymptotic confidence interval
     nstar=optimal_holdout_size(mu[1],mu[2],mu[3:length(mu)],k2=k2)$size
     beta_est=grad_nstar(mu[1],mu[2],mu[3:length(mu)])
-    sigma_hat=var(par_mat)
     z_a=-qnorm(alpha/2)
     n_e=length(N)
     # Variation from estimated value in asymptotic confidence interval
-    di=z_a*sqrt((t(beta_est) %*% sigma_hat %*% beta_est)/n_e)
+    di=z_a*sqrt(((beta_est) %*% sigma_hat %*% t(beta_est))/n_e)
 
     cx=nstar+c(-di,di)
     names(cx)=c("lower","upper")
@@ -271,14 +280,33 @@ ci_ohs=function(
   }
 
   if (mode=="empirical") {
-    par_mat=cbind(N,k1,theta)
-    n_e=dim(par_mat)[1]
+
+    if (is.null(sigma)) {
+      par_mat=cbind(N,k1,theta)
+      mu=colMeans(par_mat)
+      sigma_hat=var(par_mat)
+      n_e=dim(par_mat)[1]
+    } else {
+      mu=c(N,k1,theta)
+      sigma_hat=sigma
+      n_e=n_boot
+
+      # Sample, allowing that some parameters may have zero variance
+      w=which(sigma_hat[cbind(1:length(mu),1:length(mu))]<1e-20)
+      wc=setdiff(1:length(mu),w)
+      if (length(w)>0) {
+        psub=outer(rep(1,n_boot),mu[w])
+        psubc=rmnorm(n_boot,mean=mu[wc],varcov=sigma_hat[wc,wc])
+        par_mat=outer(rep(1,n_boot),rep(0,length(mu)))
+        par_mat[,w]=psub; par_mat[,wc]=psubc
+      } else par_mat=rmnorm(n_boot,mean=mu,varcov=sigma_hat)
+    }
 
     # Random seed
     if (!is.null(seed)) set.seed(seed)
 
     # Populate with mean parameters from bootstrap resamples
-    ci_mat=matrix(0,n_boot,2+dim(theta)[2])
+    ci_mat=matrix(0,n_boot,dim(par_mat)[2])
     for (i in 1:n_boot) {
       sboot=sample(n_e,n_e,replace=TRUE)
       ci_mat[i,]=colMeans(par_mat[sboot,])

@@ -21,7 +21,7 @@ require("mnormt")       # Multivariate normal distributions
 require("mvtnorm")      # Multivariate normal and t distributions
 require("dplyr")        # Syntax
 require("ranger")       # Random forests
-
+require("mle.tools")    # Gaussian processes
 
 ################################################################################
 ## Small auxiliary functions                                                  ##
