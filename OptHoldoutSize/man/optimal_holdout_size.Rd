@@ -2,16 +2,9 @@
 % Please edit documentation in R/OptHoldoutSize_estimation.R
 \name{optimal_holdout_size}
 \alias{optimal_holdout_size}
-\title{Estimate optimal holdout size}
+\title{Estimate optimal holdout size under parametric assumptions}
 \usage{
-optimal_holdout_size(
-  N,
-  k1,
-  theta,
-  k2 = function(n, par) par[1] * (n^(-par[2])) + par[3],
-  round_result = FALSE,
-  ...
-)
+optimal_holdout_size(N, k1, theta, k2 = powerlaw, round_result = FALSE, ...)
 }
 \arguments{
 \item{N}{Total number of samples on which the predictive score will be used/fitted. Can be a vector.}
@@ -20,7 +13,7 @@ optimal_holdout_size(
 
 \item{theta}{Parameters for function k2(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.}
 
-\item{k2}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{k2(n,c(a,b,c))=a n^(-b) + c}.}
+\item{k2}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{powerlaw(n,c(a,b,c))=a n^(-b) + c}.}
 
 \item{round_result}{Set to TRUE to solve over integral sizes}
 

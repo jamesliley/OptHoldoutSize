@@ -8,7 +8,8 @@ powersolve_se(
   x,
   y,
   method = "fisher",
-  init = c(1, 1, 0.1),
+  init = c(20000, 2, 0.1),
+  y_var = rep(1, length(y)),
   n_boot = 1000,
   seed = NULL,
   ...
@@ -21,13 +22,15 @@ powersolve_se(
 
 \item{method}{One of 'fisher' (for asymptotic variance via Fisher Information) or 'bootstrap' (for Bootstrap)}
 
-\item{init}{Initial values of (a,b,c) to start when computing MLE}
+\item{init}{Initial values of (a,b,c) to start when computing MLE. Default c(20000,2,0.1)}
+
+\item{y_var}{Optional parameter giving sampling variance of each y value. Defaults to 1.}
 
 \item{n_boot}{Number of bootstrap resamples. Only used if method='bootstrap'. Defaults to 1000}
 
 \item{seed}{Random seed for bootstrap resamples. Defaults to NULL.}
 
-\item{...}{further parameters passed to optim}
+\item{...}{further parameters passed to optim. We suggest specifying lower and upper bounds; since optim is called on (a*1000^-b,b,c), bounds should be relative to this; for instance, lower=c(0,0,0),upper=c(100,3,1)}
 }
 \value{
 Standard error matrix; approximate covariance matrix of MLE(a,b,c)
@@ -37,13 +40,13 @@ Find approximate standard error matrix for \verb{(a,b,c)} under power law model 
 
 Assumes that
 
-\verb{y= ax^-b + c + e, e~N(0,s^2)}
+\verb{y_i= a x_i^-b + c + e, e~N(0,s^2 y_var_i^2)}
 
 Standard error can be computed either asymptotically using Fisher information (\code{method='fisher'}) or boostrapped (\code{method='bootstrap'})
 
 These estimate different quantities: the asymptotic method estimates
 
-\code{Var[MLE(a,b,c)|X]}
+\code{Var[MLE(a,b,c)|X,y_var]}
 
 and the boostrap method estimates
 

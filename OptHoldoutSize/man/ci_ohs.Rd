@@ -9,8 +9,9 @@ ci_ohs(
   k1,
   theta,
   alpha = 0.05,
-  k2 = function(n, par) par[1] * (n^(-par[2])) + par[3],
+  k2 = powerlaw,
   grad_nstar = NULL,
+  sigma = NULL,
   n_boot = 10000,
   seed = NULL,
   mode = "empirical",
@@ -30,6 +31,8 @@ ci_ohs(
 
 \item{grad_nstar}{Function giving partial derivatives of optimal holdout set, taking three arguments: N, k1, and theta. Only used for asymptotic confidence intervals. F NULL, estimated empirically}
 
+\item{sigma}{Standard error covariance matrix for (N,k1,theta), in that order. If NULL, will derive as sample covariance matrix of parameters. Must be of the correct size and positive definite.}
+
 \item{n_boot}{Number of bootstrap resamples for empirical estimate.}
 
 \item{seed}{Random seed for bootstrap resamples. Defaults to NULL.}
@@ -42,9 +45,11 @@ ci_ohs(
 A vector of length two containing lower and upper limits of confidence interval.
 }
 \description{
-Compute confidence interval for optimal holdout size given a set of n_e estimates of parameters.
+Compute confidence interval for optimal holdout size given either a standard error covariance matrix or a set of n_e estimates of parameters.
 
 This can be done either asymptotically, using a method analogous to the Fisher information matrix, or empirically (using bootstrap resampling)
+
+If sigma (covariance matrix) is specified and method='bootstrap', a confidence interval is generated assuming a Gaussian distribution of (N,k1,theta). To estimate a confidence interval assuming a non-Gaussian distribution, simulate values under the requisite distribution and use then as parameters N,k1, theta, with sigma set to NULL.
 }
 \examples{
 ## We will assume that our observations of N, k1, and theta=(a,b,c) are distributed with mean mu_par and variance sigma_par

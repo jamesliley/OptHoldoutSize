@@ -1,14 +1,18 @@
 
-  spec=FALSE
-  ## True mean cost function
-  if (spec==TRUE) {
-    # Mean cost follows a power-law form
-    true_mean=function(n) powerlaw_mean_fn(n,theta_true)
-  } else {
-    # Mean cost follows a double-descent form
-    true_mean=function(n) powerlaw_mean_fn(n,theta_true) + (2e4)*dnorm(n,mean=4e4,sd=8e3)
-  }
-  #
+spec=FALSE
+## True mean cost function
+if (spec==TRUE) {
+  # Mean cost follows a power-law form
+  true_mean=function(n) powerlaw(n,theta_true)
+} else {
+  # Mean cost follows a double-descent form
+  true_mean=function(n) powerlaw(n,theta_true) + (2e4)*dnorm(n,mean=4e4,sd=8e3)
+}
+#
+
+# Kernel width and Gaussian process variance
+kw0=5000
+vu0=1e7
 
 
 nstart=4
@@ -18,6 +22,10 @@ var_w0=runif(nstart,vwmin,vwmax)
 d0=rnorm(nstart,mean=true_mean(nset0),sd=sqrt(var_w0))
 
 nmin=c()
+
+
+
+
 
 
 ## Repeatedly run next part

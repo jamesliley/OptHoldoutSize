@@ -15,6 +15,7 @@
 
 ##' Coefficients for imperfect risk score
 ##'
+##' @export
 ##' @name gen_dr_coefs
 ##' @description Generate coefficients corresponding to an imperfect risk score, interpretable
 ##'  as 'baseline' behaviour in the absence of a risk score
@@ -49,6 +50,7 @@ gen_dr_coefs <- function(coefs, noise = TRUE, num_vars = 2, max_dr_powers = 1) {
 
 ##' Generate matrix of random observations
 ##'
+##' @export
 ##' @name gen_preds
 ##' @description Generate matrix of random observations. Observations are unit Gaussian-distributed.
 ##' @keywords simulation
@@ -73,6 +75,7 @@ gen_preds <- function(nobs, npreds, ninters = 0) {
 
 ##' Generate response
 ##'
+##' @export
 ##' @name gen_resp
 ##' @description Generate random outcome (response) according to a ground-truth logistic model
 ##' @keywords simulation
@@ -113,6 +116,7 @@ gen_resp <- function(X, coefs = NA, coefs_sd = 1, retprobs = FALSE) {
 ####### Consider revising - this is not specific to baseline predictions; it could be replaced by a function to just calculate logistic probabilities.
 ##' Generate responses
 ##'
+##' @export
 ##' @name oracle_pred
 ##' @description Probably for deprecation
 ##' @keywords simulation
@@ -154,6 +158,7 @@ oracle_pred <- function(X, coefs, num_vars = 3, noise = TRUE) {
 
 ##' Split data
 ##'
+##' @export
 ##' @name split_data
 ##' @description Split data into holdout and intervention sets
 ##' @keywords simulation
@@ -176,6 +181,7 @@ split_data <- function(X, frac) {
 
 ##' Train model (wrapper)
 ##'
+##' @export
 ##' @name model_train
 ##' @description Train model using either a GLM or a random forest
 ##' @keywords simulation
@@ -205,6 +211,7 @@ model_train <- function(train_data, model_family = "log_reg",...) {
 ## TODO: update to check class of trained_model rather than model_family variable
 ##' Make predictions
 ##'
+##' @export
 ##' @name model_predict
 ##' @description Make predictions according to a given model
 ##' @keywords simulation

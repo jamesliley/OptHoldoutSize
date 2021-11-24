@@ -18,6 +18,7 @@
 ##' Sensitivity at theshold quantile 10%
 ##'
 ##'
+##' @export
 ##' @name sens10
 ##' @description Computes sensitivity of a risk score at a threshold at which 10% of samples (or some proportion pi_int) are above the threshold.
 ##' @keywords aspre
@@ -48,6 +49,7 @@ sens10=function(Y,Ypred,pi_int=0.1) {
 
 ##' Fit power law curve
 ##'
+##' @export
 ##' @name powersolve
 ##' @description  Find least-squares solution: MLE of (a,b,c) under model
 ##'  ``y_i= a x_i^-b + c + e_i; e_i~N(0,s^2 y_var_i^2)``
@@ -79,13 +81,13 @@ powersolve=function(x,y,init=c(20000,2,0.1),y_var=rep(1,length(y)),estimate_s=FA
       out=sum( ((y- (abc[1]*(x^(-abc[2])) + abc[3]))^2)/(y_var))
       if (is.finite(out)) return(out) else return(1e10)
     }
-    out=suppressWarnings(optim(par=init,fn=fabc,...))
+    out=suppressWarnings(optim(par=init,fn=fabc,control=list(parscale=init),...))
   } else {
     fabcs=function(abcs) {
       out=-(sum( -((y- (abcs[1]*(x^(-abcs[2])) + abcs[3]))^2 / (2*y_var*(abcs[4]^2))) - log(sqrt(2*3.1415*y_var)*abcs[4])))
       if (is.finite(out)) return(out) else return(1e10)
     }
-    out=suppressWarnings(optim(par=c(init,0.05),fn=fabcs,...))
+    out=suppressWarnings(optim(par=c(init,0.05),fn=fabcs,control=list(parscale=c(init,0.5)),...))
   }
   return(out)
 }
@@ -95,6 +97,7 @@ powersolve=function(x,y,init=c(20000,2,0.1),y_var=rep(1,length(y)),estimate_s=FA
 ##' Standard error matrix for learning curve parameters (power law)
 ##'
 ##'
+##' @export
 ##' @name powersolve_se
 ##' @description Find approximate standard error matrix for ``(a,b,c)`` under power law model for learning curve.
 ##'
@@ -212,6 +215,7 @@ powersolve_se=function(x,y,method='fisher',init=c(20000,2,0.1),y_var=rep(1,lengt
 ##' Simulate random dataset similar to ASPRE training data
 ##'
 ##'
+##' @export
 ##' @name sim_random_aspre
 ##' @description Generate random population of individuals (e.g., newly pregnant women) with given population parameters
 ##'
@@ -257,6 +261,7 @@ sim_random_aspre=function(n,params=params_aspre) {
 ##' Add interaction terms corresponding to ASPRE model
 ##'
 ##'
+##' @export
 ##' @name add_aspre_interactions
 ##' @keywords aspre
 ##' @description Add various interaction terms to X. Interaction terms correspond to those in ASPRE.
@@ -294,6 +299,7 @@ add_aspre_interactions=function(X) {
 ##' Computes ASPRE score
 ##'
 ##'
+##' @export
 ##' @name aspre
 ##' @description Computes ASPRE model prediction on a matrix `X` of covariates
 ##'

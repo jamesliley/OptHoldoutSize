@@ -32,3 +32,10 @@ require("mle.tools")    # Gaussian processes
 logit=function(x) 1/(1+exp(-x))
 logistic=function(x) -log((1/x)-1)
 
+
+#### Run if manually using package
+if (FALSE) {
+  lx=list.files("R",full.names=T)
+  for (i in 1:length(lx)) source(lx[i])
+}
+

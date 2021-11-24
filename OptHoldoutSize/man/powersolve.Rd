@@ -4,30 +4,41 @@
 \alias{powersolve}
 \title{Fit power law curve}
 \usage{
-powersolve(x, y, init = c(1, 1, 0.1), ...)
+powersolve(
+  x,
+  y,
+  init = c(20000, 2, 0.1),
+  y_var = rep(1, length(y)),
+  estimate_s = FALSE,
+  ...
+)
 }
 \arguments{
-\item{x}{x values}
+\item{x}{X values}
 
-\item{y}{y values}
+\item{y}{Y values}
 
-\item{init}{initial values of (a,b,c) to start}
+\item{init}{Initial values of (a,b,c) to start. Default c(20000,2,0.1)}
 
-\item{...}{further parameters passed to optim}
+\item{y_var}{Optional parameter giving sampling variance of each y value. Defaults to 1.}
+
+\item{estimate_s}{Parameter specifying whether to also estimate s (as above). Defaults to FALSE (no).}
+
+\item{...}{further parameters passed to optim. We suggest specifying lower and upper bounds for (a,b,c); e.g. lower=c(1,0,0),upper=c(10000,3,1)}
 }
 \value{
 MLE values of (a,b,c)
 }
 \description{
 Find least-squares solution: MLE of (a,b,c) under model
-\verb{y= ax^-b + c + e; e~N(0,s^2)}
+\verb{y_i= a x_i^-b + c + e_i; e_i~N(0,s^2 y_var_i^2)}
 }
 \examples{
 
 # Retrieval of original values
-A_true=2; B_true=1.5; C_true=0.3; sigma=1
+A_true=2000; B_true=1.5; C_true=0.3; sigma=0.002
 
-X=abs(rnorm(10000,mean=4))
+X=1000*abs(rnorm(10000,mean=4))
 Y=A_true*(X^(-B_true)) + C_true + rnorm(length(X),sd=sigma)
 
 c(A_true,B_true,C_true)

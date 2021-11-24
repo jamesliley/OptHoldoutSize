@@ -35,7 +35,7 @@ n_iter=50 # Add up to this many points
 nx=100 # Resample this many times to estimate error.
 
 # Specification correct
-spec=FALSE
+spec=TRUE
 
 
 
@@ -74,11 +74,15 @@ theta0=powersolve(nset0,d0,y_var=var_w0,lower=theta_lower,upper=theta_upper,init
 nn=10:100000
 ohs_true=nn[which.min(k1*nn + true_mean(nn)*(N-nn))]
 
+
+
+
+
 ################################################################################
 ## Functions                                                                  ##
 ################################################################################
 
-# Resample nx values d using holdout sizes nset and variances var_w and compute OHS
+
 ntri=function(nset,var_w,nx=100,method="MLE") {
   out=rep(0,nx)
   for (i in 1:nx) {
@@ -87,7 +91,7 @@ ntri=function(nset,var_w,nx=100,method="MLE") {
     if (method=="MLE") {
       out[i]=optimal_holdout_size(N,k1,theta1)$size
     } else {
-      nn=seq(1000,N)
+      nn=seq(1000,N,length=1000)
       p_mu=mu_fn(nn,nset=nset,d=d1,var_w = var_w, N=N,k1=k1,theta=theta1,k_width=kw0,var_u=vu0)
       out[i]=nn[which.min(p_mu)]
     }
@@ -158,10 +162,14 @@ for (i in 2:n_iter) {
 ## Draw figure                                                                ##
 ################################################################################
 
+#load("~/Desktop/bayes_vs_rand_specTRUE.RData")
+#load("~/Desktop/bayes_vs_rand.RData")
+
 
 alpha=0.1;
 dd=4 # horizontal line spacing
 ymax=80000
+n_iter=dim(ohs_e)[1]
 plot(0,xlim=c(0,n_iter),ylim=c(0,ymax),type="n",
   xlab="Training set size",ylab="OHS and error")
 abline(h=ohs_true,col="blue",lty=2)
