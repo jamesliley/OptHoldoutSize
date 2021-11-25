@@ -413,7 +413,7 @@ load("data/data_nextpoint_em.RData")
 load("data/data_nextpoint_par.RData")
 
 # Maximum number of training set sizes we will consider
-nmax=min(length(data_nextpoint_par$nset_pTRUE),length(data_nextpoint_em$nset_pTRUE))
+n_iter=200
 
 # Generate random 'next points'
 set.seed(36279)
@@ -432,88 +432,158 @@ data_nextpoint_rand=list(
 #  using the kth algorithm (k=1: parametric, k=2: semiparametric/emulation)
 #  using the lth method of selecting next points (l=1: random, l=2: systematic)
 nr=200 # recalculate OHS this many times
-ohs_array=array(NA,dim=c(nmax,nr,2,2,2))
+ohs_array=array(NA,dim=c(n_iter,nr,2,2,2))
 
-for (i in 5:nr) {
+for (i in 5:n_iter) {
   set.seed(363726 + i)
-
-
-  # Values of d for parametric algorithm, random next point
-  d_pTRUE_par_rand=rnorm(nr,
-    mean=true_k2_pTRUE(data_nextpoint_rand$nset_pTRUE),
-    sd=sqrt(data_nextpoint_rand$var_w_pTRUE))
-  d_pFALSE_par_rand=rnorm(nr,
-    mean=true_k2_pFALSE(data_nextpoint_rand$nset_pFALSE),
-    sd=sqrt(data_nextpoint_rand$var_w_pFALSE))
-
-  # Values of d for semiparametric/emulation algorithm, random next point
-  d_pTRUE_em_rand=rnorm(nr,
-    mean=true_k2_pTRUE(data_nextpoint_rand$nset_pTRUE),
-    sd=sqrt(data_nextpoint_rand$var_w_pTRUE))
-  d_pFALSE_em_rand=rnorm(nr,
-    mean=true_k2_pFALSE(data_nextpoint_rand$nset_pFALSE),
-    sd=sqrt(data_nextpoint_rand$var_w_pFALSE))
-
-  # Values of d for parametric algorithm, nonrandom (systematic) next point
-  d_pTRUE_par_syst=rnorm(nr,
-    mean=true_k2_pTRUE(data_nextpoint_par$nset_pTRUE),
-    sd=sqrt(data_nextpoint_par$var_w_pTRUE))
-  d_pFALSE_par_syst=rnorm(nr,
-    mean=true_k2_pFALSE(data_nextpoint_par$nset_pFALSE),
-    sd=sqrt(data_nextpoint_par$var_w_pFALSE))
-
-  # Values of d for semiparametric/emulation algorithm, nonrandom (systematic) next point
-  d_pTRUE_em_syst=rnorm(nr,
-    mean=true_k2_pTRUE(data_nextpoint_em$nset_pTRUE),
-    sd=sqrt(data_nextpoint_em$var_w_pTRUE))
-  d_pFALSE_em_syst=rnorm(nr,
-    mean=true_k2_pFALSE(data_nextpoint_em$nset_pFALSE),
-    sd=sqrt(data_nextpoint_em$var_w_pFALSE))
-
-
   # Resamplings for parametric algorithm, random next point
   ohs_array[i,,1,1,1]=ntri(
-    nset=data_nextpoint_rand$nset_pTRUE,
-    var_w=data_nextpoint_rand$var_w_pTRUE,
+    nset=data_nextpoint_rand$nset_pTRUE[1:i],
+    var_w=data_nextpoint_rand$var_w_pTRUE[1:i],
     k2=true_k2_pTRUE,nx=nr,method="MLE")
   ohs_array[i,,2,1,1]=ntri(
-    nset=data_nextpoint_rand$nset_pFALSE,
-    var_w=data_nextpoint_rand$var_w_pFALSE,
+    nset=data_nextpoint_rand$nset_pFALSE[1:i],
+    var_w=data_nextpoint_rand$var_w_pFALSE[1:i],
     k2=true_k2_pFALSE,nx=nr,method="MLE")
 
   # Resamplings for semiparametric/emulation algorithm, random next point
   ohs_array[i,,1,2,1]=ntri(
-    nset=data_nextpoint_rand$nset_pTRUE,
-    var_w=data_nextpoint_rand$var_w_pTRUE,
+    nset=data_nextpoint_rand$nset_pTRUE[1:i],
+    var_w=data_nextpoint_rand$var_w_pTRUE[1:i],
     k2=true_k2_pTRUE,nx=nr,method="EM")
   ohs_array[i,,2,2,1]=ntri(
-    nset=data_nextpoint_rand$nset_pFALSE,
-    var_w=data_nextpoint_rand$var_w_pFALSE,
+    nset=data_nextpoint_rand$nset_pFALSE[1:i],
+    var_w=data_nextpoint_rand$var_w_pFALSE[1:i],
     k2=true_k2_pFALSE,nx=nr,method="EM")
 
   # Resamplings for parametric algorithm, nonrandom (systematic) next point
-  ohs_array[i,,1,1,1]=ntri(
-    nset=data_nextpoint_par$nset_pTRUE,
-    var_w=data_nextpoint_par$var_w_pTRUE,
+  ohs_array[i,,1,1,2]=ntri(
+    nset=data_nextpoint_par$nset_pTRUE[1:i],
+    var_w=data_nextpoint_par$var_w_pTRUE[1:i],
     k2=true_k2_pTRUE,nx=nr,method="MLE")
-  ohs_array[i,,2,1,1]=ntri(
-    nset=data_nextpoint_par$nset_pFALSE,
-    var_w=data_nextpoint_par$var_w_pFALSE,
+  ohs_array[i,,2,1,2]=ntri(
+    nset=data_nextpoint_par$nset_pFALSE[1:i],
+    var_w=data_nextpoint_par$var_w_pFALSE[1:i],
     k2=true_k2_pFALSE,nx=nr,method="MLE")
 
   # Resamplings for semiparametric/emulation algorithm, nonrandom (systematic) next point
-  ohs_array[i,,1,2,1]=ntri(
-    nset=data_nextpoint_em$nset_pTRUE,
-    var_w=data_nextpoint_em$var_w_pTRUE,
+  ohs_array[i,,1,2,2]=ntri(
+    nset=data_nextpoint_em$nset_pTRUE[1:i],
+    var_w=data_nextpoint_em$var_w_pTRUE[1:i],
     k2=true_k2_pTRUE,nx=nr,method="EM")
-  ohs_array[i,,2,2,1]=ntri(
-    nset=data_nextpoint_em$nset_pFALSE,
-    var_w=data_nextpoint_em$var_w_pFALSE,
+  ohs_array[i,,2,2,2]=ntri(
+    nset=data_nextpoint_em$nset_pFALSE[1:i],
+    var_w=data_nextpoint_em$var_w_pFALSE[1:i],
     k2=true_k2_pFALSE,nx=nr,method="EM")
 
   print(i)
 
   save(ohs_array,file="data/ohs_array.RData")
 }
+
+
+
+
+
+## Draw figure
+
+
+# Load data
+data(ohs_array)
+# ohs_array[n,i,j,k,l] is
+#  using the first n training set sizes
+#  the ith resample
+#  using the jth version of k2 (j=1: pTRUE, j=2: pFALSE)
+#  using the kth algorithm (k=1: parametric, k=2: semiparametric/emulation)
+#  using the lth method of selecting next points (l=1: random, l=2: systematic)
+
+# Settings
+alpha=0.1; # Plot 1-alpha confidence intervals
+dd=3 # horizontal line spacing
+n_iter=dim(ohs_array)[1] # X axis range
+ymax=80000 # Y axis range
+
+# Plot drawing function
+plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
+
+  # Set up plot parameters
+  par(mar=c(1,4,4,0.1))
+  layout(mat=rbind(matrix(1,4,4),matrix(2,2,4)))
+
+
+  # Initialise
+  plot(0,xlim=c(5,n_iter),ylim=c(0,ymax),type="n",
+    ylab="OHS and error",xaxt="n",main=title)
+  abline(h=ohs_true,col="blue",lty=2)
+
+  # Plot medians
+  points(1:n_iter,rowMedians(M1,na.rm=T),pch=16,cex=0.5,col="black")
+  points(1:n_iter,rowMedians(M2,na.rm=T),pch=16,cex=0.5,col="red")
+
+  # CIs
+  ci1=rbind(apply(M1,1,function(x) pmax(0,quantile(x,alpha/2,na.rm=T))),
+    apply(M1,1,function(x) pmin(ymax,quantile(x,1-alpha/2,na.rm=T))))
+  ci2=rbind(apply(M2,1,function(x) pmax(0,quantile(x,alpha/2,na.rm=T))),
+    apply(M2,1,function(x) pmin(ymax,quantile(x,1-alpha/2,na.rm=T))))
+
+  # Plot CIs
+  segments(
+    1:n_iter,ci1[1,],
+    1:n_iter,ci1[2,],
+    col="black"
+  )
+  segments(
+    1:n_iter + 1/dd,ci2[1,],
+    1:n_iter + 1/dd,ci2[2,],
+    col="red"
+  )
+
+  # Add legend
+  legend("topright",
+    legend=key,
+    col=c("black","red"),lty=1)
+
+
+  # Bottom panel setup
+  par(mar=c(4,4,0.1,0.1))
+  plot(0,xlim=c(5,n_iter),ylim=c(0,5e5),type="n",
+    ylab="CI width",xlab="Training set size")
+
+  # Draw lines
+  lines(1:n_iter,ci1[2,]-ci1[1,],col="black")
+  lines(1:n_iter,ci2[2,]-ci2[1,],col="red")
+
+}
+
+
+
+# Extract matrices from aray
+M111=ohs_array[1:n_iter,,1,1,1] # pTRUE, param algorithm, random nextpoint
+M112=ohs_array[1:n_iter,,1,1,2] # pTRUE, param algorithm, systematic nextpoint
+
+M211=ohs_array[1:n_iter,,2,1,1] # pFALSE, param algorithm, random nextpoint
+M212=ohs_array[1:n_iter,,2,1,2] # pFALSE, param algorithm, systematic nextpoint
+
+M121=ohs_array[1:n_iter,,1,1,1] # pTRUE, emul algorithm, random nextpoint
+M122=ohs_array[1:n_iter,,1,1,2] # pTRUE, emul algorithm, systematic nextpoint
+
+M221=ohs_array[1:n_iter,,2,1,1] # pFALSE, emul algorithm, random nextpoint
+M222=ohs_array[1:n_iter,,2,1,2] # pFALSE, emul algorithm, systematic nextpoint
+
+
+# True OHS
+nc=1000:N
+true_ohs_pTRUE=nc[which.min(k1*nc + true_k2_pTRUE(nc)*(N-nc))]
+true_ohs_pFALSE=nc[which.min(k1*nc + true_k2_pFALSE(nc)*(N-nc))]
+
+
+par(mfrow=c(2,2))
+plot_ci_convergence("Params. satis, param. alg.",c("Rand. next n","Syst. next n"),M111,M112,true_ohs_pTRUE)
+plot_ci_convergence("Params. not satis, param. alg.",c("Rand. next n","Syst. next n"),M211,M212,true_ohs_pFALSE)
+
+plot_ci_convergence("Params. satis, emul. alg.",c("Rand. next n","Syst. next n"),M121,M122,true_ohs_pTRUE)
+plot_ci_convergence("Params. not satis, emul. alg.",c("Rand. next n","Syst. next n"),M221,M222,true_ohs_pFALSE)
+
+
 
 
