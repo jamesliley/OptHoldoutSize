@@ -25,9 +25,6 @@ vu0=1e7
 # We will presume that these are the values of n for which cost can potentially be evaluated.
 n=seq(1000,N,length=300)
 
-# Include legend on plots or not; inclusion can obscure plot elements on small figures
-inc_legend=FALSE
-
 
 ## True form of k2, option 1: parametric assumptions satisfied (true)
 true_k2_pTRUE=function(n) powerlaw(n,theta_true)
@@ -138,7 +135,7 @@ save(ohs_resample,file="data/ohs_resample.RData")
 ################################################################################
 
 ## Choose an initial five training sizes at which to evaluate k2
-set.seed(32424)
+set.seed(32424) # start from same seed as before
 nstart=5
 nset0=round(runif(nstart,1000,N/2))
 var_w0=runif(nstart,vwmin,vwmax)
@@ -160,58 +157,29 @@ var_w_pFALSE=var_w0
 max_points=200
 
 while(length(nset_pTRUE)<= max_points) {
-  set.seed(37261 + length(nset_pTRUE))
+  set.seed(46352 + length(nset_pTRUE))
 
-  # Estimate parameters
-  theta_pTRUE=powersolve(nset_pTRUE,d_pTRUE,y_var=var_w_pTRUE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
-  theta_pFALSE=powersolve(nset_pFALSE,d_pFALSE,y_var=var_w_pFALSE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
+  # Estimate parameters for parametric part of semi-parametric method
+  theta_pTRUE=powersolve(nset_pTRUE,d_pTRUE,y_var=var_w_pTRUE,
+    lower=theta_lower,upper=theta_upper,init=theta_init)$par
+  theta_pFALSE=powersolve(nset_pTRUE,d_pFALSE,y_var=var_w_pTRUE,
+    lower=theta_lower,upper=theta_upper,init=theta_init)$par
 
+  # Mean and variance of emulator for cost function, parametric assumptions satisfied
+  p_mu_pTRUE=mu_fn(n,nset=nset_pTRUE,d=d_pTRUE,var_w = var_w_pTRUE,theta=theta_pTRUE,N=N,k1=k1)
+  p_var_pTRUE=psi_fn(n,nset=nset_pTRUE,N=N,var_w = var_w_pTRUE)
 
-  # Two panels
-  par(mfrow=c(1,2))
-  yrange=c(0,100000)
-
-  ## First panel
-  plot(0,xlim=range(n),ylim=yrange,type="n",
-    xlab="Training/holdout set size",
-    ylab="Total cost (= num. cases)")
-  points(nset_pTRUE,k1*nset_pTRUE + d_pTRUE*(N-nset_pTRUE),pch=16,col="purple")
-  lines(n,k1*n + powerlaw(n,theta_pTRUE)*(N-n),lty=2)
-  lines(n,k1*n + true_k2_pTRUE(n)*(N-n),lty=3,lwd=3)
-  legend("topright",
-    c("Par. est. cost",
-      "True",
-      "d",
-      "Next pt."),
-    lty=c(2,3,NA,NA),lwd=c(1,3,NA,NA),pch=c(NA,NA,16,124),pt.cex=c(NA,NA,1,1),
-    col=c("black","black","purple","black"),bg="white",border=NA)
+  # Mean and variance of emulator for cost function, parametric assumptions not satisfied
+  p_mu_pFALSE=mu_fn(n,nset=nset_pFALSE,d=d_pFALSE,var_w = var_w_pFALSE,theta=theta_pFALSE,N=N,k1=k1)
+  p_var_pFALSE=psi_fn(n,nset=nset_pFALSE,N=N,var_w = var_w_pFALSE)
 
   # Add vertical line at next suggested point
-  ci_pTRUE = next_n(n,nset_pTRUE,d=d_pTRUE,var_w=var_w_pTRUE,N=N,k1=k1,nmed=15)
-  if (!all(is.na(ci_pTRUE))) nextn_pTRUE=n[which.min(ci_pTRUE)] else nextn_pTRUE=round(runif(1,1000,N))
-  abline(v=nextn_pTRUE)
+  exp_imp_em_pTRUE = exp_imp_fn(n,nset=nset_pTRUE,d=d_pTRUE,var_w = var_w_pTRUE, N=N,k1=k1)
+  nextn_pTRUE = n[which.max(exp_imp_em_pTRUE)]
 
-
-  ## Second panel
-  plot(0,xlim=range(n),ylim=yrange,type="n",
-    xlab="Training/holdout set size",
-    ylab="Total cost (= num. cases)")
-  points(nset_pFALSE,k1*nset_pFALSE + d_pFALSE*(N-nset_pFALSE),pch=16,col="purple")
-  lines(n,k1*n + powerlaw(n,theta_pFALSE)*(N-n),lty=2)
-  lines(n,k1*n + true_k2_pFALSE(n)*(N-n),lty=3,lwd=3)
-  legend("topright",
-    c("Par. est. cost",
-      "True",
-      "d",
-      "Next pt."),
-    lty=c(2,3,NA,NA),lwd=c(1,3,NA,NA),pch=c(NA,NA,16,124),pt.cex=c(NA,NA,1,1),
-    col=c("black","black","purple","black"),bg="white",border=NA)
-
-  # Add vertical line at next suggested point
-  ci_pFALSE = next_n(n,nset_pFALSE,d=d_pFALSE,var_w=var_w_pFALSE,N=N,k1=k1,nmed=15)
-  if (!all(is.na(ci_pFALSE))) nextn_pFALSE=n[which.min(ci_pFALSE)] else nextn_pFALSE=round(runif(1,1000,N))
-  abline(v=nextn_pFALSE)
-
+  # Find next suggested point, parametric assumptions not satisfied
+  exp_imp_em_pFALSE = exp_imp_fn(n,nset=nset_pFALSE,d=d_pFALSE,var_w = var_w_pFALSE, N=N,k1=k1)
+  nextn_pFALSE = n[which.max(exp_imp_em_pFALSE)]
 
 
   # New estimates of k2
@@ -233,23 +201,84 @@ while(length(nset_pTRUE)<= max_points) {
 
   print(length(nset_pFALSE))
 
-  data_nextpoint_par=list(
-    nset_pTRUE=nset_pTRUE,nset_pFALSE=nset_pFALSE,
-    d_pTRUE=d_pTRUE,d_pFALSE=d_pFALSE,
-    var_w_pTRUE=var_w_pTRUE,var_w_pFALSE=var_w_pFALSE)
-
-  save(data_nextpoint_par,file="data/data_nextpoint_par.RData")
-
-  #    Sys.sleep(10)
 
 }
 
-data_nextpoint_par=list(
+data_nextpoint_em=list(
   nset_pTRUE=nset_pTRUE,nset_pFALSE=nset_pFALSE,
   d_pTRUE=d_pTRUE,d_pFALSE=d_pFALSE,
   var_w_pTRUE=var_w_pTRUE,var_w_pFALSE=var_w_pFALSE)
 
-save(data_nextpoint_par,file="data/data_nextpoint_par.RData")
+save(data_nextpoint_em,file="data/data_nextpoint_em.RData")
+
+
+
+## To draw plot with np points (np can be set using the button)
+
+np=50 # or set using interactive session
+
+par(mfrow=c(1,2))
+yrange=c(0,100000)
+
+# Mean and variance of emulator for cost function, parametric assumptions satisfied
+p_mu_pTRUE=mu_fn(n,nset=nset_pTRUE[1:np],d=d_pTRUE[1:np],var_w = var_w_pTRUE[1:np],N=N,k1=k1)
+p_var_pTRUE=psi_fn(n,nset=nset_pTRUE[1:np],N=N,var_w = var_w_pTRUE[1:np])
+
+# Mean and variance of emulator for cost function, parametric assumptions not satisfied
+p_mu_pFALSE=mu_fn(n,nset=nset_pFALSE[1:np],d=d_pFALSE[1:np],var_w = var_w_pFALSE[1:np],N=N,k1=k1)
+p_var_pFALSE=psi_fn(n,nset=nset_pFALSE[1:np],N=N,var_w = var_w_pFALSE[1:np])
+
+
+# Estimate parameters for parametric part of semi-parametric method
+theta_pTRUE=powersolve(nset_pTRUE[1:np],d_pTRUE[1:np],y_var=var_w_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+theta_pFALSE=powersolve(nset_pFALSE[1:np],d_pFALSE[1:np],y_var=var_w_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+
+## First panel
+plot(0,xlim=range(n),ylim=yrange,type="n",
+  xlab="Training/holdout set size",
+  ylab="Total cost (= num. cases)")
+lines(n,p_mu_pTRUE,col="blue")
+lines(n,p_mu_pTRUE - 3*sqrt(pmax(0,p_var_pTRUE)),col="red")
+lines(n,p_mu_pTRUE + 3*sqrt(pmax(0,p_var_pTRUE)),col="red")
+points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + d_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
+lines(n,k1*n + powerlaw(n,theta_pTRUE)*(N-n),lty=2)
+lines(n,k1*n + true_k2_pTRUE(n)*(N-n),lty=3,lwd=3)
+legend("topright",
+  c(expression(mu(n)),
+    expression(mu(n) %+-% 3*sqrt(psi(n))),
+    "Par. est. cost",
+    "True",
+    "d",
+    "Next pt."),
+  lty=c(1,1,2,3,NA,NA),lwd=c(1,1,1,3,NA,NA),pch=c(NA,NA,NA,NA,16,124),pt.cex=c(NA,NA,NA,NA,1,1),
+  col=c("blue","red","black","black","purple","black"),bg="white",border=NA)
+
+abline(v=nset_pTRUE[np+1])
+
+
+
+## Second panel
+plot(0,xlim=range(n),ylim=yrange,type="n",
+  xlab="Training/holdout set size",
+  ylab="Total cost (= num. cases)")
+lines(n,p_mu_pFALSE,col="blue")
+lines(n,p_mu_pFALSE - 3*sqrt(pmax(0,p_var_pFALSE)),col="red")
+lines(n,p_mu_pFALSE + 3*sqrt(pmax(0,p_var_pFALSE)),col="red")
+points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + d_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
+lines(n,k1*n + powerlaw(n,theta_pFALSE)*(N-n),lty=2)
+lines(n,k1*n + true_k2_pFALSE(n)*(N-n),lty=3,lwd=3)
+legend("topright",
+  c(expression(mu(n)),
+    expression(mu(n) %+-% 3*sqrt(psi(n))),
+    "Par. est. cost",
+    "True",
+    "d",
+    "Next pt."),
+  lty=c(1,1,2,3,NA,NA),lwd=c(1,1,1,3,NA,NA),pch=c(NA,NA,NA,NA,16,124),pt.cex=c(NA,NA,NA,NA,1,1),
+  col=c("blue","red","black","black","purple","black"),bg="white",border=NA)
+
+abline(v=nset_pFALSE[np+1])
+
 
 
 
@@ -418,10 +447,10 @@ n_iter=200
 # Generate random 'next points'
 set.seed(36279)
 data_nextpoint_rand=list(
-  nset_pTRUE=round(runif(nmax,1000,N)),
-  nset_pFALSE=round(runif(nmax,1000,N)),
-  var_w_pTRUE=runif(nmax,vwmin,vwmax),
-  var_w_pFALSE=runif(nmax,vwmin,vwmax)
+  nset_pTRUE=round(runif(n_iter,1000,N)),
+  nset_pFALSE=round(runif(n_iter,1000,N)),
+  var_w_pTRUE=runif(n_iter,vwmin,vwmax),
+  var_w_pFALSE=runif(n_iter,vwmin,vwmax)
 )
 
 # Initialise matrices of records
@@ -485,7 +514,6 @@ for (i in 5:n_iter) {
 
 
 
-## Draw figure
 
 
 # Load data
@@ -498,7 +526,7 @@ data(ohs_array)
 #  using the lth method of selecting next points (l=1: random, l=2: systematic)
 
 # Settings
-alpha=0.1; # Plot 1-alpha confidence intervals
+alpha=0.5; # Plot 1-alpha confidence intervals
 dd=3 # horizontal line spacing
 n_iter=dim(ohs_array)[1] # X axis range
 ymax=80000 # Y axis range
@@ -546,8 +574,8 @@ plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
 
   # Bottom panel setup
   par(mar=c(4,4,0.1,0.1))
-  plot(0,xlim=c(5,n_iter),ylim=c(0,5e5),type="n",
-    ylab="CI width",xlab="Training set size")
+  plot(0,xlim=c(5,n_iter),ylim=c(0,1e5),type="n",
+    ylab="CI width",xlab=expression(paste("Number of estimates of k"[2],"(n)")))
 
   # Draw lines
   lines(1:n_iter,ci1[2,]-ci1[1,],col="black")
@@ -564,11 +592,11 @@ M112=ohs_array[1:n_iter,,1,1,2] # pTRUE, param algorithm, systematic nextpoint
 M211=ohs_array[1:n_iter,,2,1,1] # pFALSE, param algorithm, random nextpoint
 M212=ohs_array[1:n_iter,,2,1,2] # pFALSE, param algorithm, systematic nextpoint
 
-M121=ohs_array[1:n_iter,,1,1,1] # pTRUE, emul algorithm, random nextpoint
-M122=ohs_array[1:n_iter,,1,1,2] # pTRUE, emul algorithm, systematic nextpoint
+M121=ohs_array[1:n_iter,,1,2,1] # pTRUE, emul algorithm, random nextpoint
+M122=ohs_array[1:n_iter,,1,2,2] # pTRUE, emul algorithm, systematic nextpoint
 
-M221=ohs_array[1:n_iter,,2,1,1] # pFALSE, emul algorithm, random nextpoint
-M222=ohs_array[1:n_iter,,2,1,2] # pFALSE, emul algorithm, systematic nextpoint
+M221=ohs_array[1:n_iter,,2,2,1] # pFALSE, emul algorithm, random nextpoint
+M222=ohs_array[1:n_iter,,2,2,2] # pFALSE, emul algorithm, systematic nextpoint
 
 
 # True OHS
@@ -578,12 +606,13 @@ true_ohs_pFALSE=nc[which.min(k1*nc + true_k2_pFALSE(nc)*(N-nc))]
 
 
 par(mfrow=c(2,2))
-plot_ci_convergence("Params. satis, param. alg.",c("Rand. next n","Syst. next n"),M111,M112,true_ohs_pTRUE)
-plot_ci_convergence("Params. not satis, param. alg.",c("Rand. next n","Syst. next n"),M211,M212,true_ohs_pFALSE)
+plot_ci_convergence("Params. satis, param. alg.",
+  c("Rand. next n","Syst. next n"),M111,M112,true_ohs_pTRUE)
+plot_ci_convergence("Params. not satis, param. alg.",
+  c("Rand. next n","Syst. next n"),M211,M212,true_ohs_pFALSE)
 
-plot_ci_convergence("Params. satis, emul. alg.",c("Rand. next n","Syst. next n"),M121,M122,true_ohs_pTRUE)
-plot_ci_convergence("Params. not satis, emul. alg.",c("Rand. next n","Syst. next n"),M221,M222,true_ohs_pFALSE)
-
-
-
+plot_ci_convergence("Params. satis, emul. alg.",
+  c("Rand. next n","Syst. next n"),M121,M122,true_ohs_pTRUE)
+plot_ci_convergence("Params. not satis, emul. alg.",
+  c("Rand. next n","Syst. next n"),M221,M222,true_ohs_pFALSE)
 

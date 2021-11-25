@@ -62,7 +62,6 @@ parametrised by `k_width`=$\omega$ and `var_u`=$\sigma_u^2$, using the values `k
 We briefly set up general parameters for this simulation
 
 ```{r,echo=T}
-
 # Set random seed
 set.seed(21423)
 
@@ -85,10 +84,6 @@ vu0=1e7
 
 # We will presume that these are the values of n for which cost can potentially be evaluated.
 n=seq(1000,N,length=300)
-
-# Include legend on plots or not; inclusion can obscure plot elements on small figures
-inc_legend=FALSE
-
 ```
 
 
@@ -100,7 +95,6 @@ inc_legend=FALSE
 We will consider two possible forms for the true function $k_2(n)$. One is a simple power-law curve (the function `powerlaw()` generates expected values of $k_2(n)$ according to the power-law parametrisation above). The other is a curve exhibiting 'double-descent' behaviour, which cannot be parametrised using a power law curve.
 
 ```{r,echo=TRUE,fig.width = 5,fig.height=5}
-
 ## True form of k2, option 1: parametric assumptions satisfied (true)
 true_k2_pTRUE=function(n) powerlaw(n,theta_true)
 
@@ -136,7 +130,7 @@ d_pFALSE=rnorm(nsamp,mean=true_k2_pFALSE(nset),sd=sqrt(var_w))
 The true optimal holdout sizes under the two forms of $k_2(n)$ are
 
 ```{r, echo=T}
-nc=1000:N 
+nc=1000:N
 
 true_ohs_pTRUE=nc[which.min(k1*nc + true_k2_pTRUE(nc)*(N-nc))]
 true_ohs_pFALSE=nc[which.min(k1*nc + true_k2_pFALSE(nc)*(N-nc))]
@@ -149,7 +143,6 @@ print(true_ohs_pFALSE)
 We now make estimates of the optimal holdout size using the parametric and semi-parametric (Bayesian emulation) methods. Also see documentation for functions `powersolve_se()` and `ohs_ci` for details and examples of confidence interval construction for such estimates
 
 ```{r, echo=T}
-
 # Estimate a,b, and c from values nset and d
 est_abc_pTRUE=powersolve(nset,d_pTRUE,
   lower=theta_lower,upper=theta_upper,init=theta_init)$par
@@ -233,29 +226,30 @@ for (i in 1:n_var) {
   d_pFALSE_r=rnorm(nsamp,mean=true_k2_pFALSE(nset),sd=sqrt(var_w))
 
 
-# Estimate a,b, and c from values nset and d
-est_abc_pTRUE_r=powersolve(nset,d_pTRUE_r,y_var=var_w,
-  lower=theta_lower,upper=theta_upper,init=theta_init)$par
-est_abc_pFALSE_r=powersolve(nset,d_pFALSE_r,y_var=var_w,
-  lower=theta_lower,upper=theta_upper,init=theta_init)$par
+  # Estimate a,b, and c from values nset and d
+  est_abc_pTRUE_r=powersolve(nset,d_pTRUE_r,y_var=var_w,
+    lower=theta_lower,upper=theta_upper,init=theta_init)$par
+  est_abc_pFALSE_r=powersolve(nset,d_pFALSE_r,y_var=var_w,
+    lower=theta_lower,upper=theta_upper,init=theta_init)$par
 
-# Estimate optimal holdout sizes using parametric method
-param_ohs_pTRUE_r=optimal_holdout_size(N,k1,theta=est_abc_pTRUE_r)$size
-param_ohs_pFALSE_r=optimal_holdout_size(N,k1,theta=est_abc_pFALSE_r)$size
+  # Estimate optimal holdout sizes using parametric method
+  param_ohs_pTRUE_r=optimal_holdout_size(N,k1,theta=est_abc_pTRUE_r)$size
+  param_ohs_pFALSE_r=optimal_holdout_size(N,k1,theta=est_abc_pFALSE_r)$size
 
-# Estimate optimal holdout sizes using semi-parametric (emulation) method
+  # Estimate optimal holdout sizes using semi-parametric (emulation) method
   emul_ohs_pTRUE_r=optimal_holdout_size_emulation(nset,d_pTRUE_r,theta=est_abc_pTRUE_r,var_w,N,k1)$size
   emul_ohs_pFALSE_r=optimal_holdout_size_emulation(nset,d_pFALSE_r,theta=est_abc_pTRUE_r,var_w,N,k1)$size
 
-ohs_resample[i,]=c(param_ohs_pTRUE_r, param_ohs_pFALSE_r, emul_ohs_pTRUE_r, emul_ohs_pFALSE_r)
+  ohs_resample[i,]=c(param_ohs_pTRUE_r, param_ohs_pFALSE_r, emul_ohs_pTRUE_r, emul_ohs_pFALSE_r)
 
-print(i)
+  print(i)
 }
 
 colnames(ohs_resample)=c("param_pTRUE","param_pFALSE","emul_pTRUE", "emul_pFALSE")
 save(ohs_resample,file="data/ohs_resample.RData")
 
 
+## To draw plot:
 
 data(ohs_resample)
 
@@ -265,6 +259,7 @@ d_pf=density(ohs_resample[,"param_pFALSE"])
 d_ef=density(ohs_resample[,"emul_pFALSE"])
 
 
+par(mar=c(6,4,1,1))
 plot(0,type="n",xlim=c(0,5),ylim=c(8000,45000),xaxt="n",ylab="OHS",xlab="")
 axis(1,at=c(1.5,3.5),label=c("Par. satis.", "Par. unsatis."),las=2)
 
@@ -372,8 +367,8 @@ Detailed code is given below
 
 <details><summary>Show detailed code</summary>
 ```{r,echo=TRUE,fig.width=10,fig.height=5,eval=FALSE}
-
 ## Choose an initial five training sizes at which to evaluate k2
+set.seed(32424)
 nstart=5
 nset0=round(runif(nstart,1000,N/2))
 var_w0=runif(nstart,vwmin,vwmax)
@@ -395,21 +390,77 @@ var_w_pFALSE=var_w0
 max_points=200
 
 while(length(nset_pTRUE)<= max_points) {
+  set.seed(37261 + length(nset_pTRUE))
 
-# Estimate parameters
-theta_pTRUE=powersolve(nset_pTRUE,d_pTRUE,y_var=var_w_pTRUE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
-theta_pFALSE=powersolve(nset_pFALSE,d_pFALSE,y_var=var_w_pFALSE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
+  # Estimate parameters
+  theta_pTRUE=powersolve(nset_pTRUE,d_pTRUE,y_var=var_w_pTRUE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
+  theta_pFALSE=powersolve(nset_pFALSE,d_pFALSE,y_var=var_w_pFALSE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
+
+  # Find next suggested point, parametric assumptions satisfied
+  ci_pTRUE = next_n(n,nset_pTRUE,d=d_pTRUE,var_w=var_w_pTRUE,N=N,k1=k1,nmed=15)
+  if (!all(is.na(ci_pTRUE))) nextn_pTRUE=n[which.min(ci_pTRUE)] else
+    nextn_pTRUE=round(runif(1,1000,N))
+
+  # Find next suggested point, parametric assumptions not satisfied
+  ci_pFALSE = next_n(n,nset_pFALSE,d=d_pFALSE,var_w=var_w_pFALSE,N=N,k1=k1,nmed=15)
+  if (!all(is.na(ci_pFALSE))) nextn_pFALSE=n[which.min(ci_pFALSE)] else
+    nextn_pFALSE=round(runif(1,1000,N))
+
+  # New estimates of k2
+  var_w_new_pTRUE=runif(1,vwmin,vwmax)
+  d_new_pTRUE=rnorm(1,mean=true_k2_pTRUE(nextn_pTRUE),sd=sqrt(var_w_new_pTRUE))
+
+  var_w_new_pFALSE=runif(1,vwmin,vwmax)
+  d_new_pFALSE=rnorm(1,mean=true_k2_pFALSE(nextn_pFALSE),sd=sqrt(var_w_new_pFALSE))
 
 
-# Two panels
+  # Update data
+  nset_pTRUE=c(nset_pTRUE,nextn_pTRUE)
+  d_pTRUE=c(d_pTRUE,d_new_pTRUE)
+  var_w_pTRUE=c(var_w_pTRUE,var_w_new_pTRUE)
+
+  nset_pFALSE=c(nset_pFALSE,nextn_pFALSE)
+  d_pFALSE=c(d_pFALSE,d_new_pFALSE)
+  var_w_pFALSE=c(var_w_pFALSE,var_w_new_pFALSE)
+
+  print(length(nset_pFALSE))
+
+  data_nextpoint_par=list(
+    nset_pTRUE=nset_pTRUE,nset_pFALSE=nset_pFALSE,
+    d_pTRUE=d_pTRUE,d_pFALSE=d_pFALSE,
+    var_w_pTRUE=var_w_pTRUE,var_w_pFALSE=var_w_pFALSE)
+
+  save(data_nextpoint_par,file="data/data_nextpoint_par.RData")
+
+  #    Sys.sleep(10)
+
+}
+
+data_nextpoint_par=list(
+  nset_pTRUE=nset_pTRUE,nset_pFALSE=nset_pFALSE,
+  d_pTRUE=d_pTRUE,d_pFALSE=d_pFALSE,
+  var_w_pTRUE=var_w_pTRUE,var_w_pFALSE=var_w_pFALSE)
+
+save(data_nextpoint_par,file="data/data_nextpoint_par.RData")
+
+
+
+## To draw plot with np points (np can be set using the button)
+
+np=50 # or set using interactive session
+
 par(mfrow=c(1,2))
 yrange=c(0,100000)
+
+# Estimate parameters for parametric part of semi-parametric method
+theta_pTRUE=powersolve(nset_pTRUE[1:np],d_pTRUE[1:np],y_var=var_w_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+theta_pFALSE=powersolve(nset_pFALSE[1:np],d_pFALSE[1:np],y_var=var_w_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
 
 ## First panel
 plot(0,xlim=range(n),ylim=yrange,type="n",
   xlab="Training/holdout set size",
   ylab="Total cost (= num. cases)")
-points(nset_pTRUE,k1*nset_pTRUE + d_pTRUE*(N-nset_pTRUE),pch=16,col="purple")
+points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + d_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
 lines(n,k1*n + powerlaw(n,theta_pTRUE)*(N-n),lty=2)
 lines(n,k1*n + true_k2_pTRUE(n)*(N-n),lty=3,lwd=3)
 legend("topright",
@@ -420,17 +471,15 @@ legend("topright",
   lty=c(2,3,NA,NA),lwd=c(1,3,NA,NA),pch=c(NA,NA,16,124),pt.cex=c(NA,NA,1,1),
   col=c("black","black","purple","black"),bg="white",border=NA)
 
-# Add vertical line at next suggested point
-ci_pTRUE = next_n(n,nset_pTRUE,d=d_pTRUE,var_w=var_w_pTRUE,N=N,k1=k1,nmed=15)
-if (!all(is.na(ci_pTRUE))) nextn_pTRUE=n[which.min(ci_pTRUE)] else nextn_pTRUE=round(runif(1,1000,N))
-abline(v=nextn_pTRUE)
+abline(v=nset_pTRUE[np+1])
+
 
 
 ## Second panel
 plot(0,xlim=range(n),ylim=yrange,type="n",
   xlab="Training/holdout set size",
   ylab="Total cost (= num. cases)")
-points(nset_pFALSE,k1*nset_pFALSE + d_pFALSE*(N-nset_pFALSE),pch=16,col="purple")
+points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + d_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
 lines(n,k1*n + powerlaw(n,theta_pFALSE)*(N-n),lty=2)
 lines(n,k1*n + true_k2_pFALSE(n)*(N-n),lty=3,lwd=3)
 legend("topright",
@@ -441,42 +490,10 @@ legend("topright",
   lty=c(2,3,NA,NA),lwd=c(1,3,NA,NA),pch=c(NA,NA,16,124),pt.cex=c(NA,NA,1,1),
   col=c("black","black","purple","black"),bg="white",border=NA)
 
-# Add vertical line at next suggested point
-ci_pFALSE = next_n(n,nset_pFALSE,d=d_pFALSE,var_w=var_w_pFALSE,N=N,k1=k1,nmed=15)
-if (!all(is.na(ci_pFALSE))) nextn_pFALSE=n[which.min(ci_pFALSE)] else nextn_pFALSE=round(runif(1,1000,N))
-abline(v=nextn_pFALSE)
+abline(v=nset_pFALSE[np+1])
 
 
 
-# New estimates of k2
-var_w_new_pTRUE=runif(1,vwmin,vwmax) 
-d_new_pTRUE=rnorm(1,mean=true_k2_pTRUE(nextn_pTRUE),sd=sqrt(var_w_new_pTRUE))
-
-var_w_new_pFALSE=runif(1,vwmin,vwmax) 
-d_new_pFALSE=rnorm(1,mean=true_k2_pFALSE(nextn_pFALSE),sd=sqrt(var_w_new_pFALSE))
-
-
-# Update data
-nset_pTRUE=c(nset_pTRUE,nextn_pTRUE)
-d_pTRUE=c(d_pTRUE,d_new_pTRUE)
-var_w_pTRUE=c(var_w_pTRUE,var_w_new_pTRUE)
-
-nset_pFALSE=c(nset_pFALSE,nextn_pFALSE)
-d_pFALSE=c(d_pFALSE,d_new_pFALSE)
-var_w_pFALSE=c(var_w_pFALSE,var_w_new_pFALSE)
-
-print(length(nset_pFALSE))
-
-Sys.sleep(10)
-
-}
-
-data_nextpoint_par=list(
-  nset_pTRUE=nset_pTRUE,nset_pFALSE=nset_pFALSE,
-  d_pTRUE=d_pTRUE,d_pFALSE=d_pFALSE,
-  var_w_pTRUE=var_w_pTRUE,var_w_pFALSE=var_w_pFALSE)
-
-save(data_nextpoint_par,file="data/data_nextpoint_par.RData")
 ```
 </details>
 
@@ -573,9 +590,10 @@ renderUI({
 Detailed code is given below
 
 <details><summary>Show detailed code</summary>
-```{r,echo=TRUE,fig.width=10,fig.height=5,eval=FALSE}
 
+```{r,echo=TRUE,fig.width=10,fig.height=5,eval=FALSE}
 ## Choose an initial five training sizes at which to evaluate k2
+set.seed(32424) # start from same seed as before
 nstart=5
 nset0=round(runif(nstart,1000,N/2))
 var_w0=runif(nstart,vwmin,vwmax)
@@ -597,10 +615,13 @@ var_w_pFALSE=var_w0
 max_points=200
 
 while(length(nset_pTRUE)<= max_points) {
-
+  set.seed(46352 + length(nset_pTRUE))
+  
   # Estimate parameters for parametric part of semi-parametric method
-  theta_pTRUE=powersolve(nset_pTRUE,d_pTRUE,y_var=var_w_pTRUE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
-  theta_pFALSE=powersolve(nset_pTRUE,d_pFALSE,y_var=var_w_pTRUE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
+  theta_pTRUE=powersolve(nset_pTRUE,d_pTRUE,y_var=var_w_pTRUE,
+    lower=theta_lower,upper=theta_upper,init=theta_init)$par
+  theta_pFALSE=powersolve(nset_pTRUE,d_pFALSE,y_var=var_w_pTRUE,
+    lower=theta_lower,upper=theta_upper,init=theta_init)$par
   
   # Mean and variance of emulator for cost function, parametric assumptions satisfied
   p_mu_pTRUE=mu_fn(n,nset=nset_pTRUE,d=d_pTRUE,var_w = var_w_pTRUE,theta=theta_pTRUE,N=N,k1=k1)
@@ -609,12 +630,66 @@ while(length(nset_pTRUE)<= max_points) {
   # Mean and variance of emulator for cost function, parametric assumptions not satisfied
   p_mu_pFALSE=mu_fn(n,nset=nset_pFALSE,d=d_pFALSE,var_w = var_w_pFALSE,theta=theta_pFALSE,N=N,k1=k1)
   p_var_pFALSE=psi_fn(n,nset=nset_pFALSE,N=N,var_w = var_w_pFALSE)
+  
+  # Add vertical line at next suggested point
+  exp_imp_em_pTRUE = exp_imp_fn(n,nset=nset_pTRUE,d=d_pTRUE,var_w = var_w_pTRUE, N=N,k1=k1)
+  nextn_pTRUE = n[which.max(exp_imp_em_pTRUE)]
+  
+  # Find next suggested point, parametric assumptions not satisfied
+  exp_imp_em_pFALSE = exp_imp_fn(n,nset=nset_pFALSE,d=d_pFALSE,var_w = var_w_pFALSE, N=N,k1=k1)
+  nextn_pFALSE = n[which.max(exp_imp_em_pFALSE)]
+  
+  
+  # New estimates of k2
+  var_w_new_pTRUE=runif(1,vwmin,vwmax)
+  d_new_pTRUE=rnorm(1,mean=true_k2_pTRUE(nextn_pTRUE),sd=sqrt(var_w_new_pTRUE))
+  
+  var_w_new_pFALSE=runif(1,vwmin,vwmax)
+  d_new_pFALSE=rnorm(1,mean=true_k2_pFALSE(nextn_pFALSE),sd=sqrt(var_w_new_pFALSE))
+  
+  
+  # Update data
+  nset_pTRUE=c(nset_pTRUE,nextn_pTRUE)
+  d_pTRUE=c(d_pTRUE,d_new_pTRUE)
+  var_w_pTRUE=c(var_w_pTRUE,var_w_new_pTRUE)
+  
+  nset_pFALSE=c(nset_pFALSE,nextn_pFALSE)
+  d_pFALSE=c(d_pFALSE,d_new_pFALSE)
+  var_w_pFALSE=c(var_w_pFALSE,var_w_new_pFALSE)
+  
+  print(length(nset_pFALSE))
+  
+  
+}
+
+data_nextpoint_em=list(
+  nset_pTRUE=nset_pTRUE,nset_pFALSE=nset_pFALSE,
+  d_pTRUE=d_pTRUE,d_pFALSE=d_pFALSE,
+  var_w_pTRUE=var_w_pTRUE,var_w_pFALSE=var_w_pFALSE)
+
+save(data_nextpoint_em,file="data/data_nextpoint_em.RData")
 
 
-# Two panels
+
+## To draw plot with np points (np can be set using the button)
+
+np=50 # or set using interactive session
+
 par(mfrow=c(1,2))
 yrange=c(0,100000)
 
+# Mean and variance of emulator for cost function, parametric assumptions satisfied
+p_mu_pTRUE=mu_fn(n,nset=nset_pTRUE[1:np],d=d_pTRUE[1:np],var_w = var_w_pTRUE[1:np],N=N,k1=k1)
+p_var_pTRUE=psi_fn(n,nset=nset_pTRUE[1:np],N=N,var_w = var_w_pTRUE[1:np])
+
+# Mean and variance of emulator for cost function, parametric assumptions not satisfied
+p_mu_pFALSE=mu_fn(n,nset=nset_pFALSE[1:np],d=d_pFALSE[1:np],var_w = var_w_pFALSE[1:np],N=N,k1=k1)
+p_var_pFALSE=psi_fn(n,nset=nset_pFALSE[1:np],N=N,var_w = var_w_pFALSE[1:np])
+
+
+# Estimate parameters for parametric part of semi-parametric method
+theta_pTRUE=powersolve(nset_pTRUE[1:np],d_pTRUE[1:np],y_var=var_w_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+theta_pFALSE=powersolve(nset_pFALSE[1:np],d_pFALSE[1:np],y_var=var_w_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
 
 ## First panel
 plot(0,xlim=range(n),ylim=yrange,type="n",
@@ -623,23 +698,21 @@ plot(0,xlim=range(n),ylim=yrange,type="n",
 lines(n,p_mu_pTRUE,col="blue")
 lines(n,p_mu_pTRUE - 3*sqrt(pmax(0,p_var_pTRUE)),col="red")
 lines(n,p_mu_pTRUE + 3*sqrt(pmax(0,p_var_pTRUE)),col="red")
-points(nset_pTRUE,k1*nset_pTRUE + d_pTRUE*(N-nset_pTRUE),pch=16,col="purple")
+points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + d_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
 lines(n,k1*n + powerlaw(n,theta_pTRUE)*(N-n),lty=2)
 lines(n,k1*n + true_k2_pTRUE(n)*(N-n),lty=3,lwd=3)
 legend("topright",
   c(expression(mu(n)),
     expression(mu(n) %+-% 3*sqrt(psi(n))),
-    "prior(n)",
+    "Par. est. cost",
     "True",
     "d",
     "Next pt."),
   lty=c(1,1,2,3,NA,NA),lwd=c(1,1,1,3,NA,NA),pch=c(NA,NA,NA,NA,16,124),pt.cex=c(NA,NA,NA,NA,1,1),
   col=c("blue","red","black","black","purple","black"),bg="white",border=NA)
 
-# Add vertical line at next suggested point
-exp_imp_em_pTRUE = exp_imp_fn(n,nset=nset_pTRUE,d=d_pTRUE,var_w = var_w_pTRUE, N=N,k1=k1)
-nextn_pTRUE = n[which.max(exp_imp_em_pTRUE)]
-abline(v=nextn_pTRUE)
+abline(v=nset_pTRUE[np+1])
+
 
 
 ## Second panel
@@ -649,53 +722,22 @@ plot(0,xlim=range(n),ylim=yrange,type="n",
 lines(n,p_mu_pFALSE,col="blue")
 lines(n,p_mu_pFALSE - 3*sqrt(pmax(0,p_var_pFALSE)),col="red")
 lines(n,p_mu_pFALSE + 3*sqrt(pmax(0,p_var_pFALSE)),col="red")
-points(nset_pFALSE,k1*nset_pFALSE + d_pFALSE*(N-nset_pFALSE),pch=16,col="purple")
+points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + d_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
 lines(n,k1*n + powerlaw(n,theta_pFALSE)*(N-n),lty=2)
 lines(n,k1*n + true_k2_pFALSE(n)*(N-n),lty=3,lwd=3)
 legend("topright",
   c(expression(mu(n)),
     expression(mu(n) %+-% 3*sqrt(psi(n))),
-    "prior(n)",
+    "Par. est. cost",
     "True",
     "d",
     "Next pt."),
   lty=c(1,1,2,3,NA,NA),lwd=c(1,1,1,3,NA,NA),pch=c(NA,NA,NA,NA,16,124),pt.cex=c(NA,NA,NA,NA,1,1),
   col=c("blue","red","black","black","purple","black"),bg="white",border=NA)
 
-# Add vertical line at next suggested point
-exp_imp_em_pFALSE = exp_imp_fn(n,nset=nset_pFALSE,d=d_pFALSE,var_w = var_w_pFALSE, N=N,k1=k1)
-nextn_pFALSE = n[which.max(exp_imp_em_pFALSE)]
-abline(v=nextn_pFALSE)
+abline(v=nset_pFALSE[np+1])
 
 
-# New estimates of k2
-var_w_new_pTRUE=runif(1,vwmin,vwmax) 
-d_new_pTRUE=rnorm(1,mean=true_k2_pTRUE(nextn_pTRUE),sd=sqrt(var_w_new_pTRUE))
-
-var_w_new_pFALSE=runif(1,vwmin,vwmax) 
-d_new_pFALSE=rnorm(1,mean=true_k2_pFALSE(nextn_pFALSE),sd=sqrt(var_w_new_pFALSE))
-
-
-# Update data
-nset_pTRUE=c(nset_pTRUE,nextn_pTRUE)
-d_pTRUE=c(d_pTRUE,d_new_pTRUE)
-var_w_pTRUE=c(var_w_pTRUE,var_w_new_pTRUE)
-
-nset_pFALSE=c(nset_pFALSE,nextn_pFALSE)
-d_pFALSE=c(d_pFALSE,d_new_pFALSE)
-var_w_pFALSE=c(var_w_pFALSE,var_w_new_pFALSE)
-
-print(length(nset_pFALSE))
-
-Sys.sleep(10)
-}
-
-data_nextpoint_em=list(
-  nset_pTRUE=nset_pTRUE,nset_pFALSE=nset_pFALSE,
-  d_pTRUE=d_pTRUE,d_pFALSE=d_pFALSE,
-  var_w_pTRUE=var_w_pTRUE,var_w_pFALSE=var_w_pFALSE)
-
-save(data_nextpoint_em,file="data/data_nextpoint_em.RData")
 ```
 </details>
 
@@ -704,7 +746,7 @@ save(data_nextpoint_em,file="data/data_nextpoint_em.RData")
 
 ## Rates of convergence
 
-Finally, we compare the rates of convergence of OHS estimates 
+Finally, we compare the rates of convergence of OHS estimates. The following plots show medians and interquartile ranges of optimal holdout size estimates from resampled estimates of $k_2(n)$. We compare the random choice of values of $n$ with sequentially systematically-chosen values, as detailed in the previous section.
 
 ```{r,echo=F}
 
@@ -718,7 +760,7 @@ data(ohs_array)
 #  using the lth method of selecting next points (l=1: random, l=2: systematic)
 
 # Settings
-alpha=0.1; # Plot 1-alpha confidence intervals
+alpha=0.5; # Plot 1-alpha confidence intervals
 dd=3 # horizontal line spacing
 n_iter=dim(ohs_array)[1] # X axis range
 ymax=80000 # Y axis range
@@ -767,7 +809,7 @@ plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
   # Bottom panel setup
   par(mar=c(4,4,0.1,0.1))
   plot(0,xlim=c(5,n_iter),ylim=c(0,1e5),type="n",
-    ylab="CI width",xlab="Training set size")
+    ylab="CI width",xlab=expression(paste("Number of estimates of k"[2],"(n)")))
 
   # Draw lines
   lines(1:n_iter,ci1[2,]-ci1[1,],col="black")
@@ -807,8 +849,6 @@ plot_ci_convergence("Params. satis, emul. alg.",
   c("Rand. next n","Syst. next n"),M121,M122,true_ohs_pTRUE)
 plot_ci_convergence("Params. not satis, emul. alg.",
   c("Rand. next n","Syst. next n"),M221,M222,true_ohs_pFALSE)
-
-
 ```
 
 We note that, in general, convergence is faster when 'next points' are picked systematically rather than randomly and convergence is faster when using parametric estimates, though as noted above parametric estimates are biased and inconsistent when parametric assumptions are not satisfied.
@@ -846,10 +886,10 @@ n_iter=200
 # Generate random 'next points'
 set.seed(36279)
 data_nextpoint_rand=list(
-  nset_pTRUE=round(runif(nmax,1000,N)),
-  nset_pFALSE=round(runif(nmax,1000,N)),
-  var_w_pTRUE=runif(nmax,vwmin,vwmax),
-  var_w_pFALSE=runif(nmax,vwmin,vwmax)
+  nset_pTRUE=round(runif(n_iter,1000,N)),
+  nset_pFALSE=round(runif(n_iter,1000,N)),
+  var_w_pTRUE=runif(n_iter,vwmin,vwmax),
+  var_w_pFALSE=runif(n_iter,vwmin,vwmax)
 )
 
 # Initialise matrices of records
@@ -913,7 +953,6 @@ for (i in 5:n_iter) {
 
 
 
-## Draw figure
 
 
 # Load data
@@ -926,7 +965,7 @@ data(ohs_array)
 #  using the lth method of selecting next points (l=1: random, l=2: systematic)
 
 # Settings
-alpha=0.1; # Plot 1-alpha confidence intervals
+alpha=0.5; # Plot 1-alpha confidence intervals
 dd=3 # horizontal line spacing
 n_iter=dim(ohs_array)[1] # X axis range
 ymax=80000 # Y axis range
@@ -975,7 +1014,7 @@ plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
   # Bottom panel setup
   par(mar=c(4,4,0.1,0.1))
   plot(0,xlim=c(5,n_iter),ylim=c(0,1e5),type="n",
-    ylab="CI width",xlab="Training set size")
+    ylab="CI width",xlab=expression(paste("Number of estimates of k"[2],"(n)")))
 
   # Draw lines
   lines(1:n_iter,ci1[2,]-ci1[1,],col="black")
@@ -1000,7 +1039,7 @@ M222=ohs_array[1:n_iter,,2,2,2] # pFALSE, emul algorithm, systematic nextpoint
 
 
 # True OHS
-nc=1000:N 
+nc=1000:N
 true_ohs_pTRUE=nc[which.min(k1*nc + true_k2_pTRUE(nc)*(N-nc))]
 true_ohs_pFALSE=nc[which.min(k1*nc + true_k2_pFALSE(nc)*(N-nc))]
 
