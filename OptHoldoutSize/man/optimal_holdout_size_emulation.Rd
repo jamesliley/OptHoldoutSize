@@ -14,6 +14,7 @@ optimal_holdout_size_emulation(
   k_width = 5000,
   mean_fn = powerlaw,
   theta = powersolve(nset, d, y_var = var_w)$par,
+  npoll = 1000,
   ...
 )
 }
@@ -36,6 +37,8 @@ optimal_holdout_size_emulation(
 
 \item{theta}{Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.}
 
+\item{npoll}{Check npoll equally spaced values between 1 and N for minimum. If NULL, check all values (this can be slow). Defaults to 1000}
+
 \item{...}{Passed to function \code{optimise()}}
 }
 \value{
@@ -50,3 +53,4 @@ This is essentially a wrapper for function \code{mu_fn()}.
 
 
 }
+\keyword{estimation,emulation}

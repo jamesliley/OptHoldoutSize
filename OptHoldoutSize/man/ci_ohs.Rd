@@ -2,7 +2,7 @@
 % Please edit documentation in R/OptHoldoutSize_estimation.R
 \name{ci_ohs}
 \alias{ci_ohs}
-\title{Confidence interval for optimal holdout size}
+\title{Confidence interval for optimal holdout size, when estimated using parametric method}
 \usage{
 ci_ohs(
   N,

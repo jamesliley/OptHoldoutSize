@@ -140,7 +140,7 @@ print(true_ohs_pTRUE)
 print(true_ohs_pFALSE)
 ```
 
-We now make estimates of the optimal holdout size using the parametric and semi-parametric (Bayesian emulation) methods. Also see documentation for functions `powersolve_se()` and `ohs_ci` for details and examples of confidence interval construction for such estimates
+We now make estimates of the optimal holdout size using the parametric and semi-parametric (Bayesian emulation) methods. Also see documentation for functions `powersolve_se()`, `ci_ohs` and `error_ohs_emulation` for details and examples of error estimation for such estimates.
 
 ```{r, echo=T}
 # Estimate a,b, and c from values nset and d

@@ -111,10 +111,65 @@ optimal_holdout_size=function(
     out$size=out_size
     out$cost=out_cost
   }
+
+  class(out)=c("optholdoutsize",class(out))
   return(out)
 }
 
+##' Plot estimated cost function
+##'
+##' @export
+##' @name plot.optholdoutsize
+##' @keywords estimation
+##' @description Plot estimated cost function, when parametric method is used for estimation.
+##'
+##' Draws cost function as a line and indicates minimum. Assumes a power-law form of k2 unless parameter k2 is set otherwise.
+##'
+##' @param X Object of type `optholdoutsize`
+##' @param k2 Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
+##' @param ... Other arguments passed to `plot()` and `lines()`
+##' @examples
+##'
+##' # Simple example
+##'
+##' N=100000;
+##' k1=0.3
+##' A=8000; B=1.5; C=0.15; theta=c(A,B,C)
+##'
+##' res1=optimal_holdout_size(N,k1,theta)
+##'
+##' plot(res1)
+##'
+plot.optholdoutsize=function(X,k2=powerlaw,...) {
 
+  N=X$N; k1=X$k1; size=X$size; cost=X$cost;
+  if (length(N)==1) {
+    theta=unlist(X[5:length(X)])
+    xx=seq(1,N,length.out=1000)
+    yy= k1*xx + k2(xx,theta)*(N-xx)
+    costN=yy[length(xx)]
+
+    plot(xx,yy,type="l",ylim=c(2*cost-costN,costN + cost),xlab="Holdout size",ylab="Total cost",...)
+    abline(v=size,lty=2); abline(h=cost,lty=2)
+    points(size,cost,pch=16,col="black")
+    legend("bottomright",c("Est. cost","OHS"),lty=c(1,NA),pch=c(NA,16),col=c("black","black"),bty="n")
+  } else {
+    Nmax=max(N)
+    theta=as.data.frame(X[5:length(X)])
+
+    xx=seq(1,Nmax,length.out=1000)
+    yy=matrix(0,length(N),length(xx))
+    for (i in 1:length(N)) yy[i,]=k1[i]*xx + k2(xx,as.numeric(theta[i,]))*(N[i]-xx)
+
+    costN=yy[,length(xx)]
+
+    plot(0,type="n",xlim=c(1,Nmax),ylim=c(2*min(cost)-mean(costN),max(costN) + min(cost)),
+      xlab="Holdout size",ylab="Total cost",...)
+    for (i in 1:length(N)) lines(xx,yy[i,],...)
+    points(size,cost,pch=16)
+    legend("bottomright",c("Est. cost","OHS"),lty=c(1,NA),pch=c(NA,16),col=c("black","black"),bty="n")
+  }
+}
 
 
 
@@ -125,6 +180,7 @@ optimal_holdout_size=function(
 ##'
 ##' @export
 ##' @name optimal_holdout_size_emulation
+##' @keywords estimation,emulation
 ##' @description Compute optimal holdout size for updating a predictive score given a set of training set sizes and estimates of mean cost per sample at those training set sizes.
 ##'
 ##' This is essentially a wrapper for function `mu_fn()`.
@@ -139,6 +195,7 @@ optimal_holdout_size=function(
 ##' @param k_width Kernel width for Gaussian process kernel. Defaults to 5000
 ##' @param mean_fn Functional form governing expected loss per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
 ##' @param theta Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.
+##' @param npoll Check npoll equally spaced values between 1 and N for minimum. If NULL, check all values (this can be slow). Defaults to 1000
 ##' @param ... Passed to function `optimise()`
 ##' @return
 ##' @examples
@@ -149,25 +206,101 @@ optimal_holdout_size_emulation= function(nset,d,var_w,N,k1,
   k_width=5000,
   mean_fn=powerlaw,
   theta=powersolve(nset,d,y_var=var_w)$par,
+  npoll=1000,
   ...){
 
-  n=seq(1,N,length=1000)
+  if (!is.null(npoll)) n=seq(1,N,length=npoll) else n=1:N
   xv=mu_fn(n,nset,d,var_w,N,k1,var_u,k_width,mean_fn,theta)
   w=which.min(xv)
 
-  out=list(xv[w],n[w])
+  out=list(xv[w],n[w],nset,d,var_w,N,k1,var_u,k_width,theta)
   ## The 'optimise' below doesn't tend to work bimodally
   #minf=function(n) mu_fn(n,nset,d,var_w,N,k1,var_u,k_width,mean_fn,theta)
   #out=optimise(minf,c(1,N))
 
-  names(out)=c("cost","size")
+  names(out)=c("cost","size","nset","d","var_w","N","k1","var_u","k_width","theta")
+  class(out)=c("optholdoutsize_emul",class(out))
   return(out)
+}
+
+##' Plot estimated cost function using emulation (semiparametric)
+##'
+##' @export
+##' @name plot.optholdoutsize_emul
+##' @keywords estimation
+##' @description Plot estimated cost function, when semiparametric (emulation) method is used for estimation.
+##'
+##' Draws posterior mean of cost function as a line and indicates minimum. Also draws mean +/- 3 SE.
+##'
+##' Assumes a power-law form of k2 unless parameter k2 is set otherwise.
+##'
+##' @param X Object of type `optholdoutsize_emul`
+##' @param k2 Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
+##' @param ... Other arguments passed to `plot()`
+##' @examples
+##'
+##' # Simple example
+##'
+##' # Parameters
+##' N=100000;
+##' k1=0.3
+##' A=8000; B=1.5; C=0.15; theta=c(A,B,C)
+##'
+##' # True mean function
+##' k2_true=function(n) powerlaw(n,theta)
+##'
+##' # Values of n for which cost has been estimated
+##' np=50 # this many points
+##' nset=round(runif(np,1,N))
+##' var_w=runif(np,0.001,0.002)
+##' d=rnorm(np,mean=k2_true(nset),sd=sqrt(var_w))
+##'
+##' # Compute OHS
+##' res1=optimal_holdout_size_emulation(nset,d,var_w,N,k1)
+##'
+##' # Plot
+##' plot(res1)
+plot.optholdoutsize_emul=function(X,k2=powerlaw,...) {
+
+  # Plot at these values of n
+  nn=seq(1,N,length.out=1000)
+
+  # Mean function
+  xv=mu_fn(nn,X$nset,X$d,X$var_w,X$N,X$k1,X$var_u,X$k_width,mean_fn=k2,X$theta)
+
+  # Variance function
+  psiv=pmax(0,psi_fn(nn, X$nset, X$var_w, X$N, X$var_u, X$k_width))
+
+  # 3 SD bounds
+  xlo=xv - 3*sqrt(psiv)
+  xhi=xv + 3*sqrt(psiv)
+
+  # m(n)
+  xm=X$k1*nn + k2(nn,X$theta)*(X$N-nn)
+
+  xq=quantile(c(xlo,xhi),c(0.1,0.9)); xmid=median(xv)
+  yr=c(xmid - 2*(xmid-xq[1]),xmid + 2*(xq[2]-xmid))
+
+  plot(0,type="n",xlab="Holdout size",ylab="Total cost",xlim=c(1,N),ylim=yr,...)
+  lines(nn,xm,lty=2,col="black")
+  lines(nn,xv,col="blue")
+  lines(nn,xlo,col="red")
+  lines(nn,xhi,col="red")
+  points(X$nset,X$k1*X$nset + X$d*(X$N - X$nset),col="purple",pch=16)
+  abline(h=X$cost,lty=2); abline(v=X$size,lty=2)
+  legend("bottomright",
+    c(expression(mu(n)),
+      expression(mu(n) %+-% 3*sqrt(psi(n))),
+      "m(n)",
+      "d"),
+    lty=c(1,1,2,NA),lwd=c(1,1,1,NA),pch=c(NA,NA,NA,16),pt.cex=c(NA,NA,NA,1),
+    col=c("blue","red","black","purple"),bg="white",bty="n")
 }
 
 
 
 
-##' Confidence interval for optimal holdout size
+##' Confidence interval for optimal holdout size, when estimated using parametric method
 ##'
 ##' @export
 ##' @name ci_ohs
@@ -566,3 +699,99 @@ next_n=function(n,nset,d,var_w,N,k1,nmed=100,...) {
   return(out)
 }
 
+
+
+##' Measure of error for emulation-based OHS emulation
+##'
+##' @export
+##' @name error_ohs_emulation
+##' @description Measure of error for semiparametric (emulation) based estimation of optimal holdout set sizes.
+##'
+##' Returns a set of values of n for which a `1-alpha` credible interval for cost at includes a lower value than the cost at the estimated optimal holdout size.
+##'
+##' This is not a confidence interval, credible interval or credible set for the OHS, and is prone to misinterpretation.
+##'
+##' @keywords estimation,emulation
+##' @param nset Training set sizes for which a loss has been evaluated
+##' @param d Loss at training set sizes `nset`
+##' @param var_w Variance of error in loss estimate at each training set size.
+##' @param N Total number of samples on which the model will be fitted/used
+##' @param k1 Mean loss per sample with no predictive score in place
+##' @param alpha Use 1-alpha credible interval. Defaults to 0.1.
+##' @param var_u Marginal variance for Gaussian process kernel. Defaults to 1e7
+##' @param k_width Kernel width for Gaussian process kernel. Defaults to 5000
+##' @param mean_fn Functional form governing expected loss per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
+##' @param theta Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.
+##' @param npoll Check npoll equally spaced values between 1 and N for minimum. If NULL, check all values (this can be slow). Defaults to 1000
+##' @return Vector of values `n` for which 1-alpha credible interval for cost `l(n)` at n contains mean posterior loss at estimated optimal holdout size.
+##' @examples
+##'
+##'  # Set seed
+##' set.seed(57365)
+##'
+##' # Parameters
+##' N=100000;
+##' k1=0.3
+##' A=8000; B=1.5; C=0.15; theta=c(A,B,C)
+##'
+##' # True mean function
+##' k2_true=function(n) powerlaw(n,theta)
+##'
+##' # True OHS
+##' nx=1:N
+##' ohs_true=nx[which.min(k1*nx + k2_true(nx)*(N-nx))]
+##'
+##' # Values of n for which cost has been estimated
+##' np=50 # this many points
+##' nset=round(runif(np,1,N))
+##' var_w=runif(np,0.001,0.0015)
+##' d=rnorm(np,mean=k2_true(nset),sd=sqrt(var_w))
+##'
+##' # Compute OHS
+##' res1=optimal_holdout_size_emulation(nset,d,var_w,N,k1)
+##'
+##' # Error estimates
+##' ex=error_ohs_emulation(nset,d,var_w,N,k1)
+##'
+##' # Plot
+##' plot(res1)
+##'
+##' # Add error
+##' abline(v=ohs_true)
+##' abline(v=ex,col=rgb(1,0,0,alpha=0.2))
+##'
+##' # Show justification for error
+##' n=seq(1,N,length=1000)
+##' mu=mu_fn(n,nset,d,var_w,N,k1); psi=pmax(0,psi_fn(n, nset, var_w, N)); Z=-qnorm(0.1/2)
+##' lines(n,mu - Z*sqrt(psi),lty=2,lwd=2)
+##' legend("topright",
+##'     c("Err. region",expression(paste(mu(n)- "z"[alpha/2]*sqrt(psi(n))))),
+##'     pch=c(16,NA),lty=c(NA,2),lwd=c(NA,2),col=c("pink","black"),bty="n")
+error_ohs_emulation=function(nset,d,var_w,N,k1,
+  alpha=0.1,
+  var_u=1e7,
+  k_width=5000,
+  mean_fn=powerlaw,
+  theta=powersolve(nset,d,y_var=var_w)$par,
+  npoll=1000,
+  ...){
+
+  # Candidate values n
+  if (!is.null(npoll)) n=seq(1,N,length=npoll) else n=1:N
+
+  # mu and psi
+  xmu=mu_fn(n,nset,d,var_w,N,k1,var_u,k_width,mean_fn,theta)
+  xpsi=pmax(0,psi_fn(n, nset, var_w, N, var_u, k_width))
+
+  # Compute minimum
+  w=which.min(xmu)
+  ohs=n[w]
+  est_min=xmu[w]
+
+  z=-qnorm(alpha/2) # Need to be this many standard deviations below the mean
+
+  # Values of n for which 1-alpha credible interval for l(n) includes est_min
+  n_cont=n[which(xmu - z*sqrt(xpsi) <= est_min)]
+
+  return(n_cont)
+}
