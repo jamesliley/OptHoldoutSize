@@ -25,15 +25,36 @@ require("mle.tools")    # Gaussian processes
 ## Small auxiliary functions                                                  ##
 ################################################################################
 
-## These functions are not annotated.
-
+##' Logit
+##'
+##' @export
+##' @name logit
+##' @description Logit function: 1/(1+exp(-x))
+##' @param x argument
+##' @return value of logit(x)
+##' @examples
+##'
+##' # Plot
+##' x=seq(-5,5,length=1000)
+##' plot(x,logit(x),type="l")
 logit=function(x) 1/(1+exp(-x))
+
+##' Logistic
+##'
+##' @export
+##' @name logistic
+##' @description Logistic function: -log((1/x)-1)
+##' @param x argument
+##' @return value of logit(x); na if x is outside (0,1)
+##' @examples
+##'
+##' # Plot
+##' x=seq(0,1,length=100)
+##' plot(x,logistic(x),type="l)
+##'
+##' # Logit and logistic are inverses
+##' x=seq(-5,5,length=1000)
+##' plot(x,logistic(logit(x)),type="l)
 logistic=function(x) -log((1/x)-1)
 
-
-#### Run if manually using package
-if (FALSE) {
-  lx=list.files("R",full.names=T)
-  for (i in 1:length(lx)) source(lx[i])
-}
 

@@ -81,9 +81,9 @@ optimal_holdout_size=function(
   np=dim(par_mat)[2]
 
     ## Solve
-  out=apply(par_mat,1,function(x) {
+  out=suppressWarnings(apply(par_mat,1,function(x) {
     unlist(optimize(function(n) x[2]*n + k2(n,x[3:np])*(x[1]-n),c(1,N),...))
-  })
+  }))
 
   ## Post-processing
   out=cbind(t(out),par_mat)
@@ -311,8 +311,8 @@ plot.optholdoutsize_emul=function(X,k2=powerlaw,...) {
 ##' If sigma (covariance matrix) is specified and method='bootstrap', a confidence interval is generated assuming a Gaussian distribution of (N,k1,theta). To estimate a confidence interval assuming a non-Gaussian distribution, simulate values under the requisite distribution and use then as parameters N,k1, theta, with sigma set to NULL.
 ##'
 ##' @keywords estimation
-##' @param N Vector of estimates of total number of samples on which the predictive score will be used/fitted. Can be a vector.
-##' @param k1 Vector of estimates of cost value in the absence of a predictive score. Can be a vector.
+##' @param N Vector of estimates of total number of samples on which the predictive score will be used/fitted, or single estimate
+##' @param k1 Vector of estimates of cost value in the absence of a predictive score, or single number
 ##' @param theta Matrix of estimates of parameters for function k2(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.
 ##' @param alpha Construct 1-alpha confidence interval. Defaults to 0.05
 ##' @param k2 Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``k2(n,c(a,b,c))=a n^(-b) + c``.
@@ -408,7 +408,7 @@ ci_ohs=function(
   k2 = powerlaw,
   grad_nstar=NULL,
   sigma=NULL,
-  n_boot=10000,
+  n_boot=1000,
   seed=NULL,
   mode="empirical",
   ...
@@ -579,6 +579,235 @@ grad_nstar_powerlaw=function(
 
 
 
+
+
+
+##' Fit power law curve
+##'
+##' @export
+##' @name powersolve
+##' @description  Find least-squares solution: MLE of (a,b,c) under model
+##'  ``y_i = a x_i^-b + c + e_i``;
+##'  ``e_i~N(0,y_var_i)``
+##'
+##' @keywords estimation,aspre
+##' @param x X values
+##' @param y Y values
+##' @param init Initial values of (a,b,c) to start. Default c(20000,2,0.1)
+##' @param y_var Optional parameter giving sampling variance of each y value. Defaults to 1.
+##' @param estimate_s Parameter specifying whether to also estimate s (as above). Defaults to FALSE (no).
+##' @param ... further parameters passed to optim. We suggest specifying lower and upper bounds for (a,b,c); e.g. lower=c(1,0,0),upper=c(10000,3,1)
+##' @return List (output from `optim`) containing MLE values of (a,b,c)
+##' @examples
+##'
+##' # Retrieval of original values
+##' A_true=2000; B_true=1.5; C_true=0.3; sigma=0.002
+##'
+##' X=1000*abs(rnorm(10000,mean=4))
+##' Y=A_true*(X^(-B_true)) + C_true + rnorm(length(X),sd=sigma)
+##'
+##' c(A_true,B_true,C_true)
+##' powersolve(X[1:10],Y[1:10])$par
+##' powersolve(X[1:100],Y[1:100])$par
+##' powersolve(X[1:1000],Y[1:1000])$par
+##' powersolve(X[1:10000],Y[1:10000])$par
+powersolve=function(x,y,init=c(20000,2,0.1),y_var=rep(1,length(y)),estimate_s=FALSE,...) {
+  if (!estimate_s) {
+    fabc=function(abc) {
+      out=sum( ((y- (abc[1]*(x^(-abc[2])) + abc[3]))^2)/(y_var))
+      if (is.finite(out)) return(out) else return(1e10)
+    }
+    out=suppressWarnings(optim(par=init,fn=fabc,control=list(parscale=init),...))
+  } else {
+    fabcs=function(abcs) {
+      out=-(sum( -((y- (abcs[1]*(x^(-abcs[2])) + abcs[3]))^2 / (2*y_var*(abcs[4]^2))) - log(sqrt(2*3.1415*y_var)*abcs[4])))
+      if (is.finite(out)) return(out) else return(1e10)
+    }
+    out=suppressWarnings(optim(par=c(init,0.05),fn=fabcs,control=list(parscale=c(init,0.5)),...))
+  }
+  return(out)
+}
+
+
+
+
+
+##' General solver for power law curve
+##'
+##' @export
+##' @name powersolve_general
+##' @description  Find least-squares solution: MLE of (a,b,c) under model
+##'  ``y_i = a x_i^-b + c + e_i``;
+##'  ``e_i~N(0,y_var_i)``
+##'
+##' Try a range of starting values and refine estimate.
+##'
+##' Slower than a single call to ``powersolve()``
+##'
+##' @keywords estimation,aspre
+##' @param x X values
+##' @param y Y values
+##' @param y_var Optional parameter giving sampling variance of each y value. Defaults to 1.
+##' @param ... further parameters passed to optim. We suggest specifying lower and upper bounds for (a,b,c); e.g. lower=c(1,0,0),upper=c(10000,3,1)
+##' @return List (output from `optim`) containing MLE values of (a,b,c)
+##' @examples
+##'
+##' # Retrieval of original values
+##' A_true=2000; B_true=1.5; C_true=0.3; sigma=0.002
+##'
+##' X=1000*abs(rnorm(10000,mean=4))
+##' Y=A_true*(X^(-B_true)) + C_true + rnorm(length(X),sd=sigma)
+##'
+##' c(A_true,B_true,C_true)
+##' powersolve_general(X[1:10],Y[1:10])$par
+##' powersolve_general(X[1:100],Y[1:100])$par
+##' powersolve_general(X[1:1000],Y[1:1000])$par
+##' powersolve_general(X[1:10000],Y[1:10000])$par
+powersolve_general=function(x,y,y_var=rep(1,length(x)),...) {
+  # Values of a,b,c to trial
+  atry=c(0.5,1,5,10,100,1000); btry=c(0.1,0.5,1,1.5,2); ctry=c(0,0.01,0.5)
+
+  # Current estimate
+  cur=c(1,1,1); Z=powersolve(x,y,y_var,init=cur,...); best=Z$par; top=Z$value
+  for (aa in atry) for (bb in btry) for (cc in ctry) {
+    Z=powersolve(x,y,y_var,init=cur,...);
+    if (Z$value<top) {
+      top=Z$value
+      best=Z$par
+    }
+  }
+
+  for (i in 1:10) best=powersolve(x,y,y_var,init=best,...)$par
+  return(powersolve(x,y,y_var,init=best,...))
+}
+
+
+
+
+
+##' Standard error matrix for learning curve parameters (power law)
+##'
+##'
+##' @export
+##' @name powersolve_se
+##' @description Find approximate standard error matrix for ``(a,b,c)`` under power law model for learning curve.
+##'
+##' Assumes that
+##'
+##'   ``y_i= a x_i^-b + c + e, e~N(0,s^2 y_var_i^2)``
+##'
+##' Standard error can be computed either asymptotically using Fisher information (`method='fisher'`) or boostrapped (`method='bootstrap'`)
+##'
+##' These estimate different quantities: the asymptotic method estimates
+##'
+##' ``Var[MLE(a,b,c)|X,y_var]``
+##'
+##' and the boostrap method estimates
+##'
+##' ``Var[MLE(a,b,c)]``.
+##'
+##' @keywords estimation,aspre
+##' @param x X values (typically training set sizes)
+##' @param y Y values (typically observed cost per individual/sample)
+##' @param method One of 'fisher' (for asymptotic variance via Fisher Information) or 'bootstrap' (for Bootstrap)
+##' @param init Initial values of (a,b,c) to start when computing MLE. Default c(20000,2,0.1)
+##' @param y_var Optional parameter giving sampling variance of each y value. Defaults to 1.
+##' @param n_boot Number of bootstrap resamples. Only used if method='bootstrap'. Defaults to 1000
+##' @param seed Random seed for bootstrap resamples. Defaults to NULL.
+##' @param ... further parameters passed to optim. We suggest specifying lower and upper bounds; since optim is called on (a*1000^-b,b,c), bounds should be relative to this; for instance, lower=c(0,0,0),upper=c(100,3,1)
+##' @return Standard error matrix; approximate covariance matrix of MLE(a,b,c)
+##' @examples
+##'
+##' A_true=10; B_true=1.5; C_true=0.3; sigma=0.1
+##'
+##' set.seed(31525)
+##'
+##' X=1+3*rchisq(10000,df=5)
+##' Y=A_true*(X^(-B_true)) + C_true + rnorm(length(X),sd=sigma)
+##'
+##' # 'Observations' - 100 samples
+##' obs=sample(length(X),100,rep=F)
+##' Xobs=X[obs]; Yobs=Y[obs]
+##'
+##' # True covariance matrix of MLE of a,b,c on these x values
+##' ntest=1000
+##' abc_mat_xfix=matrix(0,ntest,3)
+##' abc_mat_xvar=matrix(0,ntest,3)
+##' E1=A_true*(Xobs^(-B_true)) + C_true
+##' for (i in 1:ntest) {
+##'   Y1=E1 + rnorm(length(Xobs),sd=sigma)
+##'   abc_mat_xfix[i,]=powersolve(Xobs,Y1)$par # Estimate (a,b,c) with same X
+##'
+##'   X2=1+3*rchisq(length(Xobs),df=5)
+##'   Y2=A_true*(X2^(-B_true)) + C_true + rnorm(length(Xobs),sd=sigma)
+##'   abc_mat_xvar[i,]=powersolve(X2,Y2)$par # Estimate (a,b,c) with variable X
+##' }
+##'
+##' Ve1=var(abc_mat_xfix) # empirical variance of MLE(a,b,c)|X
+##' Vf=powersolve_se(Xobs,Yobs,method='fisher') # estimated SE matrix, asymptotic
+##'
+##' Ve2=var(abc_mat_xvar) # empirical variance of MLE(a,b,c)
+##' Vb=powersolve_se(Xobs,Yobs,method='bootstrap') # estimated SE matrix, bootstrap
+##'
+##' cat("Empirical variance of MLE(a,b,c)|X\n")
+##' print(Ve1)
+##' cat("\n")
+##' cat("Asymptotic variance of MLE(a,b,c)|X\n")
+##' print(Vf)
+##' cat("\n\n")
+##' cat("Empirical variance of MLE(a,b,c)\n")
+##' print(Ve2)
+##' cat("\n")
+##' cat("Bootstrap-estimated variance of MLE(a,b,c)\n")
+##' print(Vb)
+##' cat("\n\n")
+##'
+powersolve_se=function(x,y,method='fisher',init=c(20000,2,0.1),y_var=rep(1,length(y)),n_boot=1000,seed=NULL,...) {
+  if (method=="fisher") {
+    ## Fisher Information Matrix - straightforward to compute analytically
+    FI_mat=function(x,v,a,b,c,s)
+      -(1/(s^2 * v))*cbind(
+        c(-x^(-2*b),a*(x^(-2*b))*log(x),-x^(-b),0),
+        c(a*(x^(-2*b))*log(x),-(a^2)*(x^(-2*b))*(log(x)^2),a*(x^(-b))*log(x),0),
+        c(-x^(-b),a*(x^(-b))*log(x),-1,0),
+        c(0,0,0,-2*v))
+
+    ## Need to estimate s as well; call powersolve
+    abcs=powersolve(x,y,y_var=y_var,init=init,estimate_s=TRUE,...)$par
+
+    fmat=matrix(0,4,4); for (i in 1:length(x)) fmat=fmat + FI_mat(x[i],y_var[i],abcs[1],abcs[2],abcs[3],abcs[4])
+
+    # Check if fmat is invertible
+    if ("matrix" %in% class(try(solve(fmat),silent=T))) {
+      vmat=solve(fmat)[1:3,1:3]
+      return(vmat)
+    } else {
+      return(matrix(NA,3,3))
+    }
+  }
+  if (method=="bootstrap") {
+
+    # set seed
+    if (!is.null(seed)) set.seed(seed)
+
+    # Compute bootstrap resamples
+    xboot=matrix(0,n_boot,3)
+    for (i in 1:n_boot) {
+      sub=sample(length(x),length(x),replace=TRUE)
+      x1=init
+      for (j in 1:5) x1=powersolve(x[sub],y[sub],y_var=y_var[sub],init=x1,estimate_s=FALSE,...)$par
+      xboot[i,]=x1
+    }
+    vmat=var(xboot)
+    return(vmat)
+  }
+}
+
+
+
+
+
+
 ##' Finds best value of n to sample next
 ##'
 ##' @export
@@ -673,9 +902,9 @@ grad_nstar_powerlaw=function(
 ##' abline(v=n[which.min(exp_imp)])
 ##'
 ##'
-next_n=function(n,nset,d,var_w,N,k1,nmed=100,...) {
+next_n=function(n,nset,d,N,k1,nmed=100,var_w=rep(1,length(nset)),mode="asymptotic",...) {
   out=rep(0,length(n))
-  theta=powersolve(nset,d,y_var=var_w,...)$par
+  theta=powersolve_general(nset,d,y_var=var_w)$par
   for (i in 1:length(n)) {
     out_i=rep(0,nmed)
     for (j in 1:nmed) {
@@ -685,113 +914,17 @@ next_n=function(n,nset,d,var_w,N,k1,nmed=100,...) {
       dx=c(d,rnorm(1,mean=powerlaw(n[i],theta),sd=sqrt(mean(var_w))))
 
       # Parameter estimates with new candidate point
-      thetax=powersolve(nsetx,dx,y_var=var_wx,...)$par
-      covx=powersolve_se(nsetx,dx,y_var=var_wx,method="fisher",...)
+      thetax=powersolve(nsetx,dx,y_var=var_wx,init=theta,...)$par
+      covx=powersolve_se(nsetx,dx,y_var=var_wx,method="fisher",init=theta,...)
       cov_all=matrix(0,5,5); cov_all[3:5,3:5]=covx
 
-      if (!is.na(cov_all[1,1])) {
-        cx=ci_ohs(N,k1,thetax,sigma=cov_all,mode="asymptotic",grad_nstar=grad_nstar_powerlaw)
+      if (!is.na(cov_all[3,3])) {
+        cx=ci_ohs(N,k1,thetax,sigma=cov_all,mode=mode,grad_nstar=grad_nstar_powerlaw)
         out_i[j]=max(cx)-min(cx)
       } else out[j]=Inf
     }
-    out[i]=median(out_i)
+    out[i]=median(out_i,na.rm=TRUE)
   }
   return(out)
 }
 
-
-
-##' Measure of error for emulation-based OHS emulation
-##'
-##' @export
-##' @name error_ohs_emulation
-##' @description Measure of error for semiparametric (emulation) based estimation of optimal holdout set sizes.
-##'
-##' Returns a set of values of n for which a `1-alpha` credible interval for cost at includes a lower value than the cost at the estimated optimal holdout size.
-##'
-##' This is not a confidence interval, credible interval or credible set for the OHS, and is prone to misinterpretation.
-##'
-##' @keywords estimation,emulation
-##' @param nset Training set sizes for which a loss has been evaluated
-##' @param d Loss at training set sizes `nset`
-##' @param var_w Variance of error in loss estimate at each training set size.
-##' @param N Total number of samples on which the model will be fitted/used
-##' @param k1 Mean loss per sample with no predictive score in place
-##' @param alpha Use 1-alpha credible interval. Defaults to 0.1.
-##' @param var_u Marginal variance for Gaussian process kernel. Defaults to 1e7
-##' @param k_width Kernel width for Gaussian process kernel. Defaults to 5000
-##' @param mean_fn Functional form governing expected loss per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
-##' @param theta Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.
-##' @param npoll Check npoll equally spaced values between 1 and N for minimum. If NULL, check all values (this can be slow). Defaults to 1000
-##' @return Vector of values `n` for which 1-alpha credible interval for cost `l(n)` at n contains mean posterior loss at estimated optimal holdout size.
-##' @examples
-##'
-##'  # Set seed
-##' set.seed(57365)
-##'
-##' # Parameters
-##' N=100000;
-##' k1=0.3
-##' A=8000; B=1.5; C=0.15; theta=c(A,B,C)
-##'
-##' # True mean function
-##' k2_true=function(n) powerlaw(n,theta)
-##'
-##' # True OHS
-##' nx=1:N
-##' ohs_true=nx[which.min(k1*nx + k2_true(nx)*(N-nx))]
-##'
-##' # Values of n for which cost has been estimated
-##' np=50 # this many points
-##' nset=round(runif(np,1,N))
-##' var_w=runif(np,0.001,0.0015)
-##' d=rnorm(np,mean=k2_true(nset),sd=sqrt(var_w))
-##'
-##' # Compute OHS
-##' res1=optimal_holdout_size_emulation(nset,d,var_w,N,k1)
-##'
-##' # Error estimates
-##' ex=error_ohs_emulation(nset,d,var_w,N,k1)
-##'
-##' # Plot
-##' plot(res1)
-##'
-##' # Add error
-##' abline(v=ohs_true)
-##' abline(v=ex,col=rgb(1,0,0,alpha=0.2))
-##'
-##' # Show justification for error
-##' n=seq(1,N,length=1000)
-##' mu=mu_fn(n,nset,d,var_w,N,k1); psi=pmax(0,psi_fn(n, nset, var_w, N)); Z=-qnorm(0.1/2)
-##' lines(n,mu - Z*sqrt(psi),lty=2,lwd=2)
-##' legend("topright",
-##'     c("Err. region",expression(paste(mu(n)- "z"[alpha/2]*sqrt(psi(n))))),
-##'     pch=c(16,NA),lty=c(NA,2),lwd=c(NA,2),col=c("pink","black"),bty="n")
-error_ohs_emulation=function(nset,d,var_w,N,k1,
-  alpha=0.1,
-  var_u=1e7,
-  k_width=5000,
-  mean_fn=powerlaw,
-  theta=powersolve(nset,d,y_var=var_w)$par,
-  npoll=1000,
-  ...){
-
-  # Candidate values n
-  if (!is.null(npoll)) n=seq(1,N,length=npoll) else n=1:N
-
-  # mu and psi
-  xmu=mu_fn(n,nset,d,var_w,N,k1,var_u,k_width,mean_fn,theta)
-  xpsi=pmax(0,psi_fn(n, nset, var_w, N, var_u, k_width))
-
-  # Compute minimum
-  w=which.min(xmu)
-  ohs=n[w]
-  est_min=xmu[w]
-
-  z=-qnorm(alpha/2) # Need to be this many standard deviations below the mean
-
-  # Values of n for which 1-alpha credible interval for l(n) includes est_min
-  n_cont=n[which(xmu - z*sqrt(xpsi) <= est_min)]
-
-  return(n_cont)
-}

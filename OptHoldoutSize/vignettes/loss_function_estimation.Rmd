@@ -760,7 +760,7 @@ data(ohs_array)
 #  using the lth method of selecting next points (l=1: random, l=2: systematic)
 
 # Settings
-alpha=0.5; # Plot 1-alpha confidence intervals
+alpha=0.5; # Plot alpha/2,1-alpha/2 quantiles
 dd=3 # horizontal line spacing
 n_iter=dim(ohs_array)[1] # X axis range
 ymax=80000 # Y axis range
@@ -809,7 +809,7 @@ plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
   # Bottom panel setup
   par(mar=c(4,4,0.1,0.1))
   plot(0,xlim=c(5,n_iter),ylim=c(0,1e5),type="n",
-    ylab="CI width",xlab=expression(paste("Number of estimates of k"[2],"(n)")))
+    ylab="IQR",xlab=expression(paste("Number of estimates of k"[2],"(n)")))
 
   # Draw lines
   lines(1:n_iter,ci1[2,]-ci1[1,],col="black")
@@ -977,15 +977,17 @@ plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
   par(mar=c(1,4,4,0.1))
   layout(mat=rbind(matrix(1,4,4),matrix(2,2,4)))
 
+  # Number of estimates
+  n_iterx=dim(M1)[1]
 
   # Initialise
-  plot(0,xlim=c(5,n_iter),ylim=c(0,ymax),type="n",
+  plot(0,xlim=c(5,n_iterx),ylim=c(0,ymax),type="n",
     ylab="OHS and error",xaxt="n",main=title)
   abline(h=ohs_true,col="blue",lty=2)
 
   # Plot medians
-  points(1:n_iter,rowMedians(M1,na.rm=T),pch=16,cex=0.5,col="black")
-  points(1:n_iter,rowMedians(M2,na.rm=T),pch=16,cex=0.5,col="red")
+  points(1:n_iterx,rowMedians(M1,na.rm=T),pch=16,cex=0.5,col="black")
+  points(1:n_iterx,rowMedians(M2,na.rm=T),pch=16,cex=0.5,col="red")
 
   # CIs
   ci1=rbind(apply(M1,1,function(x) pmax(0,quantile(x,alpha/2,na.rm=T))),
@@ -995,13 +997,13 @@ plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
 
   # Plot CIs
   segments(
-    1:n_iter,ci1[1,],
-    1:n_iter,ci1[2,],
+    1:n_iterx,ci1[1,],
+    1:n_iterx,ci1[2,],
     col="black"
   )
   segments(
-    1:n_iter + 1/dd,ci2[1,],
-    1:n_iter + 1/dd,ci2[2,],
+    1:n_iterx + 1/dd,ci2[1,],
+    1:n_iterx + 1/dd,ci2[2,],
     col="red"
   )
 
@@ -1013,12 +1015,13 @@ plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
 
   # Bottom panel setup
   par(mar=c(4,4,0.1,0.1))
-  plot(0,xlim=c(5,n_iter),ylim=c(0,1e5),type="n",
-    ylab="CI width",xlab=expression(paste("Number of estimates of k"[2],"(n)")))
+  plot(0,xlim=c(5,n_iterx),
+       ylim=c(0,quantile(c(ci1[2,]-ci1[1,],ci2[2,]-ci2[1,]),0.95,na.rm=T)),
+    type="n",ylab="IQR",xlab=expression(paste("Number of estimates of k"[2],"(n)")))
 
   # Draw lines
-  lines(1:n_iter,ci1[2,]-ci1[1,],col="black")
-  lines(1:n_iter,ci2[2,]-ci2[1,],col="red")
+  lines(1:n_iterx,ci1[2,]-ci1[1,],col="black")
+  lines(1:n_iterx,ci2[2,]-ci2[1,],col="red")
 
 }
 

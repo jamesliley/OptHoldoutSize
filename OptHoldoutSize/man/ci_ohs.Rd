@@ -19,9 +19,9 @@ ci_ohs(
 )
 }
 \arguments{
-\item{N}{Vector of estimates of total number of samples on which the predictive score will be used/fitted. Can be a vector.}
+\item{N}{Vector of estimates of total number of samples on which the predictive score will be used/fitted, or single estimate}
 
-\item{k1}{Vector of estimates of cost value in the absence of a predictive score. Can be a vector.}
+\item{k1}{Vector of estimates of cost value in the absence of a predictive score, or single number}
 
 \item{theta}{Matrix of estimates of parameters for function k2(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.}
 

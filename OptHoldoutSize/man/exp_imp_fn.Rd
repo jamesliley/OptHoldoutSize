@@ -39,7 +39,7 @@ exp_imp_fn(
 \item{theta}{Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.}
 }
 \value{
-
+Value of expected improvement at values n
 }
 \description{
 Expected improvement

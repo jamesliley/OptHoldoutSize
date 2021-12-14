@@ -16,35 +16,34 @@
 ##' Coefficients for imperfect risk score
 ##'
 ##' @export
-##' @name gen_dr_coefs
+##' @name gen_base_coefs
 ##' @description Generate coefficients corresponding to an imperfect risk score, interpretable
 ##'  as 'baseline' behaviour in the absence of a risk score
 ##' @keywords simulation
 ##' @param coefs Original coefficients
 ##' @param noise Set to TRUE to add Gaussian noise to coefficients
 ##' @param num_vars Number of variables at hand for baseline calculation
-##' @param max_dr_powers ??
+##' @param max_base_powers If >1, return a matrix of coefficients, with successively more noise
 ##' @return
 ##' @examples
 ##'
-##' # Lorem Ipsum
-gen_dr_coefs <- function(coefs, noise = TRUE, num_vars = 2, max_dr_powers = 1) {
+gen_base_coefs <- function(coefs, noise = TRUE, num_vars = 2, max_base_powers = 1) {
   if (!noise) {
     return(coefs[1:num_vars])
   }
 
-  coefs_dr <- matrix(nrow = max_dr_powers, ncol = length(coefs))
+  coefs_base <- matrix(nrow = max_base_powers, ncol = length(coefs))
 
-  if (max_dr_powers - 1){
-    for (dr_vars in 1:max_dr_powers)
+  if (max_base_powers - 1){
+    for (base_vars in 1:max_base_powers)
       # If we are estimating the cost for more than one dr power, we use the ad-hoc
       # formula below for the standard deviation
-      coefs_dr[dr_vars, ] <- coefs + rnorm(length(coefs), sd = 2 ** (dr_vars - 2))#1))
+      coefs_base[base_vars, ] <- coefs + rnorm(length(coefs), sd = 2 ** (base_vars - 2))#1))
   } else {
-    coefs_dr[1, ] <- coefs + rnorm(length(coefs), sd = 1)
+    coefs_base[1, ] <- coefs + rnorm(length(coefs), sd = 1)
   }
 
-  return(coefs_dr)
+  return(coefs_base)
 }
 
 
@@ -56,7 +55,7 @@ gen_dr_coefs <- function(coefs, noise = TRUE, num_vars = 2, max_dr_powers = 1) {
 ##' @keywords simulation
 ##' @param nobs Number of observations (samples)
 ##' @param npreds Number of predictors
-##' @param ninters Number of interaction terms, default 0
+##' @param ninters Number of interaction terms, default 0. Up to npreds*(npreds-1)/2
 ##' @return Data frame of observations
 ##' @examples
 ##'
@@ -65,8 +64,15 @@ gen_preds <- function(nobs, npreds, ninters = 0) {
   # Generate gaussian covariates matrix
   X <- as.data.frame(matrix( rnorm(nobs * npreds), nobs, npreds))
 
+  # indices for interactions
+  ij=matrix(0,npreds*(npreds-1)/2,2)
+  ind=1; for (i in 2:npreds) for (j in 1:(i-1)) {
+    ij[ind,]=c(i,j); ind=ind+1
+  }
+
+  # Add interactions
   for (i in 1:ninters) {
-    X[, npreds + i] <- X[, i] * X[, i + 1]
+    X[, npreds + i] <- X[, ij[i,1]] * X[, ij[i,2] + 1]
   }
 
   return(X)

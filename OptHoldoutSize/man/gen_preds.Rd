@@ -11,7 +11,7 @@ gen_preds(nobs, npreds, ninters = 0)
 
 \item{npreds}{Number of predictors}
 
-\item{ninters}{Number of interaction terms, default 0}
+\item{ninters}{Number of interaction terms, default 0. Up to npreds*(npreds-1)/2}
 }
 \value{
 Data frame of observations

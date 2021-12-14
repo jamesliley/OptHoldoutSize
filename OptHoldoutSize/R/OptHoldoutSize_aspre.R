@@ -47,170 +47,6 @@ sens10=function(Y,Ypred,pi_int=0.1) {
 
 
 
-##' Fit power law curve
-##'
-##' @export
-##' @name powersolve
-##' @description  Find least-squares solution: MLE of (a,b,c) under model
-##'  ``y_i= a x_i^-b + c + e_i; e_i~N(0,s^2 y_var_i^2)``
-##' @keywords aspre
-##' @param x X values
-##' @param y Y values
-##' @param init Initial values of (a,b,c) to start. Default c(20000,2,0.1)
-##' @param y_var Optional parameter giving sampling variance of each y value. Defaults to 1.
-##' @param estimate_s Parameter specifying whether to also estimate s (as above). Defaults to FALSE (no).
-##' @param ... further parameters passed to optim. We suggest specifying lower and upper bounds for (a,b,c); e.g. lower=c(1,0,0),upper=c(10000,3,1)
-##' @return MLE values of (a,b,c)
-##' @examples
-##'
-##' # Retrieval of original values
-##' A_true=2000; B_true=1.5; C_true=0.3; sigma=0.002
-##'
-##' X=1000*abs(rnorm(10000,mean=4))
-##' Y=A_true*(X^(-B_true)) + C_true + rnorm(length(X),sd=sigma)
-##'
-##' c(A_true,B_true,C_true)
-##' powersolve(X[1:10],Y[1:10])$par
-##' powersolve(X[1:100],Y[1:100])$par
-##' powersolve(X[1:1000],Y[1:1000])$par
-##' powersolve(X[1:10000],Y[1:10000])$par
-powersolve=function(x,y,init=c(20000,2,0.1),y_var=rep(1,length(y)),estimate_s=FALSE,...) {
-  sc=mean(x)^2 # scale by this to avoid overflow errors
-  if (!estimate_s) {
-    fabc=function(abc) {
-      out=sum( ((y- (abc[1]*(x^(-abc[2])) + abc[3]))^2)/(y_var))
-      if (is.finite(out)) return(out) else return(1e10)
-    }
-    out=suppressWarnings(optim(par=init,fn=fabc,control=list(parscale=init),...))
-  } else {
-    fabcs=function(abcs) {
-      out=-(sum( -((y- (abcs[1]*(x^(-abcs[2])) + abcs[3]))^2 / (2*y_var*(abcs[4]^2))) - log(sqrt(2*3.1415*y_var)*abcs[4])))
-      if (is.finite(out)) return(out) else return(1e10)
-    }
-    out=suppressWarnings(optim(par=c(init,0.05),fn=fabcs,control=list(parscale=c(init,0.5)),...))
-  }
-  return(out)
-}
-
-
-
-##' Standard error matrix for learning curve parameters (power law)
-##'
-##'
-##' @export
-##' @name powersolve_se
-##' @description Find approximate standard error matrix for ``(a,b,c)`` under power law model for learning curve.
-##'
-##' Assumes that
-##'
-##'   ``y_i= a x_i^-b + c + e, e~N(0,s^2 y_var_i^2)``
-##'
-##' Standard error can be computed either asymptotically using Fisher information (`method='fisher'`) or boostrapped (`method='bootstrap'`)
-##'
-##' These estimate different quantities: the asymptotic method estimates
-##'
-##' ``Var[MLE(a,b,c)|X,y_var]``
-##'
-##' and the boostrap method estimates
-##'
-##' ``Var[MLE(a,b,c)]``.
-##'
-##' @keywords aspre
-##' @param x X values (typically training set sizes)
-##' @param y Y values (typically observed cost per individual/sample)
-##' @param method One of 'fisher' (for asymptotic variance via Fisher Information) or 'bootstrap' (for Bootstrap)
-##' @param init Initial values of (a,b,c) to start when computing MLE. Default c(20000,2,0.1)
-##' @param y_var Optional parameter giving sampling variance of each y value. Defaults to 1.
-##' @param n_boot Number of bootstrap resamples. Only used if method='bootstrap'. Defaults to 1000
-##' @param seed Random seed for bootstrap resamples. Defaults to NULL.
-##' @param ... further parameters passed to optim. We suggest specifying lower and upper bounds; since optim is called on (a*1000^-b,b,c), bounds should be relative to this; for instance, lower=c(0,0,0),upper=c(100,3,1)
-##' @return Standard error matrix; approximate covariance matrix of MLE(a,b,c)
-##' @examples
-##'
-##' A_true=10; B_true=1.5; C_true=0.3; sigma=0.1
-##'
-##' set.seed(31525)
-##'
-##' X=1+3*rchisq(10000,df=5)
-##' Y=A_true*(X^(-B_true)) + C_true + rnorm(length(X),sd=sigma)
-##'
-##' # 'Observations' - 100 samples
-##' obs=sample(length(X),100,rep=F)
-##' Xobs=X[obs]; Yobs=Y[obs]
-##'
-##' # True covariance matrix of MLE of a,b,c on these x values
-##' ntest=1000
-##' abc_mat_xfix=matrix(0,ntest,3)
-##' abc_mat_xvar=matrix(0,ntest,3)
-##' E1=A_true*(Xobs^(-B_true)) + C_true
-##' for (i in 1:ntest) {
-##'   Y1=E1 + rnorm(length(Xobs),sd=sigma)
-##'   abc_mat_xfix[i,]=powersolve(Xobs,Y1)$par # Estimate (a,b,c) with same X
-##'
-##'   X2=1+3*rchisq(length(Xobs),df=5)
-##'   Y2=A_true*(X2^(-B_true)) + C_true + rnorm(length(Xobs),sd=sigma)
-##'   abc_mat_xvar[i,]=powersolve(X2,Y2)$par # Estimate (a,b,c) with variable X
-##' }
-##'
-##' Ve1=var(abc_mat_xfix) # empirical variance of MLE(a,b,c)|X
-##' Vf=powersolve_se(Xobs,Yobs,method='fisher') # estimated SE matrix, asymptotic
-##'
-##' Ve2=var(abc_mat_xvar) # empirical variance of MLE(a,b,c)
-##' Vb=powersolve_se(Xobs,Yobs,method='bootstrap') # estimated SE matrix, bootstrap
-##'
-##' cat("Empirical variance of MLE(a,b,c)|X\n")
-##' print(Ve1)
-##' cat("\n")
-##' cat("Asymptotic variance of MLE(a,b,c)|X\n")
-##' print(Vf)
-##' cat("\n\n")
-##' cat("Empirical variance of MLE(a,b,c)\n")
-##' print(Ve2)
-##' cat("\n")
-##' cat("Bootstrap-estimated variance of MLE(a,b,c)\n")
-##' print(Vb)
-##' cat("\n\n")
-##'
-powersolve_se=function(x,y,method='fisher',init=c(20000,2,0.1),y_var=rep(1,length(y)),n_boot=1000,seed=NULL,...) {
-  if (method=="fisher") {
-    ## Fisher Information Matrix - straightforward to compute analytically
-    FI_mat=function(x,v,a,b,c,s)
-      -(1/(s^2 * v))*cbind(
-        c(-x^(-2*b),a*(x^(-2*b))*log(x),-x^(-b),0),
-        c(a*(x^(-2*b))*log(x),-(a^2)*(x^(-2*b))*(log(x)^2),a*(x^(-b))*log(x),0),
-        c(-x^(-b),a*(x^(-b))*log(x),-1,0),
-        c(0,0,0,-2*v))
-
-    ## Need to estimate s as well; call powersolve
-    abcs=powersolve(x,y,y_var=y_var,init=init,estimate_s=TRUE,...)$par
-
-    fmat=matrix(0,4,4); for (i in 1:length(x)) fmat=fmat + FI_mat(x[i],y_var[i],abcs[1],abcs[2],abcs[3],abcs[4])
-
-    # Check if fmat is invertible
-    if ("matrix" %in% class(try(solve(fmat),silent=T))) {
-      vmat=solve(fmat)[1:3,1:3]
-      return(vmat)
-    } else {
-      return(matrix(NA,3,3))
-    }
-  }
-  if (method=="bootstrap") {
-
-    # set seed
-    if (!is.null(seed)) set.seed(seed)
-
-    # Compute bootstrap resamples
-    xboot=matrix(0,n_boot,3)
-    for (i in 1:n_boot) {
-      sub=sample(length(x),length(x),replace=TRUE)
-      xboot[i,]=powersolve(x[sub],y[sub],y_var=y_var[sub],init=init,...)$par
-    }
-
-    vmat=var(xboot)
-    return(vmat)
-  }
-}
-
 
 ##' Simulate random dataset similar to ASPRE training data
 ##'
@@ -391,6 +227,63 @@ aspre=function(X) {
 
   return(score)
 
+}
+
+
+
+
+
+
+##' Cost estimating function in ASPRE simulation
+##'
+##' @export
+##' @name aspre_k2
+##' @description Estimate cost at a given holdout set size in ASPRE model
+##' @keywords aspre
+##' @param n Holdout set size at which to estimate k_2 (cost)
+##' @param X Matrix of predictors
+##' @param PRE Vector indicating PRE incidence
+##' @param pi_PRE Population prevalence of PRE if not prophylactically treated. Defaults to empirical value 1426/58974
+##' @param pi_intervention Proportion of the population on which an intervention will be made. Defaults to 0.1
+##' @param alpha Reduction in PRE risk with intervention. Defaults to empirical value 0.37
+##' @return Estimated cost
+##' @examples
+##'
+##' # Simulate
+##' set.seed(32142)
+##'
+##' N=1000; p=15
+##' X=matrix(rnorm(N*p),N,p); PRE=rbinom(N,1,prob=logit(X%*% rnorm(p)))
+##' aspre_k2(1000,X,PRE)
+aspre_k2=function(n,X,PRE,seed=NULL,pi_PRE=1426/58974,pi_intervention=0.1,alpha=0.37) {
+  if (!is.null(seed)) set.seed(seed)
+  n_aspre_total=length(PRE)
+
+  sub=sample(n_aspre_total,n,rep=T) # subsample training data with replacement
+  csub=setdiff(1:n_aspre_total,unique(sub)) # complement; use for testing performance
+
+  # Subsets of X,Y
+  Xsub=X[sub,]; PREsub=PRE[sub]
+  Xc=X[csub,]; PREc=PRE[csub]
+
+  # Manage missing factor levels
+  for (i in 1:dim(Xc)[2]) {
+    if ("factor" %in% class(Xc[,i])) {
+      u=unique(Xsub[,i])
+      w=which((Xc[,i] %in% u))
+      Xc=Xc[w,]; PREc=PREc[w]
+    }
+  }
+
+  # Predictor and predicted values
+  g1=suppressWarnings(glm(PREsub~.,data=data.frame(Xsub,PREsub),family=binomial(link="logit")))
+  score_p=suppressWarnings(predict(g1,data.frame(Xc),type="response"))
+
+  # Evaluate cost
+  dif=sens10(PREc,score_p)
+  cost=pi_PRE - pi_intervention*alpha*dif
+
+  return(cost)
 }
 
 
