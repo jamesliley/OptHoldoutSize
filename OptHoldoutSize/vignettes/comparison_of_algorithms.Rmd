@@ -1,12 +1,12 @@
 ---
-title: "Loss function estimation"
+title: "Comparison of algorithms"
 author: "Sami Haidar-Wehbe, Sam Emerson, Louis Aslett, James Liley"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 runtime: shiny
 bibliography: optimal_holdout_sizing.bib
 vignette: >
-  %\VignetteIndexEntry{Loss function estimation}
+  %\VignetteIndexEntry{Comparison of algorithms}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -808,7 +808,8 @@ plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
 
   # Bottom panel setup
   par(mar=c(4,4,0.1,0.1))
-  plot(0,xlim=c(5,n_iter),ylim=c(0,1e5),type="n",
+  plot(0,xlim=c(5,n_iter),
+       ylim=c(0,quantile(c(ci1[2,]-ci1[1,],ci2[2,]-ci2[1,]),0.95,na.rm=T)),type="n",
     ylab="IQR",xlab=expression(paste("Number of estimates of k"[2],"(n)")))
 
   # Draw lines
@@ -1060,3 +1061,9 @@ plot_ci_convergence("Params. not satis, emul. alg.",
 
 ```
 <details>
+
+&nbsp;
+&nbsp;
+
+
+## References
