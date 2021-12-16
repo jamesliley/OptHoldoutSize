@@ -12,7 +12,7 @@ ci_ohs(
   k2 = powerlaw,
   grad_nstar = NULL,
   sigma = NULL,
-  n_boot = 10000,
+  n_boot = 1000,
   seed = NULL,
   mode = "empirical",
   ...

@@ -4,7 +4,17 @@
 \alias{next_n}
 \title{Finds best value of n to sample next}
 \usage{
-next_n(n, nset, d, var_w, N, k1, nmed = 100, ...)
+next_n(
+  n,
+  nset,
+  d,
+  N,
+  k1,
+  nmed = 100,
+  var_w = rep(1, length(nset)),
+  mode = "asymptotic",
+  ...
+)
 }
 \arguments{
 \item{n}{Set of training set sizes to evaluate}
@@ -13,13 +23,13 @@ next_n(n, nset, d, var_w, N, k1, nmed = 100, ...)
 
 \item{d}{Loss at training set sizes \code{nset}}
 
-\item{var_w}{Variance of error in loss estimate at each training set size.}
-
 \item{N}{Total number of samples on which the model will be fitted/used}
 
 \item{k1}{Mean loss per sample with no predictive score in place}
 
 \item{nmed}{number of times to re-evaluate d and confidence interval width.}
+
+\item{var_w}{Variance of error in loss estimate at each training set size.}
 
 \item{...}{Passed to \code{powersolve} and \code{powersolve_se}}
 }

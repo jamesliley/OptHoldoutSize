@@ -400,8 +400,8 @@ error_ohs_emulation=function(nset,d,var_w,N,k1,
   if (!is.null(npoll)) n=seq(1,N,length=npoll) else n=1:N
 
   # mu and psi
-  xmu=mu_fn(n,nset,d,var_w,N,k1,var_u,k_width,mean_fn,theta)
-  xpsi=pmax(0,psi_fn(n, nset, var_w, N, var_u, k_width))
+  xmu=mu_fn(n=n,nset=nset,d=d,var_w=var_w,N=N,k1=k1,var_u=var_u,k_width=k_width,mean_fn=mean_fn,theta=theta)
+  xpsi=pmax(0,psi_fn(n=n, nset=nset, var_w=var_w, N=N, var_u=var_u, k_width=k_width))
 
   # Compute minimum
   w=which.min(xmu)

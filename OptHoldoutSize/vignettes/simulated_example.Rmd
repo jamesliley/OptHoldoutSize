@@ -19,9 +19,9 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-Risk scores to predict future events are widely used in many fields. Deployment of a predictive risk score is usually with the intent of avoiding such future events (or sometimes bringing them about), in which case the risk score is often intended to be used to plan anticipatory interventions which avoid the event in an efficient way (e.g., @hippisley17,@nashef12,@koopman08). 
+Risk scores to predict future events are widely used in many fields. Deployment of a predictive risk score is usually with the intent of avoiding such future events (or sometimes bringing them about), in which case the risk score is often intended to be used to plan anticipatory interventions which avoid the event in an efficient way (e.g., @hippisley17, @nashef12, @koopman08). 
 
-This risk-score-directed anticipatory action can mean that, when analysed retrospectively, it appears the risk score is performing poorly, since high-risk samples have undergone risk-score directed intervention (@lenert19,@sperrin19). This leads to difficulties updating risk scores (@perdomo20). A simple 'fix' allowing risk scores to be updated safely is to with-hold risk score generation and distribution for a random subset of the population, on whom an updated risk score can then be trained (@liley21).
+This risk-score-directed anticipatory action can mean that, when analysed retrospectively, it appears the risk score is performing poorly, since high-risk samples have undergone risk-score directed intervention (@lenert19,@sperrin19). This leads to difficulties updating risk scores [@perdomo20]. A simple 'fix' allowing risk scores to be updated safely is to with-hold risk score generation and distribution for a random subset of the population, on whom an updated risk score can then be trained [@liley21].
 
 Such a 'hold-out' set of individuals should not be too small, since this will lead to excessive inaccuracy in the risk score trained on it, nor too large, since those individuals in the hold-out set miss out on any benefit. Our manuscript (partly) and this vignette (predominantly) serve to demonstrate the emergence of an optimal holdout set size under 'natural' conditions. We will also demonstrate the dependence of this optimal holdout size on system parameters, particularly the 'learning curve' of the risk score. 
 
