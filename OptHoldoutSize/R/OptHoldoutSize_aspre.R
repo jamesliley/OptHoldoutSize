@@ -6,11 +6,6 @@
 ## October 2021
 ##
 
-## TODO: update with Bayesian emulation for curve estimation
-## TODO: tidy up confidence interval stuff
-## TODO: complete documentation of return etc, write examples for some of these
-
-
 ################################################################################
 ## Functions for ASPRE-related analyses                                       ##
 ################################################################################

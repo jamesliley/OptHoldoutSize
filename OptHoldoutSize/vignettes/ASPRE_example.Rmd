@@ -214,7 +214,7 @@ We can now estimate the optimal holdout size, minimum total cost, and confidence
 # Optimal holdout set size and cost
 optim_aspre=optimal_holdout_size(N,k1,theta)
 OHS_ASPRE=optim_aspre$size
-Min_cost_ASPRE=optim_aspre$cost
+MIN_COST_ASPRE=optim_aspre$cost
 
 # Errors
 cov_par=matrix(0,5,5);
@@ -222,9 +222,9 @@ cov_par[1,1]=SE_N^2; cov_par[2,2]=SE_k1^2
 cov_par[3:5,3:5]=theta_se
 CI_OHS_ASPRE=ci_ohs(N,k1,theta,sigma=cov_par,mode = "asymptotic",grad_nstar=grad_nstar_powerlaw,alpha = 0.1)
 
-print(OHS_ASPRE)
-print(Min_cost_ASPRE)
-print(CI_OHS_ASPRE)
+print(round(OHS_ASPRE))
+print(round(MIN_COST_ASPRE))
+print(round(CI_OHS_ASPRE))
 
 ```
 
@@ -241,7 +241,7 @@ lines(nval,k1*nval + powerlaw(nval,theta)*(N-nval))
 e_min=min(CI_OHS_ASPRE); e_max=max(CI_OHS_ASPRE); c_min=min(cc_par); c_max=max(cc_par);
 polygon(c(e_min,e_min,e_max,e_max),c(c_min,c_max,c_max,c_min),
         col=rgb(1,0,0,alpha=0.2),border=NA)
-points(OHS_ASPRE,Min_cost_ASPRE,pch=16,col="red")
+points(OHS_ASPRE,MIN_COST_ASPRE,pch=16,col="red")
 
 legend("topright",
        c("Cost function",
@@ -267,7 +267,7 @@ lines(nval,k1*nval + powerlaw(nval,theta)*(N-nval))
 e_min=min(CI_OHS_ASPRE); e_max=max(CI_OHS_ASPRE); c_min=min(cc_par); c_max=max(cc_par);
 polygon(c(e_min,e_min,e_max,e_max),c(c_min,c_max,c_max,c_min),
         col=rgb(1,0,0,alpha=0.2),border=NA)
-points(OHS_ASPRE,Min_cost_ASPRE,pch=16,col="red")
+points(OHS_ASPRE,MIN_COST_ASPRE,pch=16,col="red")
 
 legend("topright",
        c("Cost function",
@@ -361,9 +361,9 @@ MIN_COST_ASPRE=min(p_mu)
 OHS_ERR=error_ohs_emulation(nn_emul,k2_emul,var_w=s2_emul,N=N,k1=k1,alpha=0.1,
                             var_u=var_u,k_width=k_width,theta=theta)
 
-print(OHS_ASPRE)
-print(MIN_COST_ASPRE)
-print(range(OHS_ERR))
+print(round(OHS_ASPRE))
+print(round(MIN_COST_ASPRE))
+print(round(range(OHS_ERR)))
 ```
 
 The following figure shows the estimated cost function mean and posterior variance, along with an error measure. The error set is defined as the set of all values $n$ for which the probability  of the true cost at $n$ being less than the observed minimum exceeds 0.1, according to the computed posterior distribution of the cost at $n$.
