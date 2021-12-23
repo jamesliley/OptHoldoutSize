@@ -671,6 +671,8 @@ base_pred   0   1
 > nset=c(10000,20000,30000)
 > 
 > # with cost-per-individual estimates
+> # (note that since empirical k2(n) is non-monotonic, it cannot be perfectly
+> #  approximated with a power-law function)
 > k2=c(0.35,0.26,0.28)
 > 
 > # and associated error on those estimates
@@ -1205,7 +1207,7 @@ Bootstrap-estimated variance of MLE(a,b,c)
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  25.901 0.381 26.329 0 0 
+Time elapsed:  25.955 0.396 26.445 0 0 
 > grDevices::dev.off()
 null device 
           1 

@@ -106,6 +106,8 @@ cov_fn = function(n,ndash,var_u,k_width){
 ##' nset=c(10000,20000,30000)
 ##'
 ##' # with cost-per-individual estimates
+##' # (note that since empirical k2(n) is non-monotonic, it cannot be perfectly
+##' #  approximated with a power-law function)
 ##' k2=c(0.35,0.26,0.28)
 ##'
 ##' # and associated error on those estimates
