@@ -4,14 +4,14 @@
 \alias{plot.optholdoutsize_emul}
 \title{Plot estimated cost function using emulation (semiparametric)}
 \usage{
-\method{plot}{optholdoutsize_emul}(x, ..., k2 = powerlaw)
+\method{plot}{optholdoutsize_emul}(x, ..., k2form = powerlaw)
 }
 \arguments{
 \item{x}{Object of type \code{optholdoutsize_emul}}
 
 \item{...}{Other arguments passed to \code{plot()}}
 
-\item{k2}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{powerlaw(n,c(a,b,c))=a n^(-b) + c}.}
+\item{k2form}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{powerlaw(n,c(a,b,c))=a n^(-b) + c}.}
 }
 \description{
 Plot estimated cost function, when semiparametric (emulation) method is used for estimation.
@@ -35,11 +35,11 @@ k2_true=function(n) powerlaw(n,theta)
 # Values of n for which cost has been estimated
 np=50 # this many points
 nset=round(runif(np,1,N))
-var_w=runif(np,0.001,0.002)
-d=rnorm(np,mean=k2_true(nset),sd=sqrt(var_w))
+var_k2=runif(np,0.001,0.002)
+k2=rnorm(np,mean=k2_true(nset),sd=sqrt(var_k2))
 
 # Compute OHS
-res1=optimal_holdout_size_emulation(nset,d,var_w,N,k1)
+res1=optimal_holdout_size_emulation(nset,k2,var_k2,N,k1)
 
 # Plot
 plot(res1)

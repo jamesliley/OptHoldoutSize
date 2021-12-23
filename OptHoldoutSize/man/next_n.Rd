@@ -7,11 +7,11 @@
 next_n(
   n,
   nset,
-  d,
+  k2,
   N,
   k1,
   nmed = 100,
-  var_w = rep(1, length(nset)),
+  var_k2 = rep(1, length(nset)),
   mode = "asymptotic",
   ...
 )
@@ -21,7 +21,7 @@ next_n(
 
 \item{nset}{Training set sizes for which a loss has been evaluated}
 
-\item{d}{Loss at training set sizes \code{nset}}
+\item{k2}{Estimated k2() at training set sizes \code{nset}}
 
 \item{N}{Total number of samples on which the model will be fitted/used}
 
@@ -29,7 +29,7 @@ next_n(
 
 \item{nmed}{number of times to re-evaluate d and confidence interval width.}
 
-\item{var_w}{Variance of error in loss estimate at each training set size.}
+\item{var_k2}{Variance of error in k2() estimate at each training set size.}
 
 \item{mode}{Mode for calculating OHS CI (passed to \code{ci_ohs}): 'asymptotic' or 'empirical'}
 
@@ -43,11 +43,11 @@ Recommends a value of \code{n} at which to next evaluate individual cost in orde
 
 Approximately finds a set of n points which, given estimates of cost, minimise width of 95\% confidence interval around OHS. Uses a greedy algorithm, so various parameters can be learned along the way.
 
-Given existing training set size/cost estimates \code{nset} and \code{d}, with \code{var_w[i]=variance(d[i])}, finds, for each candidate point \code{n[i]}, the median width of the 90\% confidence interval for OHS if
+Given existing training set size/k2 estimates \code{nset} and \code{k2}, with \code{var_k2[i]=variance(k2[i])}, finds, for each candidate point \code{n[i]}, the median width of the 90\% confidence interval for OHS if
 
 \code{nset <- c(nset,n[i])}
-\code{var_w <- c(var_w,mean(var_w))}
-\code{d <- c(d,rnorm(powerlaw(n[i],theta),variance=mean(var_w)))}
+\code{var_k2 <- c(var_k2,mean(var_k2))}
+\code{k2 <- c(k2,rnorm(powerlaw(n[i],theta),variance=mean(var_k2)))}
 }
 \examples{
 
@@ -73,23 +73,23 @@ theta_upper=c(20000,2,0.5) # upper bounds for estimating theta
 
 
 # We start with five random holdout set sizes (nset0),
-#  with corresponding cost-per-individual estimates d0 derived
-#  with various errors var_w0
+#  with corresponding cost-per-individual estimates k2_0 derived
+#  with various errors var_k2_0
 nstart=10
 vwmin=0.001; vwmax=0.005
 nset0=round(runif(nstart,1000,N/2))
-var_w0=runif(nstart,vwmin,vwmax)
-d0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_w0))
+var_k2_0=runif(nstart,vwmin,vwmax)
+k2_0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_k2_0))
 
 # We estimate theta from these three points
-theta0=powersolve(nset0,d0,y_var=var_w0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
+theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
 
 # We will estimate the posterior at these values of n
 n=seq(1000,N,length=1000)
 
 # Mean and variance
-p_mu=mu_fn(n,nset=nset0,d=d0,var_w = var_w0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
-p_var=psi_fn(n,nset=nset0,N=N,var_w = var_w0,k_width=kw0,var_u=vu0)
+p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+p_var=psi_fn(n,nset=nset0,N=N,var_k2 = var_k2_0,k_width=kw0,var_u=vu0)
 
 # Plot
 yrange=c(-30000,100000)
@@ -99,7 +99,7 @@ plot(0,xlim=range(n),ylim=yrange,type="n",
 lines(n,p_mu,col="blue")
 lines(n,p_mu - 3*sqrt(p_var),col="red")
 lines(n,p_mu + 3*sqrt(p_var),col="red")
-points(nset0,k1*nset0 + d0*(N-nset0),pch=16,col="purple")
+points(nset0,k1*nset0 + k2_0*(N-nset0),pch=16,col="purple")
 lines(n,k1*n + powerlaw(n,theta0)*(N-n),lty=2)
 lines(n,k1*n + powerlaw(n,theta_true)*(N-n),lty=3,lwd=3)
 if (inc_legend) {
@@ -115,7 +115,7 @@ if (inc_legend) {
 
 ## Add line corresponding to recommended new point. This is slow.
 nn=seq(1000,N,length=20)
-exp_imp <- next_n(nn,nset=nset0,d=d0,var_w = var_w0, N=N,k1=k1,nmed=10,
+exp_imp <- next_n(nn,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,nmed=10,
                      lower=theta_lower,upper=theta_upper)
 abline(v=nn[which.min(exp_imp)])
 

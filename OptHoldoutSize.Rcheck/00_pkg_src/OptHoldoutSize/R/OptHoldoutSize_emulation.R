@@ -2,7 +2,7 @@
 ## R script for functions in OptHoldoutSize package                           ##
 ################################################################################
 ##
-## Sami Haidar-Wehbe, Sam Emerson, James Liley
+## Sam Emerson, James Liley
 ## October 2021
 ##
 
@@ -76,48 +76,21 @@ cov_fn = function(n,ndash,var_u,k_width){
 
 
 
-
-
-
-
-##' Power law function
-##'
-##' @export
-##' @name mu_fn
-##' @description Power law function for modelling learning curve (taken to mean change in expected loss per sample with training set size)
-##'
-##' Recommended in [review of learning curve forms](https://arxiv.org/abs/2103.10948)
-##'
-##' If `theta=c(a,b,c)` then models as `a n^(-b) + c`. Note `b` is negated.
-##'
-##' Note that `powerlaw(n,c(a,b,c))` has limit `c` as `n` tends to infinity, if `a,b > 0`
-##'
-##' @param n Set of training set sizes to evaluate
-##' @param theta Parameter of values
-##' @return Vector of values of same length as `n`
-##' @examples
-##'
-##' ncheck=seq(1000,10000)
-##' plot(ncheck, powerlaw(ncheck, c(5e3,1.2,0.3)),type="l",xlab="n",ylab="powerlaw(n)")
-##'
-powerlaw=function(n,theta)  (theta[1] *n^(-theta[2]) + theta[3])
-
-
 ##' Updating function for mean.
 ##'
 ##' @export
 ##' @name mu_fn
 ##' @description Posterior mean for emulator given points `n`.
 ##' @param n Set of training set sizes to evaluate
-##' @param nset Training set sizes for which a loss has been evaluated
-##' @param d Loss at training set sizes `nset`
-##' @param var_w Variance of error in loss estimate at each training set size.
+##' @param nset Training set sizes for which k2() has been evaluated
+##' @param k2 Estimated k2() values at training set sizes `nset`
+##' @param var_k2 Variance of error in k2() estimate at each training set size.
 ##' @param N Total number of samples on which the model will be fitted/used
-##' @param k1 Mean loss per sample with no predictive score in place
+##' @param k1 Mean cost per sample with no predictive score in place
 ##' @param var_u Marginal variance for Gaussian process kernel. Defaults to 1e7
 ##' @param k_width Kernel width for Gaussian process kernel. Defaults to 5000
-##' @param mean_fn Functional form governing expected loss per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
-##' @param theta Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.
+##' @param k2form Functional form governing expected cost per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
+##' @param theta Current estimates of parameter values for k2form. Defaults to the MLE power-law solution corresponding to n,k2, and var_k2.
 ##' @return Vector Mu of same length of n where Mu_i=mean(posterior(cost(n_i)))
 ##' @examples
 ##'
@@ -129,25 +102,25 @@ powerlaw=function(n,theta)  (theta[1] *n^(-theta[2]) + theta[3])
 ##' k_width=5000
 ##' var_u=8000000
 ##'
-##' # Suppose we begin with loss estimates at n-values
+##' # Suppose we begin with k2() estimates at n-values
 ##' nset=c(10000,20000,30000)
 ##'
 ##' # with cost-per-individual estimates
 ##' k2=c(0.35,0.26,0.28)
 ##'
 ##' # and associated error on those estimates
-##' var_w=c(0.02^2,0.01^2,0.03^2)
+##' var_k2=c(0.02^2,0.01^2,0.03^2)
 ##'
 ##' # We estimate theta from these three points
-##' theta=powersolve(nset,k2,y_var=var_w)$par
+##' theta=powersolve(nset,k2,y_var=var_k2)$par
 ##'
 ##' # We will estimate the posterior at these values of n
 ##' n=seq(1000,50000,length=1000)
 ##'
 ##' # Mean and variance
-##' p_mu=mu_fn(n,nset=nset,d=k2,var_w = var_w, N=N,k1=k1,theta=theta,
+##' p_mu=mu_fn(n,nset=nset,k2=k2,var_k2 = var_k2, N=N,k1=k1,theta=theta,
 ##'            k_width=k_width,var_u=var_u)
-##' p_var=psi_fn(n,nset=nset,N=N,var_w = var_w,k_width=k_width,var_u=var_u)
+##' p_var=psi_fn(n,nset=nset,N=N,var_k2 = var_k2,k_width=k_width,var_u=var_u)
 ##'
 ##' # Plot
 ##' plot(0,xlim=range(n),ylim=c(20000,60000),type="n",
@@ -158,8 +131,8 @@ powerlaw=function(n,theta)  (theta[1] *n^(-theta[2]) + theta[3])
 ##' lines(n,p_mu + 3*sqrt(p_var),col="red")
 ##' points(nset,k1*nset + k2*(N-nset),pch=16,col="purple")
 ##' lines(n,k1*n + powerlaw(n,theta)*(N-n),lty=2)
-##' segments(nset,k1*nset + (k2 - 3*sqrt(var_w))*(N-nset),
-##'          nset,k1*nset + (k2 + 3*sqrt(var_w))*(N-nset))
+##' segments(nset,k1*nset + (k2 - 3*sqrt(var_k2))*(N-nset),
+##'          nset,k1*nset + (k2 + 3*sqrt(var_k2))*(N-nset))
 ##' legend("topright",
 ##'        c(expression(mu(n)),
 ##'          expression(mu(n) %+-% 3*sqrt(psi(n))),
@@ -169,24 +142,24 @@ powerlaw=function(n,theta)  (theta[1] *n^(-theta[2]) + theta[3])
 ##'        lty=c(1,1,2,NA,NA),lwd=c(1,1,1,NA,NA),pch=c(NA,NA,NA,16,124),
 ##'        pt.cex=c(NA,NA,NA,1,1),
 ##'        col=c("blue","red","black","purple","black"),bg="white")
-mu_fn= function(n,nset,d,var_w,N,k1,
+mu_fn= function(n,nset,k2,var_k2,N,k1,
   var_u=1e7,
   k_width=5000,
-  mean_fn=powerlaw,
-  theta=powersolve(nset,d,y_var=var_w)$par){
+  k2form=powerlaw,
+  theta=powersolve(nset,k2,y_var=var_k2)$par){
 
-  loss_fn=function(n,theta) k1*n + mean_fn(n,theta)*(N-n)
+  cost_fn=function(n,theta) k1*n + k2form(n,theta)*(N-n)
 
-  mean_n <- loss_fn(n,theta) # Expected loss at values n according to current parameters theta
+  mean_n <- cost_fn(n,theta) # Expected cost at values n according to current parameters theta
   cov_n_nset <- outer(n,nset,cov_fn,var_u=var_u,k_width=k_width) # GP covariance between nstar values and current values n
   cov_nset_nset <- outer(nset,nset,cov_fn,var_u=var_u,k_width=k_width) # Internal covariance matrix for existing values n
-  var_w_mat <- diag(var_w*(N-nset)^2) # variance on the scale of loss for whole population
+  var_k2_mat <- diag(var_k2*(N-nset)^2) # variance on the scale of cost for whole population
 
-  xd=k1*nset + d*(N-nset) # outputs on scale of whole-dataset loss
+  xd=k1*nset + k2*(N-nset) # outputs on scale of whole-dataset cost
 
-  mean_nset <- loss_fn(nset,theta)
+  mean_nset <- cost_fn(nset,theta)
   #browser()
-  return(as.numeric(mean_n + cov_n_nset%*%solve(cov_nset_nset + var_w_mat)%*%(xd - mean_nset)))
+  return(as.numeric(mean_n + cov_n_nset%*%solve(cov_nset_nset + var_k2_mat)%*%(xd - mean_nset)))
 }
 
 
@@ -196,9 +169,9 @@ mu_fn= function(n,nset,d,var_w,N,k1,
 ##' @name psi_fn
 ##' @description Posterior variance for emulator given points `n`.
 ##' @param n Set of training set sizes to evaluate at
-##' @param nset Training set sizes for which a loss has been evaluated
-##' @param var_w Variance of error in loss estimate at each training set size.
-##' @param N Total number of samples on which the model will be fitted/used. Only used to rescale var_w
+##' @param nset Training set sizes for which k2() has been evaluated
+##' @param var_k2 Variance of error in k2() estimate at each training set size.
+##' @param N Total number of samples on which the model will be fitted/used. Only used to rescale var_k2
 ##' @param var_u Marginal variance for Gaussian process kernel. Defaults to 1e7
 ##' @param k_width Kernel width for Gaussian process kernel. Defaults to 5000
 ##' @return Vector Psi of same length of n where Psi_i=var(posterior(cost(n_i)))
@@ -206,7 +179,7 @@ mu_fn= function(n,nset,d,var_w,N,k1,
 ##'
 ##' # See examples for `mu_fn`
 ##'
-psi_fn =function(n,nset,var_w,N,
+psi_fn =function(n,nset,var_k2,N,
   var_u=1e7,
   k_width=5000){
 
@@ -214,8 +187,8 @@ psi_fn =function(n,nset,var_w,N,
 
   cov_n_nset <- outer(n,nset,cov_fn,var_u=var_u,k_width=k_width)
   cov_nset_nset <- outer(nset,nset,cov_fn,var_u=var_u,k_width=k_width)
-  var_w_mat <- diag(var_w*(N-nset)^2)
-  xsol=solve(cov_nset_nset + var_w_mat)
+  var_k2_mat <- diag(var_k2*(N-nset)^2)
+  xsol=solve(cov_nset_nset + var_k2_mat)
   return(cov_n_n - apply(cov_n_nset,1,function(x) t(x)%*%xsol%*%x))
 }
 
@@ -226,18 +199,18 @@ psi_fn =function(n,nset,var_w,N,
 ##' @name exp_imp_fn
 ##' @description Expected improvement
 ##'
-##' Essentially chooses the `next point` to add to `n`, called `n*`, in order to minimise the expectation of `loss(n*)`.
+##' Essentially chooses the `next point` to add to `n`, called `n*`, in order to minimise the expectation of `cost(n*)`.
 ##'
 ##' @param n Set of training set sizes to evaluate
-##' @param nset Training set sizes for which a loss has been evaluated
-##' @param d Loss at training set sizes `nset`
-##' @param var_w Variance of error in loss estimate at each training set size.
+##' @param nset Training set sizes for which a cost has been evaluated
+##' @param k2 Estimates of k2() at training set sizes `nset`
+##' @param var_k2 Variance of error in k2() estimates at each training set size.
 ##' @param N Total number of samples on which the model will be fitted/used
-##' @param k1 Mean loss per sample with no predictive score in place
+##' @param k1 Mean vost per sample with no predictive score in place
 ##' @param var_u Marginal variance for Gaussian process kernel. Defaults to 1e7
 ##' @param k_width Kernel width for Gaussian process kernel. Defaults to 5000
-##' @param mean_fn Functional form governing expected loss per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
-##' @param theta Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.
+##' @param k2form Functional form governing expected cost per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
+##' @param theta Current estimates of parameter values for k2form. Defaults to the MLE power-law solution corresponding to n,k2, and var_k2.
 ##' @return Value of expected improvement at values n
 ##' @examples
 ##'
@@ -263,23 +236,23 @@ psi_fn =function(n,nset,var_w,N,
 ##'
 ##'
 ##' # We start with five random holdout set sizes (nset0),
-##' #  with corresponding cost-per-individual estimates d0 derived
-##' #  with various errors var_w0
+##' #  with corresponding cost-per-individual estimates k2_0 derived
+##' #  with various errors var_k2_0
 ##' nstart=4
 ##' vwmin=0.001; vwmax=0.005
 ##' nset0=round(runif(nstart,1000,N/2))
-##' var_w0=runif(nstart,vwmin,vwmax)
-##' d0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_w0))
+##' var_k2_0=runif(nstart,vwmin,vwmax)
+##' k2_0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_k2_0))
 ##'
 ##' # We estimate theta from these three points
-##' theta0=powersolve(nset0,d0,y_var=var_w0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
+##' theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
 ##'
 ##' # We will estimate the posterior at these values of n
 ##' n=seq(1000,N,length=1000)
 ##'
 ##' # Mean and variance
-##' p_mu=mu_fn(n,nset=nset0,d=d0,var_w = var_w0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
-##' p_var=psi_fn(n,nset=nset0,N=N,var_w = var_w0,k_width=kw0,var_u=vu0)
+##' p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+##' p_var=psi_fn(n,nset=nset0,N=N,var_k2 = var_k2_0,k_width=kw0,var_u=vu0)
 ##'
 ##' # Plot
 ##' yrange=c(-30000,100000)
@@ -289,7 +262,7 @@ psi_fn =function(n,nset,var_w,N,
 ##' lines(n,p_mu,col="blue")
 ##' lines(n,p_mu - 3*sqrt(p_var),col="red")
 ##' lines(n,p_mu + 3*sqrt(p_var),col="red")
-##' points(nset0,k1*nset0 + d0*(N-nset0),pch=16,col="purple")
+##' points(nset0,k1*nset0 + k2_0*(N-nset0),pch=16,col="purple")
 ##' lines(n,k1*n + powerlaw(n,theta0)*(N-n),lty=2)
 ##' lines(n,k1*n + powerlaw(n,theta_true)*(N-n),lty=3,lwd=3)
 ##' if (inc_legend) {
@@ -304,17 +277,17 @@ psi_fn =function(n,nset,var_w,N,
 ##' }
 ##'
 ##' ## Add line corresponding to recommended new point
-##' exp_imp_em <- exp_imp_fn(n,nset=nset0,d=d0,var_w = var_w0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+##' exp_imp_em <- exp_imp_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
 ##' abline(v=n[which.max(exp_imp_em)])
 ##'
-exp_imp_fn = function(n,nset,d,var_w,N,k1,
+exp_imp_fn = function(n,nset,k2,var_k2,N,k1,
   var_u=1e7,
   k_width=5000,
-  mean_fn=powerlaw,
-  theta=powersolve(nset,d,y_var=var_w)$par){
-  mu_val=mu_fn(n=n,nset=nset,d=d,var_w=var_w,N=N,k1=k1,var_u=var_u,k_width=k_width,mean_fn=mean_fn,theta=theta)
-  d_min <- min(k1*nset + d*(N-nset))
-  psi_val <- psi_fn(n=n,nset=nset,var_w=var_w,N=N,var_u=var_u,k_width=k_width)
+  k2form=powerlaw,
+  theta=powersolve(nset,k2,y_var=var_k2)$par){
+  mu_val=mu_fn(n=n,nset=nset,k2=k2,var_k2=var_k2,N=N,k1=k1,var_u=var_u,k_width=k_width,k2form=k2form,theta=theta)
+  d_min <- min(k1*nset + k2*(N-nset))
+  psi_val <- psi_fn(n=n,nset=nset,var_k2=var_k2,N=N,var_u=var_u,k_width=k_width)
   Z <- (-mu_val+d_min)/sqrt(psi_val)
   EI <- ((-mu_val+d_min)*pnorm(Z)) + (sqrt(psi_val)*dnorm(Z))
   return(EI)
@@ -339,18 +312,18 @@ exp_imp_fn = function(n,nset,d,var_w,N,k1,
 ##' This is not a confidence interval, credible interval or credible set for the OHS, and is prone to misinterpretation.
 ##'
 ##' @keywords estimation,emulation
-##' @param nset Training set sizes for which a loss has been evaluated
-##' @param d Loss at training set sizes `nset`
-##' @param var_w Variance of error in loss estimate at each training set size.
+##' @param nset Training set sizes for which k2() has been evaluated
+##' @param k2 Estimated k2() at training set sizes `nset`
+##' @param var_k2 Variance of error in k2() estimate at each training set size.
 ##' @param N Total number of samples on which the model will be fitted/used
-##' @param k1 Mean loss per sample with no predictive score in place
+##' @param k1 Mean cost per sample with no predictive score in place
 ##' @param alpha Use 1-alpha credible interval. Defaults to 0.1.
 ##' @param var_u Marginal variance for Gaussian process kernel. Defaults to 1e7
 ##' @param k_width Kernel width for Gaussian process kernel. Defaults to 5000
-##' @param mean_fn Functional form governing expected loss per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
-##' @param theta Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.
+##' @param k2form Functional form governing expected cost per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
+##' @param theta Current estimates of parameter values for k2form. Defaults to the MLE power-law solution corresponding to n,k2, and var_k2.
 ##' @param npoll Check npoll equally spaced values between 1 and N for minimum. If NULL, check all values (this can be slow). Defaults to 1000
-##' @return Vector of values `n` for which 1-alpha credible interval for cost `l(n)` at n contains mean posterior loss at estimated optimal holdout size.
+##' @return Vector of values `n` for which 1-alpha credible interval for cost `l(n)` at n contains mean posterior cost at estimated optimal holdout size.
 ##' @examples
 ##'
 ##'  # Set seed
@@ -371,14 +344,14 @@ exp_imp_fn = function(n,nset,d,var_w,N,k1,
 ##' # Values of n for which cost has been estimated
 ##' np=50 # this many points
 ##' nset=round(runif(np,1,N))
-##' var_w=runif(np,0.001,0.0015)
-##' d=rnorm(np,mean=k2_true(nset),sd=sqrt(var_w))
+##' var_k2=runif(np,0.001,0.0015)
+##' k2=rnorm(np,mean=k2_true(nset),sd=sqrt(var_k2))
 ##'
 ##' # Compute OHS
-##' res1=optimal_holdout_size_emulation(nset,d,var_w,N,k1)
+##' res1=optimal_holdout_size_emulation(nset,k2,var_k2,N,k1)
 ##'
 ##' # Error estimates
-##' ex=error_ohs_emulation(nset,d,var_w,N,k1)
+##' ex=error_ohs_emulation(nset,k2,var_k2,N,k1)
 ##'
 ##' # Plot
 ##' plot(res1)
@@ -389,25 +362,27 @@ exp_imp_fn = function(n,nset,d,var_w,N,k1,
 ##'
 ##' # Show justification for error
 ##' n=seq(1,N,length=1000)
-##' mu=mu_fn(n,nset,d,var_w,N,k1); psi=pmax(0,psi_fn(n, nset, var_w, N)); Z=-qnorm(0.1/2)
+##' mu=mu_fn(n,nset,k2,var_k2,N,k1); psi=pmax(0,psi_fn(n, nset, var_k2, N)); Z=-qnorm(0.1/2)
 ##' lines(n,mu - Z*sqrt(psi),lty=2,lwd=2)
 ##' legend("topright",
 ##'     c("Err. region",expression(paste(mu(n)- "z"[alpha/2]*sqrt(psi(n))))),
 ##'     pch=c(16,NA),lty=c(NA,2),lwd=c(NA,2),col=c("pink","black"),bty="n")
-error_ohs_emulation=function(nset,d,var_w,N,k1,
+error_ohs_emulation=function(nset,k2,var_k2,N,k1,
                              alpha=0.1,
                              var_u=1e7,
                              k_width=5000,
-                             mean_fn=powerlaw,
-                             theta=powersolve(nset,d,y_var=var_w)$par,
+                             k2form=powerlaw,
+                             theta=powersolve(nset,k2,y_var=var_k2)$par,
                              npoll=1000){
 
   # Candidate values n
   if (!is.null(npoll)) n=seq(1,N,length=npoll) else n=1:N
 
   # mu and psi
-  xmu=mu_fn(n=n,nset=nset,d=d,var_w=var_w,N=N,k1=k1,var_u=var_u,k_width=k_width,mean_fn=mean_fn,theta=theta)
-  xpsi=pmax(0,psi_fn(n=n, nset=nset, var_w=var_w, N=N, var_u=var_u, k_width=k_width))
+  xmu=mu_fn(n=n,nset=nset,k2=k2,var_k2=var_k2,N=N,k1=k1,var_u=var_u,
+            k_width=k_width,k2form=k2form,theta=theta)
+  xpsi=pmax(0,psi_fn(n=n, nset=nset, var_k2=var_k2, N=N, var_u=var_u,
+                     k_width=k_width))
 
   # Compute minimum
   w=which.min(xmu)

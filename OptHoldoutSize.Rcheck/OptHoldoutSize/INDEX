@@ -20,7 +20,7 @@ logistic                                                    Logistic
 logit                                                       Logit
 model_predict                                               Make predictions
 model_train                                                 Train model (wrapper)
-mu_fn                                                       Power law function
+mu_fn                                                       Updating function for mean.
 next_n                                                      Finds best value of n to sample next
 ohs_array                                                   Data for vignette on algorithm comparison
 ohs_resample                                                Data for vignette on algorithm comparison
@@ -30,6 +30,7 @@ oracle_pred                                                 Generate responses
 params_aspre                                                Parameters of reported ASPRE dataset
 plot.optholdoutsize                                         Plot estimated cost function
 plot.optholdoutsize_emul                                    Plot estimated cost function using emulation (semiparametric)
+powerlaw                                                    Power law function
 powersolve                                                  Fit power law curve
 powersolve_general                                          General solver for power law curve
 powersolve_se                                               Standard error matrix for learning curve parameters (power law)

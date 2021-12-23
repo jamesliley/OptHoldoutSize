@@ -30,7 +30,7 @@ oracle_pred	oracle_pred
 params_aspre	params_aspre
 plot.optholdoutsize	plot.optholdoutsize
 plot.optholdoutsize_emul	plot.optholdoutsize_emul
-powerlaw	mu_fn
+powerlaw	powerlaw
 powersolve	powersolve
 powersolve_general	powersolve_general
 powersolve_se	powersolve_se

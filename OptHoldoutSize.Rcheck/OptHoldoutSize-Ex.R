@@ -262,14 +262,14 @@ ohs_true=nx[which.min(k1*nx + k2_true(nx)*(N-nx))]
 # Values of n for which cost has been estimated
 np=50 # this many points
 nset=round(runif(np,1,N))
-var_w=runif(np,0.001,0.0015)
-d=rnorm(np,mean=k2_true(nset),sd=sqrt(var_w))
+var_k2=runif(np,0.001,0.0015)
+k2=rnorm(np,mean=k2_true(nset),sd=sqrt(var_k2))
 
 # Compute OHS
-res1=optimal_holdout_size_emulation(nset,d,var_w,N,k1)
+res1=optimal_holdout_size_emulation(nset,k2,var_k2,N,k1)
 
 # Error estimates
-ex=error_ohs_emulation(nset,d,var_w,N,k1)
+ex=error_ohs_emulation(nset,k2,var_k2,N,k1)
 
 # Plot
 plot(res1)
@@ -280,7 +280,7 @@ abline(v=ex,col=rgb(1,0,0,alpha=0.2))
 
 # Show justification for error
 n=seq(1,N,length=1000)
-mu=mu_fn(n,nset,d,var_w,N,k1); psi=pmax(0,psi_fn(n, nset, var_w, N)); Z=-qnorm(0.1/2)
+mu=mu_fn(n,nset,k2,var_k2,N,k1); psi=pmax(0,psi_fn(n, nset, var_k2, N)); Z=-qnorm(0.1/2)
 lines(n,mu - Z*sqrt(psi),lty=2,lwd=2)
 legend("topright",
     c("Err. region",expression(paste(mu(n)- "z"[alpha/2]*sqrt(psi(n))))),
@@ -323,23 +323,23 @@ theta_upper=c(20000,2,0.5) # upper bounds for estimating theta
 
 
 # We start with five random holdout set sizes (nset0),
-#  with corresponding cost-per-individual estimates d0 derived
-#  with various errors var_w0
+#  with corresponding cost-per-individual estimates k2_0 derived
+#  with various errors var_k2_0
 nstart=4
 vwmin=0.001; vwmax=0.005
 nset0=round(runif(nstart,1000,N/2))
-var_w0=runif(nstart,vwmin,vwmax)
-d0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_w0))
+var_k2_0=runif(nstart,vwmin,vwmax)
+k2_0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_k2_0))
 
 # We estimate theta from these three points
-theta0=powersolve(nset0,d0,y_var=var_w0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
+theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
 
 # We will estimate the posterior at these values of n
 n=seq(1000,N,length=1000)
 
 # Mean and variance
-p_mu=mu_fn(n,nset=nset0,d=d0,var_w = var_w0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
-p_var=psi_fn(n,nset=nset0,N=N,var_w = var_w0,k_width=kw0,var_u=vu0)
+p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+p_var=psi_fn(n,nset=nset0,N=N,var_k2 = var_k2_0,k_width=kw0,var_u=vu0)
 
 # Plot
 yrange=c(-30000,100000)
@@ -349,7 +349,7 @@ plot(0,xlim=range(n),ylim=yrange,type="n",
 lines(n,p_mu,col="blue")
 lines(n,p_mu - 3*sqrt(p_var),col="red")
 lines(n,p_mu + 3*sqrt(p_var),col="red")
-points(nset0,k1*nset0 + d0*(N-nset0),pch=16,col="purple")
+points(nset0,k1*nset0 + k2_0*(N-nset0),pch=16,col="purple")
 lines(n,k1*n + powerlaw(n,theta0)*(N-n),lty=2)
 lines(n,k1*n + powerlaw(n,theta_true)*(N-n),lty=3,lwd=3)
 if (inc_legend) {
@@ -364,7 +364,7 @@ if (inc_legend) {
 }
 
 ## Add line corresponding to recommended new point
-exp_imp_em <- exp_imp_fn(n,nset=nset0,d=d0,var_w = var_w0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+exp_imp_em <- exp_imp_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
 abline(v=n[which.max(exp_imp_em)])
 
 
@@ -599,14 +599,10 @@ nameEx("mu_fn")
 flush(stderr()); flush(stdout())
 
 ### Name: mu_fn
-### Title: Power law function
-### Aliases: mu_fn powerlaw
+### Title: Updating function for mean.
+### Aliases: mu_fn
 
 ### ** Examples
-
-
-ncheck=seq(1000,10000)
-plot(ncheck, powerlaw(ncheck, c(5e3,1.2,0.3)),type="l",xlab="n",ylab="powerlaw(n)")
 
 
 # Suppose we have population size and cost-per-sample without a risk score as follows
@@ -617,25 +613,25 @@ k1=0.4
 k_width=5000
 var_u=8000000
 
-# Suppose we begin with loss estimates at n-values
+# Suppose we begin with k2() estimates at n-values
 nset=c(10000,20000,30000)
 
 # with cost-per-individual estimates
 k2=c(0.35,0.26,0.28)
 
 # and associated error on those estimates
-var_w=c(0.02^2,0.01^2,0.03^2)
+var_k2=c(0.02^2,0.01^2,0.03^2)
 
 # We estimate theta from these three points
-theta=powersolve(nset,k2,y_var=var_w)$par
+theta=powersolve(nset,k2,y_var=var_k2)$par
 
 # We will estimate the posterior at these values of n
 n=seq(1000,50000,length=1000)
 
 # Mean and variance
-p_mu=mu_fn(n,nset=nset,d=k2,var_w = var_w, N=N,k1=k1,theta=theta,
+p_mu=mu_fn(n,nset=nset,k2=k2,var_k2 = var_k2, N=N,k1=k1,theta=theta,
            k_width=k_width,var_u=var_u)
-p_var=psi_fn(n,nset=nset,N=N,var_w = var_w,k_width=k_width,var_u=var_u)
+p_var=psi_fn(n,nset=nset,N=N,var_k2 = var_k2,k_width=k_width,var_u=var_u)
 
 # Plot
 plot(0,xlim=range(n),ylim=c(20000,60000),type="n",
@@ -646,8 +642,8 @@ lines(n,p_mu - 3*sqrt(p_var),col="red")
 lines(n,p_mu + 3*sqrt(p_var),col="red")
 points(nset,k1*nset + k2*(N-nset),pch=16,col="purple")
 lines(n,k1*n + powerlaw(n,theta)*(N-n),lty=2)
-segments(nset,k1*nset + (k2 - 3*sqrt(var_w))*(N-nset),
-         nset,k1*nset + (k2 + 3*sqrt(var_w))*(N-nset))
+segments(nset,k1*nset + (k2 - 3*sqrt(var_k2))*(N-nset),
+         nset,k1*nset + (k2 + 3*sqrt(var_k2))*(N-nset))
 legend("topright",
        c(expression(mu(n)),
          expression(mu(n) %+-% 3*sqrt(psi(n))),
@@ -695,23 +691,23 @@ theta_upper=c(20000,2,0.5) # upper bounds for estimating theta
 
 
 # We start with five random holdout set sizes (nset0),
-#  with corresponding cost-per-individual estimates d0 derived
-#  with various errors var_w0
+#  with corresponding cost-per-individual estimates k2_0 derived
+#  with various errors var_k2_0
 nstart=10
 vwmin=0.001; vwmax=0.005
 nset0=round(runif(nstart,1000,N/2))
-var_w0=runif(nstart,vwmin,vwmax)
-d0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_w0))
+var_k2_0=runif(nstart,vwmin,vwmax)
+k2_0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_k2_0))
 
 # We estimate theta from these three points
-theta0=powersolve(nset0,d0,y_var=var_w0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
+theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
 
 # We will estimate the posterior at these values of n
 n=seq(1000,N,length=1000)
 
 # Mean and variance
-p_mu=mu_fn(n,nset=nset0,d=d0,var_w = var_w0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
-p_var=psi_fn(n,nset=nset0,N=N,var_w = var_w0,k_width=kw0,var_u=vu0)
+p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+p_var=psi_fn(n,nset=nset0,N=N,var_k2 = var_k2_0,k_width=kw0,var_u=vu0)
 
 # Plot
 yrange=c(-30000,100000)
@@ -721,7 +717,7 @@ plot(0,xlim=range(n),ylim=yrange,type="n",
 lines(n,p_mu,col="blue")
 lines(n,p_mu - 3*sqrt(p_var),col="red")
 lines(n,p_mu + 3*sqrt(p_var),col="red")
-points(nset0,k1*nset0 + d0*(N-nset0),pch=16,col="purple")
+points(nset0,k1*nset0 + k2_0*(N-nset0),pch=16,col="purple")
 lines(n,k1*n + powerlaw(n,theta0)*(N-n),lty=2)
 lines(n,k1*n + powerlaw(n,theta_true)*(N-n),lty=3,lwd=3)
 if (inc_legend) {
@@ -737,7 +733,7 @@ if (inc_legend) {
 
 ## Add line corresponding to recommended new point. This is slow.
 nn=seq(1000,N,length=20)
-exp_imp <- next_n(nn,nset=nset0,d=d0,var_w = var_w0, N=N,k1=k1,nmed=10,
+exp_imp <- next_n(nn,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,nmed=10,
                      lower=theta_lower,upper=theta_upper)
 abline(v=nn[which.min(exp_imp)])
 
@@ -870,14 +866,33 @@ k2_true=function(n) powerlaw(n,theta)
 # Values of n for which cost has been estimated
 np=50 # this many points
 nset=round(runif(np,1,N))
-var_w=runif(np,0.001,0.002)
-d=rnorm(np,mean=k2_true(nset),sd=sqrt(var_w))
+var_k2=runif(np,0.001,0.002)
+k2=rnorm(np,mean=k2_true(nset),sd=sqrt(var_k2))
 
 # Compute OHS
-res1=optimal_holdout_size_emulation(nset,d,var_w,N,k1)
+res1=optimal_holdout_size_emulation(nset,k2,var_k2,N,k1)
 
 # Plot
 plot(res1)
+
+
+
+cleanEx()
+nameEx("powerlaw")
+### * powerlaw
+
+flush(stderr()); flush(stdout())
+
+### Name: powerlaw
+### Title: Power law function
+### Aliases: powerlaw
+
+### ** Examples
+
+
+ncheck=seq(1000,10000)
+plot(ncheck, powerlaw(ncheck, c(5e3,1.2,0.3)),type="l",xlab="n",ylab="powerlaw(n)")
+
 
 
 

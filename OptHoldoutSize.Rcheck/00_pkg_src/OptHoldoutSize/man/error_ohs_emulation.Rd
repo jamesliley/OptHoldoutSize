@@ -6,28 +6,28 @@
 \usage{
 error_ohs_emulation(
   nset,
-  d,
-  var_w,
+  k2,
+  var_k2,
   N,
   k1,
   alpha = 0.1,
   var_u = 1e+07,
   k_width = 5000,
-  mean_fn = powerlaw,
-  theta = powersolve(nset, d, y_var = var_w)$par,
+  k2form = powerlaw,
+  theta = powersolve(nset, k2, y_var = var_k2)$par,
   npoll = 1000
 )
 }
 \arguments{
-\item{nset}{Training set sizes for which a loss has been evaluated}
+\item{nset}{Training set sizes for which k2() has been evaluated}
 
-\item{d}{Loss at training set sizes \code{nset}}
+\item{k2}{Estimated k2() at training set sizes \code{nset}}
 
-\item{var_w}{Variance of error in loss estimate at each training set size.}
+\item{var_k2}{Variance of error in k2() estimate at each training set size.}
 
 \item{N}{Total number of samples on which the model will be fitted/used}
 
-\item{k1}{Mean loss per sample with no predictive score in place}
+\item{k1}{Mean cost per sample with no predictive score in place}
 
 \item{alpha}{Use 1-alpha credible interval. Defaults to 0.1.}
 
@@ -35,14 +35,14 @@ error_ohs_emulation(
 
 \item{k_width}{Kernel width for Gaussian process kernel. Defaults to 5000}
 
-\item{mean_fn}{Functional form governing expected loss per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function \code{powerlaw}.}
+\item{k2form}{Functional form governing expected cost per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function \code{powerlaw}.}
 
-\item{theta}{Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.}
+\item{theta}{Current estimates of parameter values for k2form. Defaults to the MLE power-law solution corresponding to n,k2, and var_k2.}
 
 \item{npoll}{Check npoll equally spaced values between 1 and N for minimum. If NULL, check all values (this can be slow). Defaults to 1000}
 }
 \value{
-Vector of values \code{n} for which 1-alpha credible interval for cost \code{l(n)} at n contains mean posterior loss at estimated optimal holdout size.
+Vector of values \code{n} for which 1-alpha credible interval for cost \code{l(n)} at n contains mean posterior cost at estimated optimal holdout size.
 }
 \description{
 Measure of error for semiparametric (emulation) based estimation of optimal holdout set sizes.
@@ -71,14 +71,14 @@ ohs_true=nx[which.min(k1*nx + k2_true(nx)*(N-nx))]
 # Values of n for which cost has been estimated
 np=50 # this many points
 nset=round(runif(np,1,N))
-var_w=runif(np,0.001,0.0015)
-d=rnorm(np,mean=k2_true(nset),sd=sqrt(var_w))
+var_k2=runif(np,0.001,0.0015)
+k2=rnorm(np,mean=k2_true(nset),sd=sqrt(var_k2))
 
 # Compute OHS
-res1=optimal_holdout_size_emulation(nset,d,var_w,N,k1)
+res1=optimal_holdout_size_emulation(nset,k2,var_k2,N,k1)
 
 # Error estimates
-ex=error_ohs_emulation(nset,d,var_w,N,k1)
+ex=error_ohs_emulation(nset,k2,var_k2,N,k1)
 
 # Plot
 plot(res1)
@@ -89,7 +89,7 @@ abline(v=ex,col=rgb(1,0,0,alpha=0.2))
 
 # Show justification for error
 n=seq(1,N,length=1000)
-mu=mu_fn(n,nset,d,var_w,N,k1); psi=pmax(0,psi_fn(n, nset, var_w, N)); Z=-qnorm(0.1/2)
+mu=mu_fn(n,nset,k2,var_k2,N,k1); psi=pmax(0,psi_fn(n, nset, var_k2, N)); Z=-qnorm(0.1/2)
 lines(n,mu - Z*sqrt(psi),lty=2,lwd=2)
 legend("topright",
     c("Err. region",expression(paste(mu(n)- "z"[alpha/2]*sqrt(psi(n))))),

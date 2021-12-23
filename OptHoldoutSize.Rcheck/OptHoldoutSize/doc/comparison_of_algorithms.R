@@ -45,12 +45,12 @@ legend("topright",c("Power law", "Not power law"),col=c("black","red"),lty=1,bty
 
 ## ---- echo=T------------------------------------------------------------------
 nsamp=200 # Presume we have this many estimates of k_2(n), between 1000 and N
-vwmin=0.001; vwmax=0.02 # Sample variances var_w uniformly between these values
+vwmin=0.001; vwmax=0.02 # Sample variances var_k2 uniformly between these values
 
 nset=round(runif(nsamp,1000,N))
-var_w=runif(nsamp,vwmin,vwmax)
-d_pTRUE=rnorm(nsamp,mean=true_k2_pTRUE(nset),sd=sqrt(var_w))
-d_pFALSE=rnorm(nsamp,mean=true_k2_pFALSE(nset),sd=sqrt(var_w))
+var_k2=runif(nsamp,vwmin,vwmax)
+k2_pTRUE=rnorm(nsamp,mean=true_k2_pTRUE(nset),sd=sqrt(var_k2))
+k2_pFALSE=rnorm(nsamp,mean=true_k2_pFALSE(nset),sd=sqrt(var_k2))
 
 ## ---- echo=T------------------------------------------------------------------
 nc=1000:N
@@ -64,9 +64,9 @@ print(true_ohs_pFALSE)
 
 ## ---- echo=T------------------------------------------------------------------
 # Estimate a,b, and c from values nset and d
-est_abc_pTRUE=powersolve(nset,d_pTRUE,
+est_abc_pTRUE=powersolve(nset,k2_pTRUE,
   lower=theta_lower,upper=theta_upper,init=theta_init)$par
-est_abc_pFALSE=powersolve(nset,d_pFALSE,
+est_abc_pFALSE=powersolve(nset,k2_pFALSE,
   lower=theta_lower,upper=theta_upper,init=theta_init)$par
 
 # Estimate optimal holdout sizes using parametric method
@@ -74,8 +74,8 @@ param_ohs_pTRUE=optimal_holdout_size(N,k1,theta=est_abc_pTRUE)$size
 param_ohs_pFALSE=optimal_holdout_size(N,k1,theta=est_abc_pFALSE)$size
 
 # Estimate optimal holdout sizes using semi-parametric (emulation) method
-emul_ohs_pTRUE=optimal_holdout_size_emulation(nset,d_pTRUE,var_w,theta=est_abc_pTRUE,N=N,k1=k1)$size
-emul_ohs_pFALSE=optimal_holdout_size_emulation(nset,d_pFALSE,var_w,theta=est_abc_pFALSE,N=N,k1=k1)$size
+emul_ohs_pTRUE=optimal_holdout_size_emulation(nset,k2_pTRUE,var_k2,theta=est_abc_pTRUE,N=N,k1=k1)$size
+emul_ohs_pFALSE=optimal_holdout_size_emulation(nset,k2_pFALSE,var_k2,theta=est_abc_pFALSE,N=N,k1=k1)$size
 
 # In the parametrised case, the parametric model is better
 print(true_ohs_pTRUE)
@@ -131,14 +131,14 @@ legend("bottomleft",
 #    set.seed(36253 + i)
 #  
 #    # Resample values d
-#    d_pTRUE_r=rnorm(nsamp,mean=true_k2_pTRUE(nset),sd=sqrt(var_w))
-#    d_pFALSE_r=rnorm(nsamp,mean=true_k2_pFALSE(nset),sd=sqrt(var_w))
+#    k2_pTRUE_r=rnorm(nsamp,mean=true_k2_pTRUE(nset),sd=sqrt(var_k2))
+#    k2_pFALSE_r=rnorm(nsamp,mean=true_k2_pFALSE(nset),sd=sqrt(var_k2))
 #  
 #  
 #    # Estimate a,b, and c from values nset and d
-#    est_abc_pTRUE_r=powersolve(nset,d_pTRUE_r,y_var=var_w,
+#    est_abc_pTRUE_r=powersolve(nset,k2_pTRUE_r,y_var=var_k2,
 #      lower=theta_lower,upper=theta_upper,init=theta_init)$par
-#    est_abc_pFALSE_r=powersolve(nset,d_pFALSE_r,y_var=var_w,
+#    est_abc_pFALSE_r=powersolve(nset,k2_pFALSE_r,y_var=var_k2,
 #      lower=theta_lower,upper=theta_upper,init=theta_init)$par
 #  
 #    # Estimate optimal holdout sizes using parametric method
@@ -146,8 +146,8 @@ legend("bottomleft",
 #    param_ohs_pFALSE_r=optimal_holdout_size(N,k1,theta=est_abc_pFALSE_r)$size
 #  
 #    # Estimate optimal holdout sizes using semi-parametric (emulation) method
-#    emul_ohs_pTRUE_r=optimal_holdout_size_emulation(nset,d_pTRUE_r,theta=est_abc_pTRUE_r,var_w,N,k1)$size
-#    emul_ohs_pFALSE_r=optimal_holdout_size_emulation(nset,d_pFALSE_r,theta=est_abc_pTRUE_r,var_w,N,k1)$size
+#    emul_ohs_pTRUE_r=optimal_holdout_size_emulation(nset,k2_pTRUE_r,theta=est_abc_pTRUE_r,var_k2,N,k1)$size
+#    emul_ohs_pFALSE_r=optimal_holdout_size_emulation(nset,k2_pFALSE_r,theta=est_abc_pTRUE_r,var_k2,N,k1)$size
 #  
 #    ohs_resample[i,]=c(param_ohs_pTRUE_r, param_ohs_pFALSE_r, emul_ohs_pTRUE_r, emul_ohs_pFALSE_r)
 #  
@@ -206,14 +206,14 @@ par(mfrow=c(1,2))
 yrange=c(0,100000)
 
 # Estimate parameters for parametric part of semi-parametric method
-theta_pTRUE=powersolve(nset_pTRUE[1:np],d_pTRUE[1:np],y_var=var_w_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
-theta_pFALSE=powersolve(nset_pFALSE[1:np],d_pFALSE[1:np],y_var=var_w_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+theta_pTRUE=powersolve(nset_pTRUE[1:np],k2_pTRUE[1:np],y_var=var_k2_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+theta_pFALSE=powersolve(nset_pFALSE[1:np],k2_pFALSE[1:np],y_var=var_k2_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
 
 ## First panel
 plot(0,xlim=range(n),ylim=yrange,type="n",
      xlab="Training/holdout set size",
      ylab="Total cost (= num. cases)")
-points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + d_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
+points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + k2_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
 lines(n,k1*n + powerlaw(n,theta_pTRUE)*(N-n),lty=2)
 lines(n,k1*n + true_k2_pTRUE(n)*(N-n),lty=3,lwd=3)
 legend("topright",
@@ -232,7 +232,7 @@ abline(v=nset_pTRUE[np+1])
 plot(0,xlim=range(n),ylim=yrange,type="n",
      xlab="Training/holdout set size",
      ylab="Total cost (= num. cases)")
-points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + d_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
+points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + k2_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
 lines(n,k1*n + powerlaw(n,theta_pFALSE)*(N-n),lty=2)
 lines(n,k1*n + true_k2_pFALSE(n)*(N-n),lty=3,lwd=3)
 legend("topright",
@@ -251,19 +251,19 @@ abline(v=nset_pFALSE[np+1])
 #  set.seed(32424)
 #  nstart=5
 #  nset0=round(runif(nstart,1000,N/2))
-#  var_w0=runif(nstart,vwmin,vwmax)
-#  d0_pTRUE=rnorm(nstart,mean=true_k2_pTRUE(nset0),sd=sqrt(var_w0))
-#  d0_pFALSE=rnorm(nstart,mean=true_k2_pFALSE(nset0),sd=sqrt(var_w0))
+#  var_k2_0=runif(nstart,vwmin,vwmax)
+#  k2_0_pTRUE=rnorm(nstart,mean=true_k2_pTRUE(nset0),sd=sqrt(var_k2_0))
+#  k2_0_pFALSE=rnorm(nstart,mean=true_k2_pFALSE(nset0),sd=sqrt(var_k2_0))
 #  
 #  
 #  # These are our sets of training sizes and k2 estimates, which will be built up.
 #  nset_pTRUE=nset0
-#  d_pTRUE=d0_pTRUE
-#  var_w_pTRUE=var_w0
+#  k2_pTRUE=k2_0_pTRUE
+#  var_k2_pTRUE=var_k2_0
 #  
 #  nset_pFALSE=nset0
-#  d_pFALSE=d0_pFALSE
-#  var_w_pFALSE=var_w0
+#  k2_pFALSE=k2_0_pFALSE
+#  var_k2_pFALSE=var_k2_0
 #  
 #  
 #  # Go up to this many points
@@ -273,42 +273,42 @@ abline(v=nset_pFALSE[np+1])
 #    set.seed(37261 + length(nset_pTRUE))
 #  
 #    # Estimate parameters
-#    theta_pTRUE=powersolve(nset_pTRUE,d_pTRUE,y_var=var_w_pTRUE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
-#    theta_pFALSE=powersolve(nset_pFALSE,d_pFALSE,y_var=var_w_pFALSE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
+#    theta_pTRUE=powersolve(nset_pTRUE,k2_pTRUE,y_var=var_k2_pTRUE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
+#    theta_pFALSE=powersolve(nset_pFALSE,k2_pFALSE,y_var=var_k2_pFALSE,lower=theta_lower,upper=theta_upper,init=theta_init)$par
 #  
 #    # Find next suggested point, parametric assumptions satisfied
-#    ci_pTRUE = next_n(n,nset_pTRUE,d=d_pTRUE,var_w=var_w_pTRUE,N=N,k1=k1,nmed=15)
+#    ci_pTRUE = next_n(n,nset_pTRUE,k2=k2_pTRUE,var_k2=var_k2_pTRUE,N=N,k1=k1,nmed=15)
 #    if (!all(is.na(ci_pTRUE))) nextn_pTRUE=n[which.min(ci_pTRUE)] else
 #      nextn_pTRUE=round(runif(1,1000,N))
 #  
 #    # Find next suggested point, parametric assumptions not satisfied
-#    ci_pFALSE = next_n(n,nset_pFALSE,d=d_pFALSE,var_w=var_w_pFALSE,N=N,k1=k1,nmed=15)
+#    ci_pFALSE = next_n(n,nset_pFALSE,k2=k2_pFALSE,var_k2=var_k2_pFALSE,N=N,k1=k1,nmed=15)
 #    if (!all(is.na(ci_pFALSE))) nextn_pFALSE=n[which.min(ci_pFALSE)] else
 #      nextn_pFALSE=round(runif(1,1000,N))
 #  
 #    # New estimates of k2
-#    var_w_new_pTRUE=runif(1,vwmin,vwmax)
-#    d_new_pTRUE=rnorm(1,mean=true_k2_pTRUE(nextn_pTRUE),sd=sqrt(var_w_new_pTRUE))
+#    var_k2_new_pTRUE=runif(1,vwmin,vwmax)
+#    k2_new_pTRUE=rnorm(1,mean=true_k2_pTRUE(nextn_pTRUE),sd=sqrt(var_k2_new_pTRUE))
 #  
-#    var_w_new_pFALSE=runif(1,vwmin,vwmax)
-#    d_new_pFALSE=rnorm(1,mean=true_k2_pFALSE(nextn_pFALSE),sd=sqrt(var_w_new_pFALSE))
+#    var_k2_new_pFALSE=runif(1,vwmin,vwmax)
+#    k2_new_pFALSE=rnorm(1,mean=true_k2_pFALSE(nextn_pFALSE),sd=sqrt(var_k2_new_pFALSE))
 #  
 #  
 #    # Update data
 #    nset_pTRUE=c(nset_pTRUE,nextn_pTRUE)
-#    d_pTRUE=c(d_pTRUE,d_new_pTRUE)
-#    var_w_pTRUE=c(var_w_pTRUE,var_w_new_pTRUE)
+#    k2_pTRUE=c(k2_pTRUE,k2_new_pTRUE)
+#    var_k2_pTRUE=c(var_k2_pTRUE,var_k2_new_pTRUE)
 #  
 #    nset_pFALSE=c(nset_pFALSE,nextn_pFALSE)
-#    d_pFALSE=c(d_pFALSE,d_new_pFALSE)
-#    var_w_pFALSE=c(var_w_pFALSE,var_w_new_pFALSE)
+#    k2_pFALSE=c(k2_pFALSE,k2_new_pFALSE)
+#    var_k2_pFALSE=c(var_k2_pFALSE,var_k2_new_pFALSE)
 #  
 #    print(length(nset_pFALSE))
 #  
 #    data_nextpoint_par=list(
 #      nset_pTRUE=nset_pTRUE,nset_pFALSE=nset_pFALSE,
-#      d_pTRUE=d_pTRUE,d_pFALSE=d_pFALSE,
-#      var_w_pTRUE=var_w_pTRUE,var_w_pFALSE=var_w_pFALSE)
+#      k2_pTRUE=k2_pTRUE,k2_pFALSE=k2_pFALSE,
+#      var_k2_pTRUE=var_k2_pTRUE,var_k2_pFALSE=var_k2_pFALSE)
 #  
 #    save(data_nextpoint_par,file="data/data_nextpoint_par.RData")
 #  
@@ -318,8 +318,8 @@ abline(v=nset_pFALSE[np+1])
 #  
 #  data_nextpoint_par=list(
 #    nset_pTRUE=nset_pTRUE,nset_pFALSE=nset_pFALSE,
-#    d_pTRUE=d_pTRUE,d_pFALSE=d_pFALSE,
-#    var_w_pTRUE=var_w_pTRUE,var_w_pFALSE=var_w_pFALSE)
+#    k2_pTRUE=k2_pTRUE,k2_pFALSE=k2_pFALSE,
+#    var_k2_pTRUE=var_k2_pTRUE,var_k2_pFALSE=var_k2_pFALSE)
 #  
 #  save(data_nextpoint_par,file="data/data_nextpoint_par.RData")
 #  
@@ -333,14 +333,14 @@ abline(v=nset_pFALSE[np+1])
 #  yrange=c(0,100000)
 #  
 #  # Estimate parameters for parametric part of semi-parametric method
-#  theta_pTRUE=powersolve(nset_pTRUE[1:np],d_pTRUE[1:np],y_var=var_w_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
-#  theta_pFALSE=powersolve(nset_pFALSE[1:np],d_pFALSE[1:np],y_var=var_w_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+#  theta_pTRUE=powersolve(nset_pTRUE[1:np],k2_pTRUE[1:np],y_var=var_k2_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+#  theta_pFALSE=powersolve(nset_pFALSE[1:np],k2_pFALSE[1:np],y_var=var_k2_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
 #  
 #  ## First panel
 #  plot(0,xlim=range(n),ylim=yrange,type="n",
 #    xlab="Training/holdout set size",
 #    ylab="Total cost (= num. cases)")
-#  points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + d_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
+#  points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + k2_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
 #  lines(n,k1*n + powerlaw(n,theta_pTRUE)*(N-n),lty=2)
 #  lines(n,k1*n + true_k2_pTRUE(n)*(N-n),lty=3,lwd=3)
 #  legend("topright",
@@ -359,7 +359,7 @@ abline(v=nset_pFALSE[np+1])
 #  plot(0,xlim=range(n),ylim=yrange,type="n",
 #    xlab="Training/holdout set size",
 #    ylab="Total cost (= num. cases)")
-#  points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + d_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
+#  points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + k2_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
 #  lines(n,k1*n + powerlaw(n,theta_pFALSE)*(N-n),lty=2)
 #  lines(n,k1*n + true_k2_pFALSE(n)*(N-n),lty=3,lwd=3)
 #  legend("topright",
@@ -387,17 +387,17 @@ par(mfrow=c(1,2))
 yrange=c(0,100000)
 
 # Mean and variance of emulator for cost function, parametric assumptions satisfied
-p_mu_pTRUE=mu_fn(n,nset=nset_pTRUE[1:np],d=d_pTRUE[1:np],var_w = var_w_pTRUE[1:np],N=N,k1=k1)
-p_var_pTRUE=psi_fn(n,nset=nset_pTRUE[1:np],N=N,var_w = var_w_pTRUE[1:np])
+p_mu_pTRUE=mu_fn(n,nset=nset_pTRUE[1:np],k2=k2_pTRUE[1:np],var_k2 = var_k2_pTRUE[1:np],N=N,k1=k1)
+p_var_pTRUE=psi_fn(n,nset=nset_pTRUE[1:np],N=N,var_k2 = var_k2_pTRUE[1:np])
 
 # Mean and variance of emulator for cost function, parametric assumptions not satisfied
-p_mu_pFALSE=mu_fn(n,nset=nset_pFALSE[1:np],d=d_pFALSE[1:np],var_w = var_w_pFALSE[1:np],N=N,k1=k1)
-p_var_pFALSE=psi_fn(n,nset=nset_pFALSE[1:np],N=N,var_w = var_w_pFALSE[1:np])
+p_mu_pFALSE=mu_fn(n,nset=nset_pFALSE[1:np],k2=k2_pFALSE[1:np],var_k2 = var_k2_pFALSE[1:np],N=N,k1=k1)
+p_var_pFALSE=psi_fn(n,nset=nset_pFALSE[1:np],N=N,var_k2 = var_k2_pFALSE[1:np])
 
 
 # Estimate parameters for parametric part of semi-parametric method
-theta_pTRUE=powersolve(nset_pTRUE[1:np],d_pTRUE[1:np],y_var=var_w_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
-theta_pFALSE=powersolve(nset_pFALSE[1:np],d_pFALSE[1:np],y_var=var_w_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+theta_pTRUE=powersolve(nset_pTRUE[1:np],k2_pTRUE[1:np],y_var=var_k2_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+theta_pFALSE=powersolve(nset_pFALSE[1:np],k2_pFALSE[1:np],y_var=var_k2_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
 
 ## First panel
 plot(0,xlim=range(n),ylim=yrange,type="n",
@@ -406,7 +406,7 @@ plot(0,xlim=range(n),ylim=yrange,type="n",
 lines(n,p_mu_pTRUE,col="blue")
 lines(n,p_mu_pTRUE - 3*sqrt(pmax(0,p_var_pTRUE)),col="red")
 lines(n,p_mu_pTRUE + 3*sqrt(pmax(0,p_var_pTRUE)),col="red")
-points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + d_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
+points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + k2_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
 lines(n,k1*n + powerlaw(n,theta_pTRUE)*(N-n),lty=2)
 lines(n,k1*n + true_k2_pTRUE(n)*(N-n),lty=3,lwd=3)
 legend("topright",
@@ -430,7 +430,7 @@ plot(0,xlim=range(n),ylim=yrange,type="n",
 lines(n,p_mu_pFALSE,col="blue")
 lines(n,p_mu_pFALSE - 3*sqrt(pmax(0,p_var_pFALSE)),col="red")
 lines(n,p_mu_pFALSE + 3*sqrt(pmax(0,p_var_pFALSE)),col="red")
-points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + d_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
+points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + k2_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
 lines(n,k1*n + powerlaw(n,theta_pFALSE)*(N-n),lty=2)
 lines(n,k1*n + true_k2_pFALSE(n)*(N-n),lty=3,lwd=3)
 legend("topright",
@@ -452,19 +452,19 @@ abline(v=nset_pFALSE[np+1])
 #  set.seed(32424) # start from same seed as before
 #  nstart=5
 #  nset0=round(runif(nstart,1000,N/2))
-#  var_w0=runif(nstart,vwmin,vwmax)
-#  d0_pTRUE=rnorm(nstart,mean=true_k2_pTRUE(nset0),sd=sqrt(var_w0))
-#  d0_pFALSE=rnorm(nstart,mean=true_k2_pFALSE(nset0),sd=sqrt(var_w0))
+#  var_k2_0=runif(nstart,vwmin,vwmax)
+#  k2_0_pTRUE=rnorm(nstart,mean=true_k2_pTRUE(nset0),sd=sqrt(var_k2_0))
+#  k2_0_pFALSE=rnorm(nstart,mean=true_k2_pFALSE(nset0),sd=sqrt(var_k2_0))
 #  
 #  
 #  # These are our sets of training sizes and k2 estimates, which will be built up.
 #  nset_pTRUE=nset0
-#  d_pTRUE=d0_pTRUE
-#  var_w_pTRUE=var_w0
+#  k2_pTRUE=k2_0_pTRUE
+#  var_k2_pTRUE=var_k2_0
 #  
 #  nset_pFALSE=nset0
-#  d_pFALSE=d0_pFALSE
-#  var_w_pFALSE=var_w0
+#  k2_pFALSE=k2_0_pFALSE
+#  var_k2_pFALSE=var_k2_0
 #  
 #  
 #  # Go up to this many points
@@ -474,44 +474,44 @@ abline(v=nset_pFALSE[np+1])
 #    set.seed(46352 + length(nset_pTRUE))
 #  
 #    # Estimate parameters for parametric part of semi-parametric method
-#    theta_pTRUE=powersolve(nset_pTRUE,d_pTRUE,y_var=var_w_pTRUE,
+#    theta_pTRUE=powersolve(nset_pTRUE,k2_pTRUE,y_var=var_k2_pTRUE,
 #      lower=theta_lower,upper=theta_upper,init=theta_init)$par
-#    theta_pFALSE=powersolve(nset_pTRUE,d_pFALSE,y_var=var_w_pTRUE,
+#    theta_pFALSE=powersolve(nset_pTRUE,k2_pFALSE,y_var=var_k2_pTRUE,
 #      lower=theta_lower,upper=theta_upper,init=theta_init)$par
 #  
 #    # Mean and variance of emulator for cost function, parametric assumptions satisfied
-#    p_mu_pTRUE=mu_fn(n,nset=nset_pTRUE,d=d_pTRUE,var_w = var_w_pTRUE,theta=theta_pTRUE,N=N,k1=k1)
-#    p_var_pTRUE=psi_fn(n,nset=nset_pTRUE,N=N,var_w = var_w_pTRUE)
+#    p_mu_pTRUE=mu_fn(n,nset=nset_pTRUE,k2=k2_pTRUE,var_k2 = var_k2_pTRUE,theta=theta_pTRUE,N=N,k1=k1)
+#    p_var_pTRUE=psi_fn(n,nset=nset_pTRUE,N=N,var_k2 = var_k2_pTRUE)
 #  
 #    # Mean and variance of emulator for cost function, parametric assumptions not satisfied
-#    p_mu_pFALSE=mu_fn(n,nset=nset_pFALSE,d=d_pFALSE,var_w = var_w_pFALSE,theta=theta_pFALSE,N=N,k1=k1)
-#    p_var_pFALSE=psi_fn(n,nset=nset_pFALSE,N=N,var_w = var_w_pFALSE)
+#    p_mu_pFALSE=mu_fn(n,nset=nset_pFALSE,k2=k2_pFALSE,var_k2 = var_k2_pFALSE,theta=theta_pFALSE,N=N,k1=k1)
+#    p_var_pFALSE=psi_fn(n,nset=nset_pFALSE,N=N,var_k2 = var_k2_pFALSE)
 #  
 #    # Add vertical line at next suggested point
-#    exp_imp_em_pTRUE = exp_imp_fn(n,nset=nset_pTRUE,d=d_pTRUE,var_w = var_w_pTRUE, N=N,k1=k1)
+#    exp_imp_em_pTRUE = exp_imp_fn(n,nset=nset_pTRUE,k2=k2_pTRUE,var_k2 = var_k2_pTRUE, N=N,k1=k1)
 #    nextn_pTRUE = n[which.max(exp_imp_em_pTRUE)]
 #  
 #    # Find next suggested point, parametric assumptions not satisfied
-#    exp_imp_em_pFALSE = exp_imp_fn(n,nset=nset_pFALSE,d=d_pFALSE,var_w = var_w_pFALSE, N=N,k1=k1)
+#    exp_imp_em_pFALSE = exp_imp_fn(n,nset=nset_pFALSE,k2=k2_pFALSE,var_k2 = var_k2_pFALSE, N=N,k1=k1)
 #    nextn_pFALSE = n[which.max(exp_imp_em_pFALSE)]
 #  
 #  
 #    # New estimates of k2
-#    var_w_new_pTRUE=runif(1,vwmin,vwmax)
-#    d_new_pTRUE=rnorm(1,mean=true_k2_pTRUE(nextn_pTRUE),sd=sqrt(var_w_new_pTRUE))
+#    var_k2_new_pTRUE=runif(1,vwmin,vwmax)
+#    k2_new_pTRUE=rnorm(1,mean=true_k2_pTRUE(nextn_pTRUE),sd=sqrt(var_k2_new_pTRUE))
 #  
-#    var_w_new_pFALSE=runif(1,vwmin,vwmax)
-#    d_new_pFALSE=rnorm(1,mean=true_k2_pFALSE(nextn_pFALSE),sd=sqrt(var_w_new_pFALSE))
+#    var_k2_new_pFALSE=runif(1,vwmin,vwmax)
+#    k2_new_pFALSE=rnorm(1,mean=true_k2_pFALSE(nextn_pFALSE),sd=sqrt(var_k2_new_pFALSE))
 #  
 #  
 #    # Update data
 #    nset_pTRUE=c(nset_pTRUE,nextn_pTRUE)
-#    d_pTRUE=c(d_pTRUE,d_new_pTRUE)
-#    var_w_pTRUE=c(var_w_pTRUE,var_w_new_pTRUE)
+#    k2_pTRUE=c(k2_pTRUE,k2_new_pTRUE)
+#    var_k2_pTRUE=c(var_k2_pTRUE,var_k2_new_pTRUE)
 #  
 #    nset_pFALSE=c(nset_pFALSE,nextn_pFALSE)
-#    d_pFALSE=c(d_pFALSE,d_new_pFALSE)
-#    var_w_pFALSE=c(var_w_pFALSE,var_w_new_pFALSE)
+#    k2_pFALSE=c(k2_pFALSE,k2_new_pFALSE)
+#    var_k2_pFALSE=c(var_k2_pFALSE,var_k2_new_pFALSE)
 #  
 #    print(length(nset_pFALSE))
 #  
@@ -520,8 +520,8 @@ abline(v=nset_pFALSE[np+1])
 #  
 #  data_nextpoint_em=list(
 #    nset_pTRUE=nset_pTRUE,nset_pFALSE=nset_pFALSE,
-#    d_pTRUE=d_pTRUE,d_pFALSE=d_pFALSE,
-#    var_w_pTRUE=var_w_pTRUE,var_w_pFALSE=var_w_pFALSE)
+#    k2_pTRUE=k2_pTRUE,k2_pFALSE=k2_pFALSE,
+#    var_k2_pTRUE=var_k2_pTRUE,var_k2_pFALSE=var_k2_pFALSE)
 #  
 #  save(data_nextpoint_em,file="data/data_nextpoint_em.RData")
 #  
@@ -535,17 +535,17 @@ abline(v=nset_pFALSE[np+1])
 #  yrange=c(0,100000)
 #  
 #  # Mean and variance of emulator for cost function, parametric assumptions satisfied
-#  p_mu_pTRUE=mu_fn(n,nset=nset_pTRUE[1:np],d=d_pTRUE[1:np],var_w = var_w_pTRUE[1:np],N=N,k1=k1)
-#  p_var_pTRUE=psi_fn(n,nset=nset_pTRUE[1:np],N=N,var_w = var_w_pTRUE[1:np])
+#  p_mu_pTRUE=mu_fn(n,nset=nset_pTRUE[1:np],k2=k2_pTRUE[1:np],var_k2 = var_k2_pTRUE[1:np],N=N,k1=k1)
+#  p_var_pTRUE=psi_fn(n,nset=nset_pTRUE[1:np],N=N,var_k2 = var_k2_pTRUE[1:np])
 #  
 #  # Mean and variance of emulator for cost function, parametric assumptions not satisfied
-#  p_mu_pFALSE=mu_fn(n,nset=nset_pFALSE[1:np],d=d_pFALSE[1:np],var_w = var_w_pFALSE[1:np],N=N,k1=k1)
-#  p_var_pFALSE=psi_fn(n,nset=nset_pFALSE[1:np],N=N,var_w = var_w_pFALSE[1:np])
+#  p_mu_pFALSE=mu_fn(n,nset=nset_pFALSE[1:np],k2=k2_pFALSE[1:np],var_k2 = var_k2_pFALSE[1:np],N=N,k1=k1)
+#  p_var_pFALSE=psi_fn(n,nset=nset_pFALSE[1:np],N=N,var_k2 = var_k2_pFALSE[1:np])
 #  
 #  
 #  # Estimate parameters for parametric part of semi-parametric method
-#  theta_pTRUE=powersolve(nset_pTRUE[1:np],d_pTRUE[1:np],y_var=var_w_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
-#  theta_pFALSE=powersolve(nset_pFALSE[1:np],d_pFALSE[1:np],y_var=var_w_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+#  theta_pTRUE=powersolve(nset_pTRUE[1:np],k2_pTRUE[1:np],y_var=var_k2_pTRUE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
+#  theta_pFALSE=powersolve(nset_pFALSE[1:np],k2_pFALSE[1:np],y_var=var_k2_pFALSE[1:np],lower=theta_lower,upper=theta_upper,init=theta_init)$par
 #  
 #  ## First panel
 #  plot(0,xlim=range(n),ylim=yrange,type="n",
@@ -554,7 +554,7 @@ abline(v=nset_pFALSE[np+1])
 #  lines(n,p_mu_pTRUE,col="blue")
 #  lines(n,p_mu_pTRUE - 3*sqrt(pmax(0,p_var_pTRUE)),col="red")
 #  lines(n,p_mu_pTRUE + 3*sqrt(pmax(0,p_var_pTRUE)),col="red")
-#  points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + d_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
+#  points(nset_pTRUE[1:np],k1*nset_pTRUE[1:np] + k2_pTRUE[1:np]*(N-nset_pTRUE[1:np]),pch=16,cex=1,col="purple")
 #  lines(n,k1*n + powerlaw(n,theta_pTRUE)*(N-n),lty=2)
 #  lines(n,k1*n + true_k2_pTRUE(n)*(N-n),lty=3,lwd=3)
 #  legend("topright",
@@ -578,7 +578,7 @@ abline(v=nset_pFALSE[np+1])
 #  lines(n,p_mu_pFALSE,col="blue")
 #  lines(n,p_mu_pFALSE - 3*sqrt(pmax(0,p_var_pFALSE)),col="red")
 #  lines(n,p_mu_pFALSE + 3*sqrt(pmax(0,p_var_pFALSE)),col="red")
-#  points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + d_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
+#  points(nset_pFALSE[1:np],k1*nset_pFALSE[1:np] + k2_pFALSE[1:np]*(N-nset_pFALSE[1:np]),pch=16,cex=1,col="purple")
 #  lines(n,k1*n + powerlaw(n,theta_pFALSE)*(N-n),lty=2)
 #  lines(n,k1*n + true_k2_pFALSE(n)*(N-n),lty=3,lwd=3)
 #  legend("topright",
@@ -699,17 +699,17 @@ plot_ci_convergence("Params. not satis, emul. alg.",
   c("Rand. next n","Syst. next n"),M221,M222,true_ohs_pFALSE)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  # Function to resample values of d and regenerate OHS given nset and var_w
-#  ntri=function(nset,var_w,k2,nx=100,method="MLE") {
+#  # Function to resample values of d and regenerate OHS given nset and var_k2
+#  ntri=function(nset,var_k2,k2,nx=100,method="MLE") {
 #    out=rep(0,nx)
 #    for (i in 1:nx) {
-#      d1=rnorm(length(nset),mean=k2(nset),sd=sqrt(var_w))
-#      theta1=powersolve(nset,d1,y_var=var_w,lower=theta_lower,upper=theta_upper,init=theta_true)$par
+#      d1=rnorm(length(nset),mean=k2(nset),sd=sqrt(var_k2))
+#      theta1=powersolve(nset,d1,y_var=var_k2,lower=theta_lower,upper=theta_upper,init=theta_true)$par
 #      if (method=="MLE") {
 #        out[i]=optimal_holdout_size(N,k1,theta1)$size
 #      } else {
 #        nn=seq(1000,N,length=1000)
-#        p_mu=mu_fn(nn,nset=nset,d=d1,var_w = var_w, N=N,k1=k1,theta=theta1)
+#        p_mu=mu_fn(nn,nset=nset,k2=d1,var_k2 = var_k2, N=N,k1=k1,theta=theta1)
 #        out[i]=nn[which.min(p_mu)]
 #      }
 #    }
@@ -729,8 +729,8 @@ plot_ci_convergence("Params. not satis, emul. alg.",
 #  data_nextpoint_rand=list(
 #    nset_pTRUE=round(runif(n_iter,1000,N)),
 #    nset_pFALSE=round(runif(n_iter,1000,N)),
-#    var_w_pTRUE=runif(n_iter,vwmin,vwmax),
-#    var_w_pFALSE=runif(n_iter,vwmin,vwmax)
+#    var_k2_pTRUE=runif(n_iter,vwmin,vwmax),
+#    var_k2_pFALSE=runif(n_iter,vwmin,vwmax)
 #  )
 #  
 #  # Initialise matrices of records
@@ -748,41 +748,41 @@ plot_ci_convergence("Params. not satis, emul. alg.",
 #    # Resamplings for parametric algorithm, random next point
 #    ohs_array[i,,1,1,1]=ntri(
 #      nset=data_nextpoint_rand$nset_pTRUE[1:i],
-#      var_w=data_nextpoint_rand$var_w_pTRUE[1:i],
+#      var_k2=data_nextpoint_rand$var_k2_pTRUE[1:i],
 #      k2=true_k2_pTRUE,nx=nr,method="MLE")
 #    ohs_array[i,,2,1,1]=ntri(
 #      nset=data_nextpoint_rand$nset_pFALSE[1:i],
-#      var_w=data_nextpoint_rand$var_w_pFALSE[1:i],
+#      var_k2=data_nextpoint_rand$var_k2_pFALSE[1:i],
 #      k2=true_k2_pFALSE,nx=nr,method="MLE")
 #  
 #    # Resamplings for semiparametric/emulation algorithm, random next point
 #    ohs_array[i,,1,2,1]=ntri(
 #      nset=data_nextpoint_rand$nset_pTRUE[1:i],
-#      var_w=data_nextpoint_rand$var_w_pTRUE[1:i],
+#      var_k2=data_nextpoint_rand$var_k2_pTRUE[1:i],
 #      k2=true_k2_pTRUE,nx=nr,method="EM")
 #    ohs_array[i,,2,2,1]=ntri(
 #      nset=data_nextpoint_rand$nset_pFALSE[1:i],
-#      var_w=data_nextpoint_rand$var_w_pFALSE[1:i],
+#      var_k2=data_nextpoint_rand$var_k2_pFALSE[1:i],
 #      k2=true_k2_pFALSE,nx=nr,method="EM")
 #  
 #    # Resamplings for parametric algorithm, nonrandom (systematic) next point
 #    ohs_array[i,,1,1,2]=ntri(
 #      nset=data_nextpoint_par$nset_pTRUE[1:i],
-#      var_w=data_nextpoint_par$var_w_pTRUE[1:i],
+#      var_k2=data_nextpoint_par$var_k2_pTRUE[1:i],
 #      k2=true_k2_pTRUE,nx=nr,method="MLE")
 #    ohs_array[i,,2,1,2]=ntri(
 #      nset=data_nextpoint_par$nset_pFALSE[1:i],
-#      var_w=data_nextpoint_par$var_w_pFALSE[1:i],
+#      var_k2=data_nextpoint_par$var_k2_pFALSE[1:i],
 #      k2=true_k2_pFALSE,nx=nr,method="MLE")
 #  
 #    # Resamplings for semiparametric/emulation algorithm, nonrandom (systematic) next point
 #    ohs_array[i,,1,2,2]=ntri(
 #      nset=data_nextpoint_em$nset_pTRUE[1:i],
-#      var_w=data_nextpoint_em$var_w_pTRUE[1:i],
+#      var_k2=data_nextpoint_em$var_k2_pTRUE[1:i],
 #      k2=true_k2_pTRUE,nx=nr,method="EM")
 #    ohs_array[i,,2,2,2]=ntri(
 #      nset=data_nextpoint_em$nset_pFALSE[1:i],
-#      var_w=data_nextpoint_em$var_w_pFALSE[1:i],
+#      var_k2=data_nextpoint_em$var_k2_pFALSE[1:i],
 #      k2=true_k2_pFALSE,nx=nr,method="EM")
 #  
 #    print(i)

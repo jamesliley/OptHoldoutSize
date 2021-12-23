@@ -4,14 +4,14 @@
 \alias{plot.optholdoutsize}
 \title{Plot estimated cost function}
 \usage{
-\method{plot}{optholdoutsize}(x, ..., k2 = powerlaw)
+\method{plot}{optholdoutsize}(x, ..., k2form = powerlaw)
 }
 \arguments{
 \item{x}{Object of type \code{optholdoutsize}}
 
 \item{...}{Other arguments passed to \code{plot()} and \code{lines()}}
 
-\item{k2}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{powerlaw(n,c(a,b,c))=a n^(-b) + c}.}
+\item{k2form}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{powerlaw(n,c(a,b,c))=a n^(-b) + c}.}
 }
 \description{
 Plot estimated cost function, when parametric method is used for estimation.

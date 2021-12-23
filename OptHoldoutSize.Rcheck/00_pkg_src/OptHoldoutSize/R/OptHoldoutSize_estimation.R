@@ -23,7 +23,7 @@
 ##' @name optimal_holdout_size
 ##' @description Compute optimal holdout size for updating a predictive score given appropriate parameters of cost function
 ##'
-##' Evaluates empirical minimisation of cost function ``l(n;k1,N,theta) = k1 n + k2(n;theta) (N-n)``.
+##' Evaluates empirical minimisation of cost function ``l(n;k1,N,theta) = k1 n + k2form(n;theta) (N-n)``.
 ##'
 ##' The function will return `Inf` if no minimum exists. It does not check if the minimum is unique, but this can be guaranteed using the assumptions for theorem 1 in the manuscript.
 ##'
@@ -31,8 +31,8 @@
 ##' @keywords estimation
 ##' @param N Total number of samples on which the predictive score will be used/fitted. Can be a vector.
 ##' @param k1 Cost value in the absence of a predictive score. Can be a vector.
-##' @param theta Parameters for function k2(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.
-##' @param k2 Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
+##' @param theta Parameters for function k2form(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.
+##' @param k2form Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
 ##' @param round_result Set to TRUE to solve over integral sizes
 ##' @param ... Passed to function `optimize`
 ##' @return List/data frame of dimension (number of evaluations) x (4 + n_par) containing input data and results. Columns `size` and `cost` are optimal holdout size and cost at this size respectively. Parameters N, k1, theta.1, theta.2,...,theta.{n_par} are input data.
@@ -59,7 +59,7 @@ optimal_holdout_size=function(
   N,
   k1,
   theta,
-  k2 = powerlaw,
+  k2form = powerlaw,
   round_result=FALSE,
   ...
 ) {
@@ -67,8 +67,8 @@ optimal_holdout_size=function(
   ## Error handlers
   if (!is.numeric(c(N,k1))) stop("Parameters N and k1 must be numeric")
   if (!(is.numeric(theta)|is.matrix(theta))) stop("Parameter theta must be a vector or matrix")
-  if (!is.function(k2)) stop("Parameter k2 must be a function taking two arguments: n and theta")
-  if (length(as.list(args(k2)))!=3) stop("Parameter k2 must be a function taking two arguments: n and theta")
+  if (!is.function(k2form)) stop("Parameter k2form must be a function taking two arguments: n and theta")
+  if (length(as.list(args(k2form)))!=3) stop("Parameter k2form must be a function taking two arguments: n and theta")
   if ((length(N)>1 | length(k1)>1)|!is.null(dim(theta))) {
     n=max(length(N),length(k1),dim(theta)[1])
     if (is.null(dim(theta))) theta=t(matrix(theta,length(theta),n))
@@ -82,7 +82,7 @@ optimal_holdout_size=function(
 
     ## Solve
   out=suppressWarnings(apply(par_mat,1,function(x) {
-    unlist(optimize(function(n) x[2]*n + k2(n,x[3:np])*(x[1]-n),c(1,N),...))
+    unlist(optimize(function(n) x[2]*n + k2form(n,x[3:np])*(x[1]-n),c(1,N),...))
   }))
 
   ## Post-processing
@@ -99,8 +99,8 @@ optimal_holdout_size=function(
   if (round_result) {
     size1=floor(out$size)
     size2=ceiling(out$size)
-    k2_1=apply(cbind(size1,theta),1,function(x) k2(x[1],x[2:(1+dim(theta)[2])]))
-    k2_2=apply(cbind(size2,theta),1,function(x) k2(x[1],x[2:(1+dim(theta)[2])]))
+    k2_1=apply(cbind(size1,theta),1,function(x) k2form(x[1],x[2:(1+dim(theta)[2])]))
+    k2_2=apply(cbind(size2,theta),1,function(x) k2form(x[1],x[2:(1+dim(theta)[2])]))
     cost1=out$k1*size1 + k2_1*(out$N-size1)
     cost2=out$k1*size2 + k2_1*(out$N-size2)
 
@@ -127,7 +127,7 @@ optimal_holdout_size=function(
 ##'
 ##' @param x Object of type `optholdoutsize`
 ##' @param ... Other arguments passed to `plot()` and `lines()`
-##' @param k2 Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
+##' @param k2form Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
 ##' @examples
 ##'
 ##' # Simple example
@@ -140,13 +140,13 @@ optimal_holdout_size=function(
 ##'
 ##' plot(res1)
 ##'
-plot.optholdoutsize=function(x,...,k2=powerlaw) {
+plot.optholdoutsize=function(x,...,k2form=powerlaw) {
 
   N=x$N; k1=x$k1; size=x$size; cost=x$cost;
   if (length(N)==1) {
     theta=unlist(x[5:length(x)])
     xx=seq(1,N,length.out=1000)
-    yy= k1*xx + k2(xx,theta)*(N-xx)
+    yy= k1*xx + k2form(xx,theta)*(N-xx)
     costN=yy[length(xx)]
 
     plot(xx,yy,type="l",ylim=c(2*cost-costN,costN + cost),xlab="Holdout size",ylab="Total cost",...)
@@ -159,7 +159,7 @@ plot.optholdoutsize=function(x,...,k2=powerlaw) {
 
     xx=seq(1,Nmax,length.out=1000)
     yy=matrix(0,length(N),length(xx))
-    for (i in 1:length(N)) yy[i,]=k1[i]*xx + k2(xx,as.numeric(theta[i,]))*(N[i]-xx)
+    for (i in 1:length(N)) yy[i,]=k1[i]*xx + k2form(xx,as.numeric(theta[i,]))*(N[i]-xx)
 
     costN=yy[,length(xx)]
 
@@ -186,39 +186,41 @@ plot.optholdoutsize=function(x,...,k2=powerlaw) {
 ##' This is essentially a wrapper for function `mu_fn()`.
 ##'
 ##'
-##' @param nset Training set sizes for which a loss has been evaluated
-##' @param d Loss at training set sizes `nset`
-##' @param var_w Variance of error in loss estimate at each training set size.
+##' @param nset Training set sizes for which a cost has been evaluated
+##' @param k2 Estimated values of k2() at training set sizes `nset`
+##' @param var_k2 Variance of error in k2 estimate at each training set size.
 ##' @param N Total number of samples on which the model will be fitted/used
-##' @param k1 Mean loss per sample with no predictive score in place
+##' @param k1 Mean cost per sample with no predictive score in place
 ##' @param var_u Marginal variance for Gaussian process kernel. Defaults to 1e7
 ##' @param k_width Kernel width for Gaussian process kernel. Defaults to 5000
-##' @param mean_fn Functional form governing expected loss per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
-##' @param theta Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.
+##' @param k2form Functional form governing expected cost per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function `powerlaw`.
+##' @param theta Current estimates of parameter values for k2form. Defaults to the MLE power-law solution corresponding to n,k2, and var_k2.
 ##' @param npoll Check npoll equally spaced values between 1 and N for minimum. If NULL, check all values (this can be slow). Defaults to 1000
 ##' @param ... Passed to function `optimise()`
-##' @return Object of class 'optholdoutsize_emul' with elements "cost" (minimum cost),"size" (OHS),"nset","d","var_w","N","k1","var_u","k_width","theta" (parameters)
+##' @return Object of class 'optholdoutsize_emul' with elements "cost" (minimum cost),"size" (OHS),"nset","k2","var_k2","N","k1","var_u","k_width","theta" (parameters)
 ##' @examples
 ##'
 ##' # See examples for mu_fn()
-optimal_holdout_size_emulation= function(nset,d,var_w,N,k1,
+optimal_holdout_size_emulation= function(nset,k2,var_k2,N,k1,
   var_u=1e7,
   k_width=5000,
-  mean_fn=powerlaw,
-  theta=powersolve(nset,d,y_var=var_w)$par,
+  k2form=powerlaw,
+  theta=powersolve_general(nset,k2,y_var=var_k2)$par,
   npoll=1000,
   ...){
 
   if (!is.null(npoll)) n=seq(1,N,length=npoll) else n=1:N
-  xv=mu_fn(n,nset,d,var_w,N,k1,var_u,k_width,mean_fn,theta)
+  xv=mu_fn(n=n,nset=nset,k2=k2,var_k2=var_k2,N=N,k1=k1,
+           var_u=var_u,k_width=k_width,k2form=k2form,
+           theta=theta)
   w=which.min(xv)
 
-  out=list(xv[w],n[w],nset,d,var_w,N,k1,var_u,k_width,theta)
+  out=list(xv[w],n[w],nset,k2,var_k2,N,k1,var_u,k_width,theta)
   ## The 'optimise' below doesn't tend to work bimodally
-  #minf=function(n) mu_fn(n,nset,d,var_w,N,k1,var_u,k_width,mean_fn,theta)
+  #minf=function(n) mu_fn(n,nset,k2,var_k2,N,k1,var_u,k_width,mean_fn,theta)
   #out=optimise(minf,c(1,N))
 
-  names(out)=c("cost","size","nset","d","var_w","N","k1","var_u","k_width","theta")
+  names(out)=c("cost","size","nset","k2","var_k2","N","k1","var_u","k_width","theta")
   class(out)=c("optholdoutsize_emul",class(out))
   return(out)
 }
@@ -236,7 +238,7 @@ optimal_holdout_size_emulation= function(nset,d,var_w,N,k1,
 ##'
 ##' @param x Object of type `optholdoutsize_emul`
 ##' @param ... Other arguments passed to `plot()`
-##' @param k2 Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
+##' @param k2form Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
 ##' @examples
 ##'
 ##' # Simple example
@@ -252,31 +254,34 @@ optimal_holdout_size_emulation= function(nset,d,var_w,N,k1,
 ##' # Values of n for which cost has been estimated
 ##' np=50 # this many points
 ##' nset=round(runif(np,1,N))
-##' var_w=runif(np,0.001,0.002)
-##' d=rnorm(np,mean=k2_true(nset),sd=sqrt(var_w))
+##' var_k2=runif(np,0.001,0.002)
+##' k2=rnorm(np,mean=k2_true(nset),sd=sqrt(var_k2))
 ##'
 ##' # Compute OHS
-##' res1=optimal_holdout_size_emulation(nset,d,var_w,N,k1)
+##' res1=optimal_holdout_size_emulation(nset,k2,var_k2,N,k1)
 ##'
 ##' # Plot
 ##' plot(res1)
-plot.optholdoutsize_emul=function(x,...,k2=powerlaw) {
+plot.optholdoutsize_emul=function(x,...,k2form=powerlaw) {
 
   # Plot at these values of n
   nn=seq(1,x$N,length.out=1000)
 
   # Mean function
-  xv=mu_fn(nn,x$nset,x$d,x$var_w,x$N,x$k1,x$var_u,x$k_width,mean_fn=k2,x$theta)
+  xv=mu_fn(n=nn,nset=x$nset,k2=x$k2,var_k2=x$var_k2,
+           N=x$N,k1=x$k1,var_u=x$var_u,k_width=x$k_width,
+           k2form=k2form,x$theta)
 
   # Variance function
-  psiv=pmax(0,psi_fn(nn, x$nset, x$var_w, x$N, x$var_u, x$k_width))
+  psiv=pmax(0,psi_fn(n=nn, nset=x$nset, var_k2=x$var_k2,
+                     N=x$N, var_u=x$var_u, k_width=x$k_width))
 
   # 3 SD bounds
   xlo=xv - 3*sqrt(psiv)
   xhi=xv + 3*sqrt(psiv)
 
   # m(n)
-  xm=x$k1*nn + k2(nn,x$theta)*(x$N-nn)
+  xm=x$k1*nn + k2form(nn,x$theta)*(x$N-nn)
 
   xq=quantile(c(xlo,xhi),c(0.1,0.9)); xmid=median(xv)
   yr=c(xmid - 2*(xmid-xq[1]),xmid + 2*(xq[2]-xmid))
@@ -286,7 +291,7 @@ plot.optholdoutsize_emul=function(x,...,k2=powerlaw) {
   lines(nn,xv,col="blue")
   lines(nn,xlo,col="red")
   lines(nn,xhi,col="red")
-  points(x$nset,x$k1*x$nset + x$d*(x$N - x$nset),col="purple",pch=16)
+  points(x$nset,x$k1*x$nset + x$k2*(x$N - x$nset),col="purple",pch=16)
   abline(h=x$cost,lty=2); abline(v=x$size,lty=2)
   legend("bottomright",
     c(expression(mu(n)),
@@ -313,9 +318,9 @@ plot.optholdoutsize_emul=function(x,...,k2=powerlaw) {
 ##' @keywords estimation
 ##' @param N Vector of estimates of total number of samples on which the predictive score will be used/fitted, or single estimate
 ##' @param k1 Vector of estimates of cost value in the absence of a predictive score, or single number
-##' @param theta Matrix of estimates of parameters for function k2(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.
+##' @param theta Matrix of estimates of parameters for function k2form(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.
 ##' @param alpha Construct 1-alpha confidence interval. Defaults to 0.05
-##' @param k2 Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``k2(n,c(a,b,c))=a n^(-b) + c``.
+##' @param k2form Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``k2(n,c(a,b,c))=a n^(-b) + c``.
 ##' @param grad_nstar Function giving partial derivatives of optimal holdout set, taking three arguments: N, k1, and theta. Only used for asymptotic confidence intervals. F NULL, estimated empirically
 ##' @param sigma Standard error covariance matrix for (N,k1,theta), in that order. If NULL, will derive as sample covariance matrix of parameters. Must be of the correct size and positive definite.
 ##' @param n_boot Number of bootstrap resamples for empirical estimate.
@@ -405,7 +410,7 @@ ci_ohs=function(
   k1,
   theta,
   alpha=0.05,
-  k2 = powerlaw,
+  k2form = powerlaw,
   grad_nstar=NULL,
   sigma=NULL,
   n_boot=1000,
@@ -417,8 +422,8 @@ ci_ohs=function(
   ## Error handlers
   if (length(N)<5 & is.null(sigma)) stop("At least five samples necessary for estimation if parameter sigma not specified")
   if (!(is.numeric(N) & is.numeric(k1) & is.numeric(theta))) stop("Parameters N, k1 and theta must be numeric")
-  if (!is.function(k2)) stop("Parameter k2 must be a function taking two arguments: n and theta")
-  if (length(as.list(args(k2)))!=3) stop("Parameter k2 must be a function taking two arguments: n and theta")
+  if (!is.function(k2form)) stop("Parameter k2form must be a function taking two arguments: n and theta")
+  if (length(as.list(args(k2form)))!=3) stop("Parameter k2 must be a function taking two arguments: n and theta")
   if (!is.null(grad_nstar)) {
     if (!is.function(grad_nstar)) stop("Parameter grad_nstar must be a function taking three arguments: N, k1, and theta")
     if (length(as.list(args(grad_nstar)))!=4) stop("Parameter grad_nstar must be a function taking three arguments: N, k1, and theta")
@@ -444,14 +449,14 @@ ci_ohs=function(
         dx=1e-5 # estimate gradient by using this difference
         par2=outer(rep(1,2+length(theta)),c(N,k1,theta))
         par2=par2 + dx*diag(dim(par2)[1]) # parameters, shifted by dx one-at-a-time
-        ohs2=optimal_holdout_size(N=par2[,1],k1=par2[,2],theta=par2[,3:dim(par2)[2]],k2=k2)$size
-        ohs1=optimal_holdout_size(N,k1,theta,k2=k2)$size
+        ohs2=optimal_holdout_size(N=par2[,1],k1=par2[,2],theta=par2[,3:dim(par2)[2]],k2form=k2form)$size
+        ohs1=optimal_holdout_size(N,k1,theta,k2form=k2form)$size
         return(t((ohs2-ohs1)/dx))
       }
     }
 
     # Parameters for asymptotic confidence interval
-    nstar=optimal_holdout_size(mu[1],mu[2],mu[3:length(mu)],k2=k2)$size
+    nstar=optimal_holdout_size(mu[1],mu[2],mu[3:length(mu)],k2form=k2form)$size
     beta_est=grad_nstar(mu[1],mu[2],mu[3:length(mu)])
     z_a=-qnorm(alpha/2)
     n_e=length(N)
@@ -497,7 +502,7 @@ ci_ohs=function(
     }
 
     # Compute OHSs for bootstrap resamples
-    ohs_boot=optimal_holdout_size(ci_mat[,1],ci_mat[,2],ci_mat[,3:dim(ci_mat)[2]],k2=k2)
+    ohs_boot=optimal_holdout_size(ci_mat[,1],ci_mat[,2],ci_mat[,3:dim(ci_mat)[2]],k2form=k2form)
 
     # Estimate confidence interval as quantile
     cx=quantile(ohs_boot$size,c(alpha/2,1-(alpha/2)))
@@ -505,6 +510,33 @@ ci_ohs=function(
     return(cx)
   }
 }
+
+
+
+
+##' Power law function
+##'
+##' @export
+##' @name powerlaw
+##' @description Power law function for modelling learning curve (taken to mean change in expected loss per sample with training set size)
+##'
+##' Recommended in [review of learning curve forms](https://arxiv.org/abs/2103.10948)
+##'
+##' If `theta=c(a,b,c)` then models as `a n^(-b) + c`. Note `b` is negated.
+##'
+##' Note that `powerlaw(n,c(a,b,c))` has limit `c` as `n` tends to infinity, if `a,b > 0`
+##'
+##' @param n Set of training set sizes to evaluate
+##' @param theta Parameter of values
+##' @return Vector of values of same length as `n`
+##' @examples
+##'
+##' ncheck=seq(1000,10000)
+##' plot(ncheck, powerlaw(ncheck, c(5e3,1.2,0.3)),type="l",xlab="n",ylab="powerlaw(n)")
+##'
+powerlaw=function(n,theta)  (theta[1] *n^(-theta[2]) + theta[3])
+
+
 
 
 
@@ -816,16 +848,16 @@ powersolve_se=function(x,y,method='fisher',init=c(20000,2,0.1),y_var=rep(1,lengt
 ##'
 ##' Approximately finds a set of n points which, given estimates of cost, minimise width of 95% confidence interval around OHS. Uses a greedy algorithm, so various parameters can be learned along the way.
 ##'
-##' Given existing training set size/cost estimates `nset` and `d`, with `var_w[i]=variance(d[i])`, finds, for each candidate point `n[i]`, the median width of the 90% confidence interval for OHS if
+##' Given existing training set size/k2 estimates `nset` and `k2`, with `var_k2[i]=variance(k2[i])`, finds, for each candidate point `n[i]`, the median width of the 90% confidence interval for OHS if
 ##'
 ##' ``nset <- c(nset,n[i])``
-##' ``var_w <- c(var_w,mean(var_w))``
-##' ``d <- c(d,rnorm(powerlaw(n[i],theta),variance=mean(var_w)))``
+##' ``var_k2 <- c(var_k2,mean(var_k2))``
+##' ``k2 <- c(k2,rnorm(powerlaw(n[i],theta),variance=mean(var_k2)))``
 ##'
 ##' @param n Set of training set sizes to evaluate
 ##' @param nset Training set sizes for which a loss has been evaluated
-##' @param d Loss at training set sizes `nset`
-##' @param var_w Variance of error in loss estimate at each training set size.
+##' @param k2 Estimated k2() at training set sizes `nset`
+##' @param var_k2 Variance of error in k2() estimate at each training set size.
 ##' @param mode Mode for calculating OHS CI (passed to `ci_ohs`): 'asymptotic' or 'empirical'
 ##' @param N Total number of samples on which the model will be fitted/used
 ##' @param k1 Mean loss per sample with no predictive score in place
@@ -856,23 +888,23 @@ powersolve_se=function(x,y,method='fisher',init=c(20000,2,0.1),y_var=rep(1,lengt
 ##'
 ##'
 ##' # We start with five random holdout set sizes (nset0),
-##' #  with corresponding cost-per-individual estimates d0 derived
-##' #  with various errors var_w0
+##' #  with corresponding cost-per-individual estimates k2_0 derived
+##' #  with various errors var_k2_0
 ##' nstart=10
 ##' vwmin=0.001; vwmax=0.005
 ##' nset0=round(runif(nstart,1000,N/2))
-##' var_w0=runif(nstart,vwmin,vwmax)
-##' d0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_w0))
+##' var_k2_0=runif(nstart,vwmin,vwmax)
+##' k2_0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_k2_0))
 ##'
 ##' # We estimate theta from these three points
-##' theta0=powersolve(nset0,d0,y_var=var_w0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
+##' theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
 ##'
 ##' # We will estimate the posterior at these values of n
 ##' n=seq(1000,N,length=1000)
 ##'
 ##' # Mean and variance
-##' p_mu=mu_fn(n,nset=nset0,d=d0,var_w = var_w0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
-##' p_var=psi_fn(n,nset=nset0,N=N,var_w = var_w0,k_width=kw0,var_u=vu0)
+##' p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+##' p_var=psi_fn(n,nset=nset0,N=N,var_k2 = var_k2_0,k_width=kw0,var_u=vu0)
 ##'
 ##' # Plot
 ##' yrange=c(-30000,100000)
@@ -882,7 +914,7 @@ powersolve_se=function(x,y,method='fisher',init=c(20000,2,0.1),y_var=rep(1,lengt
 ##' lines(n,p_mu,col="blue")
 ##' lines(n,p_mu - 3*sqrt(p_var),col="red")
 ##' lines(n,p_mu + 3*sqrt(p_var),col="red")
-##' points(nset0,k1*nset0 + d0*(N-nset0),pch=16,col="purple")
+##' points(nset0,k1*nset0 + k2_0*(N-nset0),pch=16,col="purple")
 ##' lines(n,k1*n + powerlaw(n,theta0)*(N-n),lty=2)
 ##' lines(n,k1*n + powerlaw(n,theta_true)*(N-n),lty=3,lwd=3)
 ##' if (inc_legend) {
@@ -898,25 +930,25 @@ powersolve_se=function(x,y,method='fisher',init=c(20000,2,0.1),y_var=rep(1,lengt
 ##'
 ##' ## Add line corresponding to recommended new point. This is slow.
 ##' nn=seq(1000,N,length=20)
-##' exp_imp <- next_n(nn,nset=nset0,d=d0,var_w = var_w0, N=N,k1=k1,nmed=10,
+##' exp_imp <- next_n(nn,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,nmed=10,
 ##'                      lower=theta_lower,upper=theta_upper)
 ##' abline(v=nn[which.min(exp_imp)])
 ##'
 ##'
-next_n=function(n,nset,d,N,k1,nmed=100,var_w=rep(1,length(nset)),mode="asymptotic",...) {
+next_n=function(n,nset,k2,N,k1,nmed=100,var_k2=rep(1,length(nset)),mode="asymptotic",...) {
   out=rep(0,length(n))
-  theta=powersolve_general(nset,d,y_var=var_w)$par
+  theta=powersolve_general(nset,k2,y_var=var_k2)$par
   for (i in 1:length(n)) {
     out_i=rep(0,nmed)
     for (j in 1:nmed) {
       # Data appended with new candidate point
       nsetx=c(nset,n[i]);
-      var_wx=c(var_w,mean(var_w));
-      dx=c(d,rnorm(1,mean=powerlaw(n[i],theta),sd=sqrt(mean(var_w))))
+      var_k2x=c(var_k2,mean(var_k2));
+      k2x=c(k2,rnorm(1,mean=powerlaw(n[i],theta),sd=sqrt(mean(var_k2))))
 
       # Parameter estimates with new candidate point
-      thetax=powersolve(nsetx,dx,y_var=var_wx,init=theta,...)$par
-      covx=powersolve_se(nsetx,dx,y_var=var_wx,method="fisher",init=theta,...)
+      thetax=powersolve(nsetx,k2x,y_var=var_k2x,init=theta,...)$par
+      covx=powersolve_se(nsetx,k2x,y_var=var_k2x,method="fisher",init=theta,...)
       cov_all=matrix(0,5,5); cov_all[3:5,3:5]=covx
 
       if (!is.na(cov_all[3,3])) {

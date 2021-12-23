@@ -9,7 +9,7 @@ ci_ohs(
   k1,
   theta,
   alpha = 0.05,
-  k2 = powerlaw,
+  k2form = powerlaw,
   grad_nstar = NULL,
   sigma = NULL,
   n_boot = 1000,
@@ -23,11 +23,11 @@ ci_ohs(
 
 \item{k1}{Vector of estimates of cost value in the absence of a predictive score, or single number}
 
-\item{theta}{Matrix of estimates of parameters for function k2(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.}
+\item{theta}{Matrix of estimates of parameters for function k2form(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.}
 
 \item{alpha}{Construct 1-alpha confidence interval. Defaults to 0.05}
 
-\item{k2}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{k2(n,c(a,b,c))=a n^(-b) + c}.}
+\item{k2form}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{k2(n,c(a,b,c))=a n^(-b) + c}.}
 
 \item{grad_nstar}{Function giving partial derivatives of optimal holdout set, taking three arguments: N, k1, and theta. Only used for asymptotic confidence intervals. F NULL, estimated empirically}
 

@@ -2,66 +2,49 @@
 % Please edit documentation in R/OptHoldoutSize_emulation.R
 \name{mu_fn}
 \alias{mu_fn}
-\alias{powerlaw}
-\title{Power law function}
+\title{Updating function for mean.}
 \usage{
-powerlaw(n, theta)
-
 mu_fn(
   n,
   nset,
-  d,
-  var_w,
+  k2,
+  var_k2,
   N,
   k1,
   var_u = 1e+07,
   k_width = 5000,
-  mean_fn = powerlaw,
-  theta = powersolve(nset, d, y_var = var_w)$par
+  k2form = powerlaw,
+  theta = powersolve(nset, k2, y_var = var_k2)$par
 )
 }
 \arguments{
 \item{n}{Set of training set sizes to evaluate}
 
-\item{theta}{Current estimates of parameter values for mean_fn. Defaults to the MLE power-law solution corresponding to n,d, and var_w.}
+\item{nset}{Training set sizes for which k2() has been evaluated}
 
-\item{nset}{Training set sizes for which a loss has been evaluated}
+\item{k2}{Estimated k2() values at training set sizes \code{nset}}
 
-\item{d}{Loss at training set sizes \code{nset}}
-
-\item{var_w}{Variance of error in loss estimate at each training set size.}
+\item{var_k2}{Variance of error in k2() estimate at each training set size.}
 
 \item{N}{Total number of samples on which the model will be fitted/used}
 
-\item{k1}{Mean loss per sample with no predictive score in place}
+\item{k1}{Mean cost per sample with no predictive score in place}
 
 \item{var_u}{Marginal variance for Gaussian process kernel. Defaults to 1e7}
 
 \item{k_width}{Kernel width for Gaussian process kernel. Defaults to 5000}
 
-\item{mean_fn}{Functional form governing expected loss per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function \code{powerlaw}.}
+\item{k2form}{Functional form governing expected cost per sample given sample size. Should take two parameters: n (sample size) and theta (parameters). Defaults to function \code{powerlaw}.}
+
+\item{theta}{Current estimates of parameter values for k2form. Defaults to the MLE power-law solution corresponding to n,k2, and var_k2.}
 }
 \value{
-Vector of values of same length as \code{n}
-
 Vector Mu of same length of n where Mu_i=mean(posterior(cost(n_i)))
 }
 \description{
-Power law function for modelling learning curve (taken to mean change in expected loss per sample with training set size)
-
-Recommended in \href{https://arxiv.org/abs/2103.10948}{review of learning curve forms}
-
-If \code{theta=c(a,b,c)} then models as \verb{a n^(-b) + c}. Note \code{b} is negated.
-
-Note that \code{powerlaw(n,c(a,b,c))} has limit \code{c} as \code{n} tends to infinity, if \verb{a,b > 0}
-
 Posterior mean for emulator given points \code{n}.
 }
 \examples{
-
-ncheck=seq(1000,10000)
-plot(ncheck, powerlaw(ncheck, c(5e3,1.2,0.3)),type="l",xlab="n",ylab="powerlaw(n)")
-
 
 # Suppose we have population size and cost-per-sample without a risk score as follows
 N=100000
@@ -71,25 +54,25 @@ k1=0.4
 k_width=5000
 var_u=8000000
 
-# Suppose we begin with loss estimates at n-values
+# Suppose we begin with k2() estimates at n-values
 nset=c(10000,20000,30000)
 
 # with cost-per-individual estimates
 k2=c(0.35,0.26,0.28)
 
 # and associated error on those estimates
-var_w=c(0.02^2,0.01^2,0.03^2)
+var_k2=c(0.02^2,0.01^2,0.03^2)
 
 # We estimate theta from these three points
-theta=powersolve(nset,k2,y_var=var_w)$par
+theta=powersolve(nset,k2,y_var=var_k2)$par
 
 # We will estimate the posterior at these values of n
 n=seq(1000,50000,length=1000)
 
 # Mean and variance
-p_mu=mu_fn(n,nset=nset,d=k2,var_w = var_w, N=N,k1=k1,theta=theta,
+p_mu=mu_fn(n,nset=nset,k2=k2,var_k2 = var_k2, N=N,k1=k1,theta=theta,
            k_width=k_width,var_u=var_u)
-p_var=psi_fn(n,nset=nset,N=N,var_w = var_w,k_width=k_width,var_u=var_u)
+p_var=psi_fn(n,nset=nset,N=N,var_k2 = var_k2,k_width=k_width,var_u=var_u)
 
 # Plot
 plot(0,xlim=range(n),ylim=c(20000,60000),type="n",
@@ -100,8 +83,8 @@ lines(n,p_mu - 3*sqrt(p_var),col="red")
 lines(n,p_mu + 3*sqrt(p_var),col="red")
 points(nset,k1*nset + k2*(N-nset),pch=16,col="purple")
 lines(n,k1*n + powerlaw(n,theta)*(N-n),lty=2)
-segments(nset,k1*nset + (k2 - 3*sqrt(var_w))*(N-nset),
-         nset,k1*nset + (k2 + 3*sqrt(var_w))*(N-nset))
+segments(nset,k1*nset + (k2 - 3*sqrt(var_k2))*(N-nset),
+         nset,k1*nset + (k2 + 3*sqrt(var_k2))*(N-nset))
 legend("topright",
        c(expression(mu(n)),
          expression(mu(n) \%+-\% 3*sqrt(psi(n))),

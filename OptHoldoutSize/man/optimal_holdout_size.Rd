@@ -4,16 +4,23 @@
 \alias{optimal_holdout_size}
 \title{Estimate optimal holdout size under parametric assumptions}
 \usage{
-optimal_holdout_size(N, k1, theta, k2 = powerlaw, round_result = FALSE, ...)
+optimal_holdout_size(
+  N,
+  k1,
+  theta,
+  k2form = powerlaw,
+  round_result = FALSE,
+  ...
+)
 }
 \arguments{
 \item{N}{Total number of samples on which the predictive score will be used/fitted. Can be a vector.}
 
 \item{k1}{Cost value in the absence of a predictive score. Can be a vector.}
 
-\item{theta}{Parameters for function k2(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.}
+\item{theta}{Parameters for function k2form(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.}
 
-\item{k2}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{powerlaw(n,c(a,b,c))=a n^(-b) + c}.}
+\item{k2form}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{powerlaw(n,c(a,b,c))=a n^(-b) + c}.}
 
 \item{round_result}{Set to TRUE to solve over integral sizes}
 
@@ -25,7 +32,7 @@ List/data frame of dimension (number of evaluations) x (4 + n_par) containing in
 \description{
 Compute optimal holdout size for updating a predictive score given appropriate parameters of cost function
 
-Evaluates empirical minimisation of cost function \verb{l(n;k1,N,theta) = k1 n + k2(n;theta) (N-n)}.
+Evaluates empirical minimisation of cost function \verb{l(n;k1,N,theta) = k1 n + k2form(n;theta) (N-n)}.
 
 The function will return \code{Inf} if no minimum exists. It does not check if the minimum is unique, but this can be guaranteed using the assumptions for theorem 1 in the manuscript.
 

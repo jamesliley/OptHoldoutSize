@@ -4,16 +4,16 @@
 \alias{psi_fn}
 \title{Updating function for variance.}
 \usage{
-psi_fn(n, nset, var_w, N, var_u = 1e+07, k_width = 5000)
+psi_fn(n, nset, var_k2, N, var_u = 1e+07, k_width = 5000)
 }
 \arguments{
 \item{n}{Set of training set sizes to evaluate at}
 
-\item{nset}{Training set sizes for which a loss has been evaluated}
+\item{nset}{Training set sizes for which k2() has been evaluated}
 
-\item{var_w}{Variance of error in loss estimate at each training set size.}
+\item{var_k2}{Variance of error in k2() estimate at each training set size.}
 
-\item{N}{Total number of samples on which the model will be fitted/used. Only used to rescale var_w}
+\item{N}{Total number of samples on which the model will be fitted/used. Only used to rescale var_k2}
 
 \item{var_u}{Marginal variance for Gaussian process kernel. Defaults to 1e7}
 
