@@ -6,10 +6,6 @@
 ## October 2021
 ##
 
-## TODO: Possibly include function for confidence interval for OHS and cost given
-#  point estimates of k1, N, theta and an estimate of sigma, assuming normality.
-
-
 
 
 ################################################################################
@@ -329,6 +325,10 @@ plot.optholdoutsize_emul=function(x,...,k2form=powerlaw) {
 ##' @param ... Passed to function `optimize`
 ##' @return A vector of length two containing lower and upper limits of confidence interval.
 ##' @examples
+##'
+##' ## Set seed
+##' set.seed(493825)
+##'
 ##' ## We will assume that our observations of N, k1, and theta=(a,b,c) are distributed with mean mu_par and variance sigma_par
 ##' mu_par=c(N=10000,k1=0.35,A=3,B=1.5,C=0.1)
 ##' sigma_par=cbind(
@@ -379,6 +379,9 @@ plot.optholdoutsize_emul=function(x,...,k2form=powerlaw) {
 ##'     print(paste0("Completed for n_e = ",n_e))
 ##'   }
 ##'
+##' save(ci_cover_a_yn,file="data/ci_cover_a_yn.RData")
+##' save(ci_cover_e_yn,file="data/ci_cover_e_yn.RData")
+##'
 ##' }
 ##'
 ##' # Cover at each n_e value and standard error
@@ -394,7 +397,7 @@ plot.optholdoutsize_emul=function(x,...,k2form=powerlaw) {
 ##'
 ##' # Asymptotic cover and 2*SE pointwise envelope
 ##' polygon(c(n_e_values,rev(n_e_values)),c(cover_a+zse_a,rev(cover_a-zse_a)),
-##'   col=rgb(1,1,1,alpha=0.3),border=NA)
+##'   col=rgb(0,0,0,alpha=0.3),border=NA)
 ##' lines(n_e_values,cover_a,col="black")
 ##'
 ##' # Empirical cover and 2*SE pointwiseenvelope
@@ -514,6 +517,232 @@ ci_ohs=function(
 
 
 
+
+
+
+
+##' Confidence interval for minimum total cost, when estimated using parametric method
+##'
+##' @export
+##' @name ci_mincost
+##' @description Compute confidence interval for cost at optimal holdout size given either a standard error covariance matrix or a set of n_e estimates of parameters.
+##'
+##' This can be done either asymptotically, using a method analogous to the Fisher information matrix, or empirically (using bootstrap resampling)
+##'
+##' If sigma (covariance matrix) is specified and method='bootstrap', a confidence interval is generated assuming a Gaussian distribution of (N,k1,theta). To estimate a confidence interval assuming a non-Gaussian distribution, simulate values under the requisite distribution and use then as parameters N,k1, theta, with sigma set to NULL.
+##'
+##' @keywords estimation
+##' @param N Vector of estimates of total number of samples on which the predictive score will be used/fitted, or single estimate
+##' @param k1 Vector of estimates of cost value in the absence of a predictive score, or single number
+##' @param theta Matrix of estimates of parameters for function k2form(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.
+##' @param alpha Construct 1-alpha confidence interval. Defaults to 0.05
+##' @param k2form Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``k2(n,c(a,b,c))=a n^(-b) + c``.
+##' @param grad_mincost Function giving partial derivatives of minimum cost, taking three arguments: N, k1, and theta. Only used for asymptotic confidence intervals. F NULL, estimated empirically
+##' @param sigma Standard error covariance matrix for (N,k1,theta), in that order. If NULL, will derive as sample covariance matrix of parameters. Must be of the correct size and positive definite.
+##' @param n_boot Number of bootstrap resamples for empirical estimate.
+##' @param seed Random seed for bootstrap resamples. Defaults to NULL.
+##' @param mode One of 'asymptotic' or 'empirical'. Defaults to 'empirical'
+##' @param ... Passed to function `optimize`
+##' @return A vector of length two containing lower and upper limits of confidence interval.
+##' @examples
+##'
+##' ## Set seed
+##' set.seed(574635)
+##'
+##' ## We will assume that our observations of N, k1, and theta=(a,b,c) are distributed with mean mu_par and variance sigma_par
+##' mu_par=c(N=10000,k1=0.35,A=3,B=1.5,C=0.1)
+##' sigma_par=cbind(
+##'   c(100^2,       1,      0,       0,       0),
+##'   c(    1,  0.07^2,      0,       0,       0),
+##'   c(    0,       0,  0.5^2,    0.05,  -0.001),
+##'   c(    0,       0,   0.05,   0.4^2,  -0.002),
+##'   c(    0,       0, -0.001,  -0.002,  0.02^2)
+##' )
+##'
+##' # Firstly, we make 500 observations
+##' par_obs=rmnorm(500,mean=mu_par,varcov=sigma_par)
+##'
+##' # Minimum cost and asymptotic and empirical confidence intervals
+##' mincost=optimal_holdout_size(N=mean(par_obs[,1]),k1=mean(par_obs[,2]),theta=colMeans(par_obs[,3:5]))$cost
+##' ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,seed=12345,mode="asymptotic")
+##' ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,seed=12345,mode="empirical")
+##'
+##'
+##' # Assess cover at various n_e
+##' n_e_values=c(20,30,50,100,150,200,300,500,750,1000,1500)
+##' ntrial=5000
+##' alpha_trial=0.1 # use 90% confidence intervals
+##' mincost_true=optimal_holdout_size(N=mu_par[1],k1=mu_par[2],theta=mu_par[3:5])$cost
+##'
+##' ## The matrices indicating cover take are included in this package but take around 30 minutes to generate. They are generated using the code below (including random seeds).
+##' data(ci_cover_cost_a_yn)
+##' data(ci_cover_cost_e_yn)
+##'
+##' if (!exists("ci_cover_cost_a_yn")) {
+##'   ci_cover_cost_a_yn=matrix(NA,length(n_e_values),ntrial) # Entry [i,j] is 1 if ith asymptotic CI for jth value of n_e covers true mincost
+##'   ci_cover_cost_e_yn=matrix(NA,length(n_e_values),ntrial) # Entry [i,j] is 1 if ith empirical CI for jth value of n_e covers true mincost
+##'
+##'   for (i in 1:length(n_e_values)) {
+##'     n_e=n_e_values[i]
+##'     for (j in 1:ntrial) {
+##'       # Set seed
+##'       set.seed(j*ntrial + i + 12345)
+##'
+##'       # Make n_e observations
+##'       par_obs=rmnorm(n_e,mean=mu_par,varcov=sigma_par)
+##'       ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=alpha_trial,mode="asymptotic")
+##'       ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=alpha_trial,mode="empirical",n_boot=500)
+##'
+##'       if (mincost_true>ci_a[1] & mincost_true<ci_a[2]) ci_cover_cost_a_yn[i,j]=1 else ci_cover_cost_a_yn[i,j]=0
+##'       if (mincost_true>ci_e[1] & mincost_true<ci_e[2]) ci_cover_cost_e_yn[i,j]=1 else ci_cover_cost_e_yn[i,j]=0
+##'     }
+##'     print(paste0("Completed for n_e = ",n_e))
+##'   }
+##'
+##' save(ci_cover_cost_a_yn,file="data/ci_cover_cost_a_yn.RData")
+##' save(ci_cover_cost_e_yn,file="data/ci_cover_cost_e_yn.RData")
+##'
+##' }
+##'
+##' # Cover at each n_e value and standard error
+##' cover_a=rowMeans(ci_cover_cost_a_yn)
+##' cover_e=rowMeans(ci_cover_cost_e_yn)
+##' zse_a=2*sqrt(cover_a*(1-cover_a)/ntrial)
+##' zse_e=2*sqrt(cover_e*(1-cover_e)/ntrial)
+##'
+##'
+##' # Draw plot. Convergence to 1-alpha cover is evident. Cover is not far from alpha even at small n_e.
+##'
+##' plot(0,type="n",xlim=range(n_e_values),ylim=c(0.7,1),xlab=expression("n"[e]),ylab="Cover")
+##'
+##' # Asymptotic cover and 2*SE pointwise envelope
+##' polygon(c(n_e_values,rev(n_e_values)),c(cover_a+zse_a,rev(cover_a-zse_a)),
+##'   col=rgb(0,0,0,alpha=0.3),border=NA)
+##' lines(n_e_values,cover_a,col="black")
+##'
+##' # Empirical cover and 2*SE pointwiseenvelope
+##' polygon(c(n_e_values,rev(n_e_values)),c(cover_e+zse_e,rev(cover_e-zse_e)),
+##'   col=rgb(0,0,1,alpha=0.3),border=NA)
+##' lines(n_e_values,cover_e,col="blue")
+##'
+##' abline(h=1-alpha_trial,col="red")
+##' legend("bottomright",c("Asym.","Emp.",expression(paste("1-",alpha))),lty=1,col=c("black","blue","red"))
+##'
+ci_mincost=function(
+  N,
+  k1,
+  theta,
+  alpha=0.05,
+  k2form = powerlaw,
+  grad_mincost=NULL,
+  sigma=NULL,
+  n_boot=1000,
+  seed=NULL,
+  mode="empirical",
+  ...
+) {
+
+  ## Error handlers
+  if (length(N)<5 & is.null(sigma)) stop("At least five samples necessary for estimation if parameter sigma not specified")
+  if (!(is.numeric(N) & is.numeric(k1) & is.numeric(theta))) stop("Parameters N, k1 and theta must be numeric")
+  if (!is.function(k2form)) stop("Parameter k2form must be a function taking two arguments: n and theta")
+  if (length(as.list(args(k2form)))!=3) stop("Parameter k2 must be a function taking two arguments: n and theta")
+  if (!is.null(grad_mincost)) {
+    if (!is.function(grad_mincost)) stop("Parameter grad_mincost must be a function taking three arguments: N, k1, and theta")
+    if (length(as.list(args(grad_mincost)))!=4) stop("Parameter grad_mincost must be a function taking three arguments: N, k1, and theta")
+  }
+  if (!(mode %in% c("asymptotic","empirical"))) stop("Parameter mode must be either 'asymptotic' or 'empirical'")
+  if (mode=="empirical") if (n_boot*alpha < 10) stop("Parameter nboot too low for this level of alpha")
+  if (!is.numeric(alpha)) stop("Parameter alpha must be numeric")
+  if (alpha <= 0 | alpha>=1) stop("Parameter alpha must be >0 and <1")
+
+  if (mode=="asymptotic") {
+    if (is.null(sigma)) {
+      par_mat=cbind(N,k1,theta)
+      mu=colMeans(par_mat)
+      sigma_hat=var(par_mat)
+    } else {
+      mu=c(N,k1,theta)
+      sigma_hat=sigma
+    }
+
+    ## Determine function for grad_mincost if not specified
+    if (is.null(grad_mincost)) {
+      grad_mincost=function(N,k1,theta) {
+        dx=1e-5 # estimate gradient by using this difference
+        par2=outer(rep(1,2+length(theta)),c(N,k1,theta))
+        par2=par2 + dx*diag(dim(par2)[1]) # parameters, shifted by dx one-at-a-time
+        cost2=optimal_holdout_size(N=par2[,1],k1=par2[,2],theta=par2[,3:dim(par2)[2]],k2form=k2form)$cost
+        cost1=optimal_holdout_size(N,k1,theta,k2form=k2form)$cost
+        return(t((cost2-cost1)/dx))
+      }
+    }
+
+    # Parameters for asymptotic confidence interval
+    xcost=optimal_holdout_size(mu[1],mu[2],mu[3:length(mu)],k2form=k2form)$cost
+    gamma_est=grad_mincost(mu[1],mu[2],mu[3:length(mu)])
+    z_a=-qnorm(alpha/2)
+    n_e=length(N)
+    # Variation from estimated value in asymptotic confidence interval
+    di=z_a*sqrt(((gamma_est) %*% sigma_hat %*% t(gamma_est))/n_e)
+
+    cx=xcost+c(-di,di)
+    names(cx)=c("lower","upper")
+    return(cx)
+  }
+
+  if (mode=="empirical") {
+
+    if (is.null(sigma)) {
+      par_mat=cbind(N,k1,theta)
+      mu=colMeans(par_mat)
+      sigma_hat=var(par_mat)
+      n_e=dim(par_mat)[1]
+    } else {
+      mu=c(N,k1,theta)
+      sigma_hat=sigma
+      n_e=n_boot
+
+      # Sample, allowing that some parameters may have zero variance
+      w=which(sigma_hat[cbind(1:length(mu),1:length(mu))]<1e-20)
+      wc=setdiff(1:length(mu),w)
+      if (length(w)>0) {
+        psub=outer(rep(1,n_boot),mu[w])
+        psubc=rmnorm(n_boot,mean=mu[wc],varcov=sigma_hat[wc,wc])
+        par_mat=outer(rep(1,n_boot),rep(0,length(mu)))
+        par_mat[,w]=psub; par_mat[,wc]=psubc
+      } else par_mat=rmnorm(n_boot,mean=mu,varcov=sigma_hat)
+    }
+
+    # Random seed
+    if (!is.null(seed)) set.seed(seed)
+
+    # Populate with mean parameters from bootstrap resamples
+    ci_mat=matrix(0,n_boot,dim(par_mat)[2])
+    for (i in 1:n_boot) {
+      sboot=sample(n_e,n_e,replace=TRUE)
+      ci_mat[i,]=colMeans(par_mat[sboot,])
+    }
+
+    # Compute min costs for bootstrap resamples
+    cost_boot=optimal_holdout_size(ci_mat[,1],ci_mat[,2],ci_mat[,3:dim(ci_mat)[2]],k2form=k2form)
+
+    # Estimate confidence interval as quantile
+    cx=quantile(cost_boot$cost,c(alpha/2,1-(alpha/2)))
+    names(cx)=c("lower","upper")
+    return(cx)
+  }
+}
+
+
+
+
+
+
+
+
+
+
 ##' Power law function
 ##'
 ##' @export
@@ -606,6 +835,80 @@ grad_nstar_powerlaw=function(
     dnstarda,
     dnstardb,
     dnstardc
+  ))
+}
+
+
+
+
+
+
+##' Gradient of minimum cost (power law)
+##'
+##'
+##' @export
+##' @name grad_mincost_powerlaw
+##' @description Compute gradient of minimum cost assuming a power-law form of k2
+##'
+##' Assumes cost function is ``l(n;k1,N,theta) = k1 n + k2(n;theta) (N-n)`` with ``k2(n;theta)=k2(n;a,b,c)= a n^(-b) + c``
+##' @keywords estimation
+##' @param N Total number of samples on which the predictive score will be used/fitted. Can be a vector.
+##' @param k1 Cost value in the absence of a predictive score. Can be a vector.
+##' @param theta Parameters for function k2(n) governing expected cost to an individual sample given a predictive score fitted to n samples. Can be a matrix of dimension n x n_par, where n_par is the number of parameters of k2.
+##' @return List/data frame of dimension (number of evaluations) x 5 containing partial derivatives of nstar (optimal holdout size) with respect to N, k1, a, b, c respectively.
+##' @examples
+##' # Evaluate minimum for a range of values of k1, and compute derivative
+##' N=10000;
+##' k1=seq(0.1,0.5,length=20)
+##' A=3; B=1.5; C=0.15; theta=c(A,B,C)
+##'
+##' mincost=optimal_holdout_size(N,k1,theta)
+##' grad_mincost=grad_mincost_powerlaw(N,k1,theta)
+##'
+##' plot(0,type="n",ylim=c(0,1560),xlim=range(k1),xlab=expression("k"[1]),ylab="Optimal holdout set size")
+##' lines(mincost$k1,mincost$cost,col="black")
+##' lines(mincost$k1,grad_mincost[,2],col="red")
+##' legend(0.2,800,c(expression(paste("l(n"["*"],")")),
+##'                        expression(paste(partialdiff[k1],"l(n"["*"],")"))),
+##'     col=c("black","red"),lty=1,bty="n")
+##'
+grad_mincost_powerlaw=function(
+  N,
+  k1,
+  theta
+) {
+
+  ## Error handlers
+  if (!is.numeric(c(N,k1))) stop("Parameters N and k1 must be numeric")
+  if (!(is.numeric(theta)|is.matrix(theta))) stop("Parameter theta must be a vector or matrix")
+  if ((length(N)>1 | length(k1)>1)|!is.null(dim(theta))) {
+    n=max(length(N),length(k1),dim(theta)[1])
+    if (is.null(dim(theta))) theta=t(matrix(theta,length(theta),n))
+    if (!all(c(length(k1),length(N),dim(theta)[1]) %in% c(1,n))) stop("If vectors, N and k1 must have the same length, or have length one. Parameter theta must either be a vector or a matrix of dimension length(n) x n_par, where n_par is the number of parameters of k2.")
+    if (length(N)==1) N=rep(N,n)
+    if (length(k1)==1) k1=rep(k1,n)
+  } else theta=matrix(theta,1,length(theta))
+  if (dim(theta)[2]!=3) stop("Parameter theta must have length 3 or dimension n x 3")
+
+
+  ns=optimal_holdout_size(N,k1,theta)$size
+
+  A=theta[,1]; B=theta[,2]; C=theta[,3]
+
+
+  # partial derivatives of ns*
+  dmincostda = (N-ns)*(ns^(-B))
+  dmincostdb = -log(ns)*(N-ns)*A*(ns^(-B))
+  dmincostdc = N-ns
+  dmincostdk1 = ns
+  dmincostdN = A*(ns^(-B)) + C
+
+  return(cbind(
+    dmincostdN,
+    dmincostdk1,
+    dmincostda,
+    dmincostdb,
+    dmincostdc
   ))
 }
 

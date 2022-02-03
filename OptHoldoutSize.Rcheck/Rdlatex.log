@@ -240,8 +240,8 @@ Overfull \hbox (3.40727pt too wide) in paragraph at lines 1761--1764
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [34] [35]
 No file Rd2.ind.
 [36]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.aux)
 
 Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -259,7 +259,7 @@ ype1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/ur
 w/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><
 /usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (36 pages, 157776 bytes).
+Output written on Rd2.pdf (36 pages, 157778 bytes).
 Transcript written on Rd2.log.
 This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex)
  restricted \write18 enabled.
@@ -328,24 +328,24 @@ Package hyperref Warning: Option `pagebackref' has already been used,
 Writing index file Rd2.idx
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.aux)
 (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
 ty))
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.out)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.out)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/
-pdftex.map}]) [2]
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/p
+dftex.map}]) [2]
 Overfull \hbox (106.56616pt too wide) in paragraph at lines 82--83
 []\T1/ptm/m/n/10 Full AS-PRE model from https://www.nejm.org/doi/suppl/10.1056/
 NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf 
@@ -509,8 +509,8 @@ Overfull \hbox (3.40727pt too wide) in paragraph at lines 1761--1764
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [35] [36]
 No file Rd2.ind.
 [37]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.aux) )
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.aux) )
 (see the transcript file for additional information){/usr/local/texlive/2021/te
 xmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/local/texlive/2021/tex
 mf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/local/texlive/2021/texmf-d
@@ -522,7 +522,7 @@ ype1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/ur
 w/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><
 /usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (37 pages, 162986 bytes).
+Output written on Rd2.pdf (37 pages, 162988 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2021] (kpathsea + Thai support).
 Scanning input file Rd2.idx....done (73 entries accepted, 0 rejected).
@@ -597,24 +597,24 @@ Package hyperref Warning: Option `pagebackref' has already been used,
 Writing index file Rd2.idx
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.aux)
 (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
 ty))
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.out)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.out)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/
-pdftex.map}]) [2]
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/p
+dftex.map}]) [2]
 Overfull \hbox (106.56616pt too wide) in paragraph at lines 82--83
 []\T1/ptm/m/n/10 Full AS-PRE model from https://www.nejm.org/doi/suppl/10.1056/
 NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf 
@@ -776,10 +776,10 @@ Overfull \hbox (3.40727pt too wide) in paragraph at lines 1761--1764
  = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
 [32] [33] [34] (/usr/local/texlive/2021/texmf-dist/tex/latex/base/t1cmtt.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [35] [36]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.ind [37] [38])
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.ind [37] [38])
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.aux)
 
 Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -798,7 +798,7 @@ pe1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw
 /times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utm
 r8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></
 usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (38 pages, 174806 bytes).
+Output written on Rd2.pdf (38 pages, 174808 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2021] (kpathsea + Thai support).
 Scanning input file Rd2.idx....done (73 entries accepted, 0 rejected).
@@ -873,24 +873,24 @@ Package hyperref Warning: Option `pagebackref' has already been used,
 Writing index file Rd2.idx
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.aux)
 (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
 ty))
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.out)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.out)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/
-pdftex.map}]) [2]
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/p
+dftex.map}]) [2]
 Overfull \hbox (106.56616pt too wide) in paragraph at lines 82--83
 []\T1/ptm/m/n/10 Full AS-PRE model from https://www.nejm.org/doi/suppl/10.1056/
 NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf 
@@ -1052,10 +1052,10 @@ Overfull \hbox (3.40727pt too wide) in paragraph at lines 1761--1764
  = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
 [32] [33] [34] (/usr/local/texlive/2021/texmf-dist/tex/latex/base/t1cmtt.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [35] [36]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.ind [37] [38])
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmptgtjbY/Rd2pdf179f
-33fdb839c/Rd2.aux) )
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.ind [37] [38])
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpfI4A5c/Rd2pdfdba3
+59b09ef8/Rd2.aux) )
 (see the transcript file for additional information){/usr/local/texlive/2021/te
 xmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/local/texlive/2021/tex
 mf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/local/texlive/2021/texmf-d
@@ -1068,8 +1068,8 @@ pe1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw
 /times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utm
 r8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></
 usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (38 pages, 175336 bytes).
+Output written on Rd2.pdf (38 pages, 175339 bytes).
 Transcript written on Rd2.log.
 Saving output to ‘OptHoldoutSize-manual.pdf’ ...
 Done
-You may want to clean up by 'rm -Rf /var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T//RtmptgtjbY/Rd2pdf179f33fdb839c'
+You may want to clean up by 'rm -Rf /var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T//RtmpfI4A5c/Rd2pdfdba359b09ef8'

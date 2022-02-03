@@ -1207,7 +1207,7 @@ Bootstrap-estimated variance of MLE(a,b,c)
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  25.955 0.396 26.445 0 0 
+Time elapsed:  26.181 0.386 26.664 0 0 
 > grDevices::dev.off()
 null device 
           1 
