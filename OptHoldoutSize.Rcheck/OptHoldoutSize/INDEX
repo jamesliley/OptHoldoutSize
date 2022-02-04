@@ -3,8 +3,11 @@ aspre                                                       Computes ASPRE score
 aspre_emulation                                             Emulation-based OHS estimation for ASPRE
 aspre_k2                                                    Cost estimating function in ASPRE simulation
 aspre_parametric                                            Parametric-based OHS estimation for ASPRE
-ci_cover_a_yn                                               Data for example on asymptotic confidence interval for CI.
-ci_cover_e_yn                                               Data for example on empirical confidence interval for CI.
+ci_cover_a_yn                                               Data for example on asymptotic confidence interval for OHS.
+ci_cover_cost_a_yn                                          Data for example on asymptotic confidence interval for min cost.
+ci_cover_cost_e_yn                                          Data for example on empirical confidence interval for min cost.
+ci_cover_e_yn                                               Data for example on empirical confidence interval for OHS.
+ci_mincost                                                  Confidence interval for minimum total cost, when estimated using parametric method
 ci_ohs                                                      Confidence interval for optimal holdout size, when estimated using parametric method
 cov_fn                                                      Covariance function for Gaussian process
 data_example_simulation                                     Data for vignette showing general example
@@ -15,6 +18,7 @@ exp_imp_fn                                                  Expected improvement
 gen_base_coefs                                              Coefficients for imperfect risk score
 gen_preds                                                   Generate matrix of random observations
 gen_resp                                                    Generate response
+grad_mincost_powerlaw                                       Gradient of minimum cost (power law)
 grad_nstar_powerlaw                                         Gradient of optimal holdout size (power law)
 logistic                                                    Logistic
 logit                                                       Logit

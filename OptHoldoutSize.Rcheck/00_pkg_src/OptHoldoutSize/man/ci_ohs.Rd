@@ -45,13 +45,17 @@ ci_ohs(
 A vector of length two containing lower and upper limits of confidence interval.
 }
 \description{
-Compute confidence interval for optimal holdout size given either a standard error covariance matrix or a set of n_e estimates of parameters.
+Compute confidence interval for optimal holdout size given either a standard error covariance matrix or a set of m estimates of parameters.
 
 This can be done either asymptotically, using a method analogous to the Fisher information matrix, or empirically (using bootstrap resampling)
 
 If sigma (covariance matrix) is specified and method='bootstrap', a confidence interval is generated assuming a Gaussian distribution of (N,k1,theta). To estimate a confidence interval assuming a non-Gaussian distribution, simulate values under the requisite distribution and use then as parameters N,k1, theta, with sigma set to NULL.
 }
 \examples{
+
+## Set seed
+set.seed(493825)
+
 ## We will assume that our observations of N, k1, and theta=(a,b,c) are distributed with mean mu_par and variance sigma_par
 mu_par=c(N=10000,k1=0.35,A=3,B=1.5,C=0.1)
 sigma_par=cbind(
@@ -71,8 +75,8 @@ ci_a=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,seed=123
 ci_e=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,seed=12345,mode="empirical")
 
 
-# Assess cover at various n_e
-n_e_values=c(20,30,50,100,150,200,300,500,750,1000,1500)
+# Assess cover at various m
+m_values=c(20,30,50,100,150,200,300,500,750,1000,1500)
 ntrial=5000
 alpha_trial=0.1 # use 90\% confidence intervals
 nstar_true=optimal_holdout_size(N=mu_par[1],k1=mu_par[2],theta=mu_par[3:5])$size
@@ -82,48 +86,51 @@ data(ci_cover_a_yn)
 data(ci_cover_e_yn)
 
 if (!exists("ci_cover_a_yn")) {
-  ci_cover_a_yn=matrix(NA,length(n_e_values),ntrial) # Entry [i,j] is 1 if ith asymptotic CI for jth value of n_e covers true nstar
-  ci_cover_e_yn=matrix(NA,length(n_e_values),ntrial) # Entry [i,j] is 1 if ith empirical CI for jth value of n_e covers true nstar
+  ci_cover_a_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1 if ith asymptotic CI for jth value of m covers true nstar
+  ci_cover_e_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1 if ith empirical CI for jth value of m covers true nstar
 
-  for (i in 1:length(n_e_values)) {
-    n_e=n_e_values[i]
+  for (i in 1:length(m_values)) {
+    m=m_values[i]
     for (j in 1:ntrial) {
       # Set seed
       set.seed(j*ntrial + i + 12345)
 
-      # Make n_e observations
-      par_obs=rmnorm(n_e,mean=mu_par,varcov=sigma_par)
+      # Make m observations
+      par_obs=rmnorm(m,mean=mu_par,varcov=sigma_par)
       ci_a=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=alpha_trial,mode="asymptotic")
       ci_e=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=alpha_trial,mode="empirical",n_boot=500)
 
       if (nstar_true>ci_a[1] & nstar_true<ci_a[2]) ci_cover_a_yn[i,j]=1 else ci_cover_a_yn[i,j]=0
       if (nstar_true>ci_e[1] & nstar_true<ci_e[2]) ci_cover_e_yn[i,j]=1 else ci_cover_e_yn[i,j]=0
     }
-    print(paste0("Completed for n_e = ",n_e))
+    print(paste0("Completed for m = ",m))
   }
+
+save(ci_cover_a_yn,file="data/ci_cover_a_yn.RData")
+save(ci_cover_e_yn,file="data/ci_cover_e_yn.RData")
 
 }
 
-# Cover at each n_e value and standard error
+# Cover at each m value and standard error
 cover_a=rowMeans(ci_cover_a_yn)
 cover_e=rowMeans(ci_cover_e_yn)
 zse_a=2*sqrt(cover_a*(1-cover_a)/ntrial)
 zse_e=2*sqrt(cover_e*(1-cover_e)/ntrial)
 
 
-# Draw plot. Convergence to 1-alpha cover is evident. Cover is not far from alpha even at small n_e.
+# Draw plot. Convergence to 1-alpha cover is evident. Cover is not far from alpha even at small m.
 
-plot(0,type="n",xlim=range(n_e_values),ylim=c(0.7,1),xlab=expression("n"[e]),ylab="Cover")
+plot(0,type="n",xlim=range(m_values),ylim=c(0.7,1),xlab=expression("m"),ylab="Cover")
 
 # Asymptotic cover and 2*SE pointwise envelope
-polygon(c(n_e_values,rev(n_e_values)),c(cover_a+zse_a,rev(cover_a-zse_a)),
-  col=rgb(1,1,1,alpha=0.3),border=NA)
-lines(n_e_values,cover_a,col="black")
+polygon(c(m_values,rev(m_values)),c(cover_a+zse_a,rev(cover_a-zse_a)),
+  col=rgb(0,0,0,alpha=0.3),border=NA)
+lines(m_values,cover_a,col="black")
 
 # Empirical cover and 2*SE pointwiseenvelope
-polygon(c(n_e_values,rev(n_e_values)),c(cover_e+zse_e,rev(cover_e-zse_e)),
+polygon(c(m_values,rev(m_values)),c(cover_e+zse_e,rev(cover_e-zse_e)),
   col=rgb(0,0,1,alpha=0.3),border=NA)
-lines(n_e_values,cover_e,col="blue")
+lines(m_values,cover_e,col="blue")
 
 abline(h=1-alpha_trial,col="red")
 legend("bottomright",c("Asym.","Emp.",expression(paste("1-",alpha))),lty=1,col=c("black","blue","red"))

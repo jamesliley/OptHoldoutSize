@@ -3,7 +3,7 @@
 \docType{data}
 \name{ci_cover_e_yn}
 \alias{ci_cover_e_yn}
-\title{Data for example on empirical confidence interval for CI.}
+\title{Data for example on empirical confidence interval for OHS.}
 \format{
 An object of class \code{matrix} (inherits from \code{array}) with 11 rows and 5000 columns.
 }
@@ -11,6 +11,6 @@ An object of class \code{matrix} (inherits from \code{array}) with 11 rows and 5
 ci_cover_e_yn
 }
 \description{
-Data for example for empirical confidence interval for CI. For generation, see example.
+Data for example for empirical confidence interval for OHS. For generation, see example.
 }
 \keyword{data,aspre}

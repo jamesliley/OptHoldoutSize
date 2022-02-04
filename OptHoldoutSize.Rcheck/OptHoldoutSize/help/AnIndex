@@ -4,7 +4,10 @@ aspre_emulation	aspre_emulation
 aspre_k2	aspre_k2
 aspre_parametric	aspre_parametric
 ci_cover_a_yn	ci_cover_a_yn
+ci_cover_cost_a_yn	ci_cover_cost_a_yn
+ci_cover_cost_e_yn	ci_cover_cost_e_yn
 ci_cover_e_yn	ci_cover_e_yn
+ci_mincost	ci_mincost
 ci_ohs	ci_ohs
 cov_fn	cov_fn
 data_example_simulation	data_example_simulation
@@ -15,6 +18,7 @@ exp_imp_fn	exp_imp_fn
 gen_base_coefs	gen_base_coefs
 gen_preds	gen_preds
 gen_resp	gen_resp
+grad_mincost_powerlaw	grad_mincost_powerlaw
 grad_nstar_powerlaw	grad_nstar_powerlaw
 logistic	logistic
 logit	logit

@@ -11,8 +11,8 @@ seed=1234
 set.seed(seed)
 
 # Packages
-library("ranger")          # Random forests
-library("OptHoldoutSize")  # Functions for OHS estimation
+library("ranger")            # Random forests
+library("OptHoldoutSize")    # Functions for OHS estimation
 
 # Initialisation of patient data
 n_iter <- 500           # Number of point estimates to be calculated

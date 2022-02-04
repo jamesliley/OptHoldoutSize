@@ -93,19 +93,34 @@ logistic=function(x) -log((1/x)-1)
 ##' @keywords data,aspre
 "ohs_resample"
 
-##' Data for example on asymptotic confidence interval for CI.
+##' Data for example on asymptotic confidence interval for OHS.
 ##'
-##' @description Data for example for asymptotic confidence interval for CI. For generation, see example.
+##' @description Data for example for asymptotic confidence interval for OHS. For generation, see example.
 ##' @docType data
 ##' @keywords data,aspre
 "ci_cover_a_yn"
 
-##' Data for example on empirical confidence interval for CI.
+##' Data for example on empirical confidence interval for OHS.
 ##'
-##' @description Data for example for empirical confidence interval for CI. For generation, see example.
+##' @description Data for example for empirical confidence interval for OHS. For generation, see example.
 ##' @docType data
 ##' @keywords data,aspre
 "ci_cover_e_yn"
+
+##' Data for example on asymptotic confidence interval for min cost.
+##'
+##' @description Data for example for asymptotic confidence interval for min cost. For generation, see example.
+##' @docType data
+##' @keywords data,aspre
+"ci_cover_cost_a_yn"
+
+##' Data for example on empirical confidence interval for min cost.
+##'
+##' @description Data for example for empirical confidence interval for min cost. For generation, see example.
+##' @docType data
+##' @keywords data,aspre
+"ci_cover_cost_e_yn"
+
 
 
 ##' Data for 'next point' demonstration vignette on algorithm comparison using parametric algorithm
