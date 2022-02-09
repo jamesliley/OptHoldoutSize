@@ -324,7 +324,7 @@ exp_imp_fn = function(n,nset,k2,var_k2,N,k1,
 ##'
 ##' This is not a confidence interval, credible interval or credible set for the OHS, and is prone to misinterpretation.
 ##'
-##' @keywords estimation,emulation
+##' @keywords estimation emulation
 ##' @param nset Training set sizes for which k2() has been evaluated
 ##' @param k2 Estimated k2() at training set sizes `nset`
 ##' @param var_k2 Variance of error in k2() estimate at each training set size.

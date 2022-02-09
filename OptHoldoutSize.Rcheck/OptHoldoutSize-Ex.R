@@ -99,7 +99,8 @@ flush(stderr()); flush(stdout())
 ## Set seed
 set.seed(574635)
 
-## We will assume that our observations of N, k1, and theta=(a,b,c) are distributed with mean mu_par and variance sigma_par
+## We will assume that our observations of N, k1, and theta=(a,b,c) are
+##  distributed with mean mu_par and variance sigma_par
 mu_par=c(N=10000,k1=0.35,A=3,B=1.5,C=0.1)
 sigma_par=cbind(
   c(100^2,       1,      0,       0,       0),
@@ -113,24 +114,32 @@ sigma_par=cbind(
 par_obs=rmnorm(500,mean=mu_par,varcov=sigma_par)
 
 # Minimum cost and asymptotic and empirical confidence intervals
-mincost=optimal_holdout_size(N=mean(par_obs[,1]),k1=mean(par_obs[,2]),theta=colMeans(par_obs[,3:5]))$cost
-ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,seed=12345,mode="asymptotic")
-ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,seed=12345,mode="empirical")
+mincost=optimal_holdout_size(N=mean(par_obs[,1]),k1=mean(par_obs[,2]),
+  theta=colMeans(par_obs[,3:5]))$cost
+ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,
+  seed=12345,mode="asymptotic")
+ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,
+  seed=12345,mode="empirical")
 
 
 # Assess cover at various m
 m_values=c(20,30,50,100,150,200,300,500,750,1000,1500)
 ntrial=5000
 alpha_trial=0.1 # use 90% confidence intervals
-mincost_true=optimal_holdout_size(N=mu_par[1],k1=mu_par[2],theta=mu_par[3:5])$cost
+mincost_true=optimal_holdout_size(N=mu_par[1],k1=mu_par[2],
+  theta=mu_par[3:5])$cost
 
-## The matrices indicating cover take are included in this package but take around 30 minutes to generate. They are generated using the code below (including random seeds).
+## The matrices indicating cover take are included in this package but take
+##  around 30 minutes to generate. They are generated using the code below
+##  (including random seeds).
 data(ci_cover_cost_a_yn)
 data(ci_cover_cost_e_yn)
 
 if (!exists("ci_cover_cost_a_yn")) {
-  ci_cover_cost_a_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1 if ith asymptotic CI for jth value of m covers true mincost
-  ci_cover_cost_e_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1 if ith empirical CI for jth value of m covers true mincost
+  ci_cover_cost_a_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1
+  #  if ith asymptotic CI for jth value of m covers true mincost
+  ci_cover_cost_e_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1
+  #  if ith empirical CI for jth value of m covers true mincost
 
   for (i in 1:length(m_values)) {
     m=m_values[i]
@@ -140,11 +149,15 @@ if (!exists("ci_cover_cost_a_yn")) {
 
       # Make m observations
       par_obs=rmnorm(m,mean=mu_par,varcov=sigma_par)
-      ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=alpha_trial,mode="asymptotic")
-      ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=alpha_trial,mode="empirical",n_boot=500)
+      ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],
+        alpha=alpha_trial,mode="asymptotic")
+      ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],
+        alpha=alpha_trial,mode="empirical",n_boot=500)
 
-      if (mincost_true>ci_a[1] & mincost_true<ci_a[2]) ci_cover_cost_a_yn[i,j]=1 else ci_cover_cost_a_yn[i,j]=0
-      if (mincost_true>ci_e[1] & mincost_true<ci_e[2]) ci_cover_cost_e_yn[i,j]=1 else ci_cover_cost_e_yn[i,j]=0
+      if (mincost_true>ci_a[1] & mincost_true<ci_a[2])
+        ci_cover_cost_a_yn[i,j]=1 else ci_cover_cost_a_yn[i,j]=0
+      if (mincost_true>ci_e[1] & mincost_true<ci_e[2])
+        ci_cover_cost_e_yn[i,j]=1 else ci_cover_cost_e_yn[i,j]=0
     }
     print(paste0("Completed for m = ",m))
   }
@@ -161,9 +174,11 @@ zse_a=2*sqrt(cover_a*(1-cover_a)/ntrial)
 zse_e=2*sqrt(cover_e*(1-cover_e)/ntrial)
 
 
-# Draw plot. Convergence to 1-alpha cover is evident. Cover is not far from alpha even at small m.
+# Draw plot. Convergence to 1-alpha cover is evident. Cover is not far from
+#   alpha even at small m.
 
-plot(0,type="n",xlim=range(m_values),ylim=c(0.7,1),xlab=expression("n"[e]),ylab="Cover")
+plot(0,type="n",xlim=range(m_values),ylim=c(0.7,1),xlab=expression("m"),
+  ylab="Cover")
 
 # Asymptotic cover and 2*SE pointwise envelope
 polygon(c(m_values,rev(m_values)),c(cover_a+zse_a,rev(cover_a-zse_a)),
@@ -176,7 +191,8 @@ polygon(c(m_values,rev(m_values)),c(cover_e+zse_e,rev(cover_e-zse_e)),
 lines(m_values,cover_e,col="blue")
 
 abline(h=1-alpha_trial,col="red")
-legend("bottomright",c("Asym.","Emp.",expression(paste("1-",alpha))),lty=1,col=c("black","blue","red"))
+legend("bottomright",c("Asym.","Emp.",expression(paste("1-",alpha))),lty=1,
+  col=c("black","blue","red"))
 
 
 
@@ -199,7 +215,8 @@ flush(stderr()); flush(stdout())
 ## Set seed
 set.seed(493825)
 
-## We will assume that our observations of N, k1, and theta=(a,b,c) are distributed with mean mu_par and variance sigma_par
+## We will assume that our observations of N, k1, and theta=(a,b,c) are
+##  distributed with mean mu_par and variance sigma_par
 mu_par=c(N=10000,k1=0.35,A=3,B=1.5,C=0.1)
 sigma_par=cbind(
   c(100^2,       1,      0,       0,       0),
@@ -213,24 +230,32 @@ sigma_par=cbind(
 par_obs=rmnorm(500,mean=mu_par,varcov=sigma_par)
 
 # Optimal holdout size and asymptotic and empirical confidence intervals
-ohs=optimal_holdout_size(N=mean(par_obs[,1]),k1=mean(par_obs[,2]),theta=colMeans(par_obs[,3:5]))$size
-ci_a=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,seed=12345,mode="asymptotic")
-ci_e=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,seed=12345,mode="empirical")
+ohs=optimal_holdout_size(N=mean(par_obs[,1]),k1=mean(par_obs[,2]),
+  theta=colMeans(par_obs[,3:5]))$size
+ci_a=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,
+  seed=12345,mode="asymptotic")
+ci_e=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,
+  seed=12345,mode="empirical")
 
 
 # Assess cover at various m
 m_values=c(20,30,50,100,150,200,300,500,750,1000,1500)
 ntrial=5000
 alpha_trial=0.1 # use 90% confidence intervals
-nstar_true=optimal_holdout_size(N=mu_par[1],k1=mu_par[2],theta=mu_par[3:5])$size
+nstar_true=optimal_holdout_size(N=mu_par[1],k1=mu_par[2],
+  theta=mu_par[3:5])$size
 
-## The matrices indicating cover take are included in this package but take around 30 minutes to generate. They are generated using the code below (including random seeds).
+## The matrices indicating cover take are included in this package but take
+##  around 30 minutes to generate. They are generated using the code below
+##  (including random seeds).
 data(ci_cover_a_yn)
 data(ci_cover_e_yn)
 
 if (!exists("ci_cover_a_yn")) {
-  ci_cover_a_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1 if ith asymptotic CI for jth value of m covers true nstar
-  ci_cover_e_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1 if ith empirical CI for jth value of m covers true nstar
+  ci_cover_a_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1 if ith
+  ##  asymptotic CI for jth value of m covers true nstar
+  ci_cover_e_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1 if ith
+  ##  empirical CI for jth value of m covers true nstar
 
   for (i in 1:length(m_values)) {
     m=m_values[i]
@@ -240,11 +265,15 @@ if (!exists("ci_cover_a_yn")) {
 
       # Make m observations
       par_obs=rmnorm(m,mean=mu_par,varcov=sigma_par)
-      ci_a=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=alpha_trial,mode="asymptotic")
-      ci_e=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=alpha_trial,mode="empirical",n_boot=500)
+      ci_a=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],
+        alpha=alpha_trial,mode="asymptotic")
+      ci_e=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],
+        alpha=alpha_trial,mode="empirical",n_boot=500)
 
-      if (nstar_true>ci_a[1] & nstar_true<ci_a[2]) ci_cover_a_yn[i,j]=1 else ci_cover_a_yn[i,j]=0
-      if (nstar_true>ci_e[1] & nstar_true<ci_e[2]) ci_cover_e_yn[i,j]=1 else ci_cover_e_yn[i,j]=0
+      if (nstar_true>ci_a[1] & nstar_true<ci_a[2]) ci_cover_a_yn[i,j]=1 else
+         ci_cover_a_yn[i,j]=0
+      if (nstar_true>ci_e[1] & nstar_true<ci_e[2]) ci_cover_e_yn[i,j]=1 else
+         ci_cover_e_yn[i,j]=0
     }
     print(paste0("Completed for m = ",m))
   }
@@ -261,9 +290,11 @@ zse_a=2*sqrt(cover_a*(1-cover_a)/ntrial)
 zse_e=2*sqrt(cover_e*(1-cover_e)/ntrial)
 
 
-# Draw plot. Convergence to 1-alpha cover is evident. Cover is not far from alpha even at small m.
+# Draw plot. Convergence to 1-alpha cover is evident. Cover is not far from
+#   alpha even at small m.
 
-plot(0,type="n",xlim=range(m_values),ylim=c(0.7,1),xlab=expression("m"),ylab="Cover")
+plot(0,type="n",xlim=range(m_values),ylim=c(0.7,1),xlab=expression("m"),
+  ylab="Cover")
 
 # Asymptotic cover and 2*SE pointwise envelope
 polygon(c(m_values,rev(m_values)),c(cover_a+zse_a,rev(cover_a-zse_a)),
@@ -276,7 +307,8 @@ polygon(c(m_values,rev(m_values)),c(cover_e+zse_e,rev(cover_e-zse_e)),
 lines(m_values,cover_e,col="blue")
 
 abline(h=1-alpha_trial,col="red")
-legend("bottomright",c("Asym.","Emp.",expression(paste("1-",alpha))),lty=1,col=c("black","blue","red"))
+legend("bottomright",c("Asym.","Emp.",expression(paste("1-",alpha))),lty=1,
+  col=c("black","blue","red"))
 
 
 
@@ -295,7 +327,9 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-##' # We will sample from Gaussian processes GP(0,k(.,.)=cov_fn(.,.;var_u,theta)) at these values of n
+# We will sample from Gaussian processes
+#  GP(0,k(.,.)=cov_fn(.,.;var_u,theta))
+# at these values of n
 nvals=seq(1,300,length=100)
 
 # We will consider two theta values
@@ -305,10 +339,14 @@ kw1=10; kw2=30
 var1=1; var2=10
 
 # Covariance matrices
-cov11=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var1,k_width=kw1))
-cov12=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var1,k_width=kw2))
-cov21=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var2,k_width=kw1))
-cov22=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var2,k_width=kw2))
+cov11=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var1,
+  k_width=kw1))
+cov12=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var1,
+  k_width=kw2))
+cov21=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var2,
+  k_width=kw1))
+cov22=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var2,
+  k_width=kw2))
 
 # Dampen slightly to ensure positive definiteness
 damp=1e-5
@@ -326,12 +364,14 @@ y22=rmnorm(1,mean=0,varcov=cov22)
 
 # Plot
 rr=max(abs(c(y11,y12,y21,y22)))
-plot(0,xlim=range(nvals),ylim=c(-rr,rr+10),xlab="n",ylab=expression("GP(0,cov_fn(.,.;var_u,theta))"))
+plot(0,xlim=range(nvals),ylim=c(-rr,rr+10),xlab="n",
+  ylab=expression("GP(0,cov_fn(.,.;var_u,theta))"))
 lines(nvals,y11,lty=1,col="black")
 lines(nvals,y12,lty=2,col="black")
 lines(nvals,y21,lty=1,col="red")
 lines(nvals,y22,lty=2,col="red")
-legend("topright",c("k_width=10, var_u=1", "k_width=30, var_u=1", "k_width=10, var_u=10","k_width=30, var_u=10"),
+legend("topright",c("k_width=10, var_u=1", "k_width=30, var_u=1",
+  "k_width=10, var_u=10","k_width=30, var_u=10"),
   lty=c(1,2,1,2),col=c("black","black","red","red"))
 
 
@@ -346,7 +386,7 @@ flush(stderr()); flush(stdout())
 ### Name: error_ohs_emulation
 ### Title: Measure of error for emulation-based OHS emulation
 ### Aliases: error_ohs_emulation
-### Keywords: estimation,emulation
+### Keywords: emulation estimation
 
 ### ** Examples
 
@@ -439,13 +479,15 @@ var_k2_0=runif(nstart,vwmin,vwmax)
 k2_0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_k2_0))
 
 # We estimate theta from these three points
-theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
+theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,upper=theta_upper,
+  init=theta_true)$par
 
 # We will estimate the posterior at these values of n
 n=seq(1000,N,length=1000)
 
 # Mean and variance
-p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,
+  var_u=vu0)
 p_var=psi_fn(n,nset=nset0,N=N,var_k2 = var_k2_0,k_width=kw0,var_u=vu0)
 
 # Plot
@@ -471,7 +513,8 @@ if (inc_legend) {
 }
 
 ## Add line corresponding to recommended new point
-exp_imp_em <- exp_imp_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+exp_imp_em <- exp_imp_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,
+  theta=theta0,k_width=kw0,var_u=vu0)
 abline(v=n[which.max(exp_imp_em)])
 
 
@@ -552,7 +595,8 @@ A=3; B=1.5; C=0.15; theta=c(A,B,C)
 mincost=optimal_holdout_size(N,k1,theta)
 grad_mincost=grad_mincost_powerlaw(N,k1,theta)
 
-plot(0,type="n",ylim=c(0,1560),xlim=range(k1),xlab=expression("k"[1]),ylab="Optimal holdout set size")
+plot(0,type="n",ylim=c(0,1560),xlim=range(k1),xlab=expression("k"[1]),
+  ylab="Optimal holdout set size")
 lines(mincost$k1,mincost$cost,col="black")
 lines(mincost$k1,grad_mincost[,2],col="red")
 legend(0.2,800,c(expression(paste("l(n"["*"],")")),
@@ -576,7 +620,8 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-# Evaluate optimal holdout set size for a range of values of k1, and compute derivative
+# Evaluate optimal holdout set size for a range of values of k1, and compute
+#  derivative
 N=10000;
 k1=seq(0.1,0.5,length=20)
 A=3; B=1.5; C=0.15; theta=c(A,B,C)
@@ -584,10 +629,12 @@ A=3; B=1.5; C=0.15; theta=c(A,B,C)
 nstar=optimal_holdout_size(N,k1,theta)
 grad_nstar=grad_nstar_powerlaw(N,k1,theta)
 
-plot(0,type="n",ylim=c(-2000,500),xlim=range(k1),xlab=expression("k"[1]),ylab="Optimal holdout set size")
+plot(0,type="n",ylim=c(-2000,500),xlim=range(k1),xlab=expression("k"[1]),
+  ylab="Optimal holdout set size")
 lines(nstar$k1,nstar$size,col="black")
 lines(nstar$k1,grad_nstar[,2],col="red")
-legend("bottomright",c(expression("n"["*"]),expression(paste(partialdiff[k1],"n"["*"]))),
+legend("bottomright",c(expression("n"["*"]),
+    expression(paste(partialdiff[k1],"n"["*"]))),
     col=c("black","red"),lty=1)
 
 
@@ -895,7 +942,8 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-# Evaluate optimal holdout set size for a range of values of k1 and two values of N, some of which lead to infinite values
+# Evaluate optimal holdout set size for a range of values of k1 and two values of
+#   N, some of which lead to infinite values
 N1=10000; N2=12000
 k1=seq(0.1,0.5,length=20)
 A=3; B=1.5; C=0.15; theta=c(A,B,C)
@@ -903,15 +951,19 @@ A=3; B=1.5; C=0.15; theta=c(A,B,C)
 res1=optimal_holdout_size(N1,k1,theta)
 res2=optimal_holdout_size(N2,k1,theta)
 
-par(mfrow=c(1,2))
-plot(0,type="n",ylim=c(0,500),xlim=range(res1$k1),xlab=expression("k"[1]),ylab="Optimal holdout set size")
+oldpar=par(mfrow=c(1,2))
+plot(0,type="n",ylim=c(0,500),xlim=range(res1$k1),xlab=expression("k"[1]),
+  ylab="Optimal holdout set size")
   lines(res1$k1,res1$size,col="black")
   lines(res2$k1,res2$size,col="red")
   legend("topright",as.character(c(N1,N2)),title="N:",col=c("black","red"),lty=1)
-plot(0,type="n",ylim=c(1500,1600),xlim=range(res1$k1),xlab=expression("k"[1]),ylab="Minimum cost")
+plot(0,type="n",ylim=c(1500,1600),xlim=range(res1$k1),xlab=expression("k"[1]),
+  ylab="Minimum cost")
   lines(res1$k1,res1$cost,col="black")
   lines(res2$k1,res2$cost,col="red")
   legend("topleft",as.character(c(N1,N2)),title="N:",col=c("black","red"),lty=1)
+
+par(oldpar)
 
 
 
@@ -925,7 +977,7 @@ flush(stderr()); flush(stdout())
 ### Name: optimal_holdout_size_emulation
 ### Title: Estimate optimal holdout size under semi-parametric assumptions
 ### Aliases: optimal_holdout_size_emulation
-### Keywords: estimation,emulation
+### Keywords: emulation estimation
 
 ### ** Examples
 
@@ -1045,7 +1097,7 @@ flush(stderr()); flush(stdout())
 ### Name: powersolve
 ### Title: Fit power law curve
 ### Aliases: powersolve
-### Keywords: estimation,aspre
+### Keywords: aspre estimation
 
 ### ** Examples
 
@@ -1073,7 +1125,7 @@ flush(stderr()); flush(stdout())
 ### Name: powersolve_general
 ### Title: General solver for power law curve
 ### Aliases: powersolve_general
-### Keywords: estimation,aspre
+### Keywords: aspre estimation
 
 ### ** Examples
 
@@ -1088,7 +1140,6 @@ c(A_true,B_true,C_true)
 powersolve_general(X[1:10],Y[1:10])$par
 powersolve_general(X[1:100],Y[1:100])$par
 powersolve_general(X[1:1000],Y[1:1000])$par
-powersolve_general(X[1:10000],Y[1:10000])$par
 
 
 
@@ -1101,7 +1152,7 @@ flush(stderr()); flush(stdout())
 ### Name: powersolve_se
 ### Title: Standard error matrix for learning curve parameters (power law)
 ### Aliases: powersolve_se
-### Keywords: estimation,aspre
+### Keywords: aspre estimation
 
 ### ** Examples
 
@@ -1118,7 +1169,7 @@ obs=sample(length(X),100,rep=FALSE)
 Xobs=X[obs]; Yobs=Y[obs]
 
 # True covariance matrix of MLE of a,b,c on these x values
-ntest=1000
+ntest=100
 abc_mat_xfix=matrix(0,ntest,3)
 abc_mat_xvar=matrix(0,ntest,3)
 E1=A_true*(Xobs^(-B_true)) + C_true
@@ -1135,7 +1186,7 @@ Ve1=var(abc_mat_xfix) # empirical variance of MLE(a,b,c)|X
 Vf=powersolve_se(Xobs,Yobs,method='fisher') # estimated SE matrix, asymptotic
 
 Ve2=var(abc_mat_xvar) # empirical variance of MLE(a,b,c)
-Vb=powersolve_se(Xobs,Yobs,method='bootstrap') # estimated SE matrix, bootstrap
+Vb=powersolve_se(Xobs,Yobs,method='bootstrap',n_boot=200) # estimated SE matrix, bootstrap
 
 cat("Empirical variance of MLE(a,b,c)|X\n")
 print(Ve1)

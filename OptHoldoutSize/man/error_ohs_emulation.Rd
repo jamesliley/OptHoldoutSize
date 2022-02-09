@@ -95,4 +95,5 @@ legend("topright",
     c("Err. region",expression(paste(mu(n)- "z"[alpha/2]*sqrt(psi(n))))),
     pch=c(16,NA),lty=c(NA,2),lwd=c(NA,2),col=c("pink","black"),bty="n")
 }
-\keyword{estimation,emulation}
+\keyword{emulation}
+\keyword{estimation}

@@ -13,4 +13,5 @@ data_example_simulation
 \description{
 Data for general vignette. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 }
-\keyword{data,aspre}
+\keyword{aspre}
+\keyword{data}

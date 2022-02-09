@@ -66,7 +66,7 @@ obs=sample(length(X),100,rep=FALSE)
 Xobs=X[obs]; Yobs=Y[obs]
 
 # True covariance matrix of MLE of a,b,c on these x values
-ntest=1000
+ntest=100
 abc_mat_xfix=matrix(0,ntest,3)
 abc_mat_xvar=matrix(0,ntest,3)
 E1=A_true*(Xobs^(-B_true)) + C_true
@@ -83,7 +83,7 @@ Ve1=var(abc_mat_xfix) # empirical variance of MLE(a,b,c)|X
 Vf=powersolve_se(Xobs,Yobs,method='fisher') # estimated SE matrix, asymptotic
 
 Ve2=var(abc_mat_xvar) # empirical variance of MLE(a,b,c)
-Vb=powersolve_se(Xobs,Yobs,method='bootstrap') # estimated SE matrix, bootstrap
+Vb=powersolve_se(Xobs,Yobs,method='bootstrap',n_boot=200) # estimated SE matrix, bootstrap
 
 cat("Empirical variance of MLE(a,b,c)|X\n")
 print(Ve1)
@@ -99,4 +99,5 @@ print(Vb)
 cat("\n\n")
 
 }
-\keyword{estimation,aspre}
+\keyword{aspre}
+\keyword{estimation}

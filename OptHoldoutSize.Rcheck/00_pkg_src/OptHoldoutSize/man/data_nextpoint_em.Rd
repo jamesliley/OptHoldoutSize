@@ -13,4 +13,5 @@ data_nextpoint_em
 \description{
 Data containing 'next point selected' information for emulation algorithm in vignette comparing emulation and parametric algorithms. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 }
-\keyword{data,aspre}
+\keyword{aspre}
+\keyword{data}

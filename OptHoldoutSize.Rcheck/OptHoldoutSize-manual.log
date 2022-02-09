@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.12.20)  4 FEB 2022 13:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.12.20)  8 FEB 2022 16:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -272,8 +272,8 @@ File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count271
 \l__pdf_internal_box=\box51
 )
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmppANH7H/Rd2pdf1539
-c1ab66d5e/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpBo0opW/Rd2pdf164d
+f640da134/Rd2.aux)
 \openout1 = `Rd2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
@@ -326,10 +326,10 @@ LaTeX Info: Redefining \ref on input line 8.
 LaTeX Info: Redefining \pageref on input line 8.
 LaTeX Info: Redefining \nameref on input line 8.
 
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmppANH7H/Rd2pdf1539
-c1ab66d5e/Rd2.out)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmppANH7H/Rd2pdf1539
-c1ab66d5e/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpBo0opW/Rd2pdf164d
+f640da134/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpBo0opW/Rd2pdf164d
+f640da134/Rd2.out)
 \@outlinefile=\write4
 \openout4 = `Rd2.out'.
 
@@ -348,404 +348,178 @@ LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 2
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 30.
+(Font)              <7> on input line 31.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 30.
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 32
+(Font)              <5> on input line 31.
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 35
 .
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 )
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmppANH7H/Rd2pdf1539
-c1ab66d5e/Rd2.toc [1
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpBo0opW/Rd2pdf164d
+f640da134/Rd2.toc [1
 
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}])
 \tf@toc=\write5
 \openout5 = `Rd2.toc'.
 
-LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 9.0pt on input line 58.
  [2]
-Overfull \hbox (106.56616pt too wide) in paragraph at lines 78--79
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 9.0pt on input line 61.
+
+Overfull \hbox (106.56616pt too wide) in paragraph at lines 81--82
 []\T1/ptm/m/n/10 Full AS-PRE model from https://www.nejm.org/doi/suppl/10.1056/
 NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf 
  []
 
 
-Overfull \hbox (36.78708pt too wide) in paragraph at lines 91--92
+Overfull \hbox (36.78708pt too wide) in paragraph at lines 94--95
 []\T1/ptm/m/n/10 matrix, as-sumed to be out-put of sim_random_aspre with pa-ram
 -e-ter params=params_aspre
  []
 
 
-Overfull \hbox (50.94576pt too wide) in paragraph at lines 119--120
+Overfull \hbox (50.94576pt too wide) in paragraph at lines 123--124
 \T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
 https://github.com/jamesliley/OptHoldoutSize_pipelines 
  []
 
 [3] [4]
-Overfull \hbox (50.94576pt too wide) in paragraph at lines 191--192
+Overfull \hbox (50.94576pt too wide) in paragraph at lines 196--197
 \T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
 https://github.com/jamesliley/OptHoldoutSize_pipelines 
  []
 
-[5] [6] [7]
-Overfull \hbox (129.72261pt too wide) in paragraph at lines 337--337
- []\T1/zi4/m/n/9 ## We will assume that our observations of N, k1, and theta=(a
-,b,c) are distributed with mean mu_par and variance sigma_par[] 
- []
-
-
-Overfull \hbox (77.28088pt too wide) in paragraph at lines 351--351
- []\T1/zi4/m/n/9 mincost=optimal_holdout_size(N=mean(par_obs[,1]),k1=mean(par_o
-bs[,2]),theta=colMeans(par_obs[,3:5]))$cost[] 
- []
-
-
-Overfull \hbox (77.28088pt too wide) in paragraph at lines 352--352
- []\T1/zi4/m/n/9 ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:
-5],alpha=0.05,seed=12345,mode="asymptotic")[] 
- []
-
-
-Overfull \hbox (72.78088pt too wide) in paragraph at lines 353--353
- []\T1/zi4/m/n/9 ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:
-5],alpha=0.05,seed=12345,mode="empirical")[] 
- []
-
-
-Overfull \hbox (338.19807pt too wide) in paragraph at lines 362--362
- []\T1/zi4/m/n/9 ## The matrices indicating cover take are included in this pac
-kage but take around 30 minutes to generate. They are generated using the code 
-below (including random seeds).[] 
- []
-
-
-Overfull \hbox (179.22261pt too wide) in paragraph at lines 367--367
- []  \T1/zi4/m/n/9 ci_cover_cost_a_yn=matrix(NA,length(m_values),ntrial) # Entr
-y [i,j] is 1 if ith asymptotic CI for jth value of m covers true mincost[] 
- []
-
-
-Overfull \hbox (174.72261pt too wide) in paragraph at lines 368--368
- []  \T1/zi4/m/n/9 ci_cover_cost_e_yn=matrix(NA,length(m_values),ntrial) # Entr
-y [i,j] is 1 if ith empirical CI for jth value of m covers true mincost[] 
- []
-
-[8]
-Overfull \hbox (77.26248pt too wide) in paragraph at lines 378--378
- []      \T1/zi4/m/n/9 ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_o
-bs[,3:5],alpha=alpha_trial,mode="asymptotic")[] 
- []
-
-
-Overfull \hbox (122.26248pt too wide) in paragraph at lines 379--379
- []      \T1/zi4/m/n/9 ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_o
-bs[,3:5],alpha=alpha_trial,mode="empirical",n_boot=500)[] 
- []
-
-
-Overfull \hbox (86.24408pt too wide) in paragraph at lines 381--381
- []      \T1/zi4/m/n/9 if (mincost_true>ci_a[1] & mincost_true<ci_a[2]) ci_cove
-r_cost_a_yn[i,j]=1 else ci_cover_cost_a_yn[i,j]=0[] 
- []
-
-
-Overfull \hbox (86.24408pt too wide) in paragraph at lines 382--382
- []      \T1/zi4/m/n/9 if (mincost_true>ci_e[1] & mincost_true<ci_e[2]) ci_cove
-r_cost_e_yn[i,j]=1 else ci_cover_cost_e_yn[i,j]=0[] 
- []
-
-
-Overfull \hbox (18.72568pt too wide) in paragraph at lines 399--399
- []\T1/zi4/m/n/9 # Draw plot. Convergence to 1-alpha cover is evident. Cover is
- not far from alpha even at small m.[] 
- []
-
-
-Overfull \hbox (0.78088pt too wide) in paragraph at lines 401--401
- []\T1/zi4/m/n/9 plot(0,type="n",xlim=range(m_values),ylim=c(0.7,1),xlab=expres
-sion("n"[e]),ylab="Cover")[] 
- []
-
-
-Overfull \hbox (68.28088pt too wide) in paragraph at lines 414--414
- []\T1/zi4/m/n/9 legend("bottomright",c("Asym.","Emp.",expression(paste("1-",al
-pha))),lty=1,col=c("black","blue","red"))[] 
- []
-
-[9] [10]
-Overfull \hbox (129.72261pt too wide) in paragraph at lines 484--484
- []\T1/zi4/m/n/9 ## We will assume that our observations of N, k1, and theta=(a
-,b,c) are distributed with mean mu_par and variance sigma_par[] 
- []
-
-
-Overfull \hbox (59.28088pt too wide) in paragraph at lines 498--498
- []\T1/zi4/m/n/9 ohs=optimal_holdout_size(N=mean(par_obs[,1]),k1=mean(par_obs[,
-2]),theta=colMeans(par_obs[,3:5]))$size[] 
- []
-
-
-Overfull \hbox (59.28088pt too wide) in paragraph at lines 499--499
- []\T1/zi4/m/n/9 ci_a=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],a
-lpha=0.05,seed=12345,mode="asymptotic")[] 
- []
-
-
-Overfull \hbox (54.78088pt too wide) in paragraph at lines 500--500
- []\T1/zi4/m/n/9 ci_e=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],a
-lpha=0.05,seed=12345,mode="empirical")[] 
- []
-
-
-Overfull \hbox (338.19807pt too wide) in paragraph at lines 509--509
- []\T1/zi4/m/n/9 ## The matrices indicating cover take are included in this pac
-kage but take around 30 minutes to generate. They are generated using the code 
-below (including random seeds).[] 
- []
-
-
-Overfull \hbox (147.72261pt too wide) in paragraph at lines 514--514
- []  \T1/zi4/m/n/9 ci_cover_a_yn=matrix(NA,length(m_values),ntrial) # Entry [i,
-j] is 1 if ith asymptotic CI for jth value of m covers true nstar[] 
- []
-
-
-Overfull \hbox (143.22261pt too wide) in paragraph at lines 515--515
- []  \T1/zi4/m/n/9 ci_cover_e_yn=matrix(NA,length(m_values),ntrial) # Entry [i,
-j] is 1 if ith empirical CI for jth value of m covers true nstar[] 
- []
-
-
-Overfull \hbox (59.26248pt too wide) in paragraph at lines 525--525
- []      \T1/zi4/m/n/9 ci_a=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,
-3:5],alpha=alpha_trial,mode="asymptotic")[] 
- []
-
-
-Overfull \hbox (104.26248pt too wide) in paragraph at lines 526--526
- []      \T1/zi4/m/n/9 ci_e=ci_ohs(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,
-3:5],alpha=alpha_trial,mode="empirical",n_boot=500)[] 
- []
-
-
-Overfull \hbox (23.24408pt too wide) in paragraph at lines 528--528
- []      \T1/zi4/m/n/9 if (nstar_true>ci_a[1] & nstar_true<ci_a[2]) ci_cover_a_
-yn[i,j]=1 else ci_cover_a_yn[i,j]=0[] 
- []
-
-
-Overfull \hbox (23.24408pt too wide) in paragraph at lines 529--529
- []      \T1/zi4/m/n/9 if (nstar_true>ci_e[1] & nstar_true<ci_e[2]) ci_cover_e_
-yn[i,j]=1 else ci_cover_e_yn[i,j]=0[] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [11]
-Overfull \hbox (18.72568pt too wide) in paragraph at lines 546--546
- []\T1/zi4/m/n/9 # Draw plot. Convergence to 1-alpha cover is evident. Cover is
- not far from alpha even at small m.[] 
- []
-
-
-Overfull \hbox (68.28088pt too wide) in paragraph at lines 561--561
- []\T1/zi4/m/n/9 legend("bottomright",c("Asym.","Emp.",expression(paste("1-",al
-pha))),lty=1,col=c("black","blue","red"))[] 
- []
-
-LaTeX Font Info:    Trying to load font information for TS1+zi4 on input line 6
-02.
-(/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/ts1zi4.fd
-File: ts1zi4.fd 2018/01/14 TS1/zi4 (Inconsolata)
-)
-LaTeX Font Info:    Font shape `TS1/zi4/m/n' will be
-(Font)              scaled to size 9.0pt on input line 602.
-
-Overfull \hbox (44.24101pt too wide) in paragraph at lines 602--602
- []\T1/zi4/m/n/9 ##\TS1/zi4/m/n/9 ' \T1/zi4/m/n/9 # We will sample from Gaussia
-n processes GP(0,k(.,.)=cov_fn(.,.;var_u,theta)) at these values of n[] 
- []
-
-[12]
-Overfull \hbox (59.28088pt too wide) in paragraph at lines 633--633
- []\T1/zi4/m/n/9 plot(0,xlim=range(nvals),ylim=c(-rr,rr+10),xlab="n",ylab=expre
-ssion("GP(0,cov_fn(.,.;var_u,theta))"))[] 
- []
-
-
-Overfull \hbox (104.26248pt too wide) in paragraph at lines 638--638
- []\T1/zi4/m/n/9 legend("topright",c("k_width=10, var_u=1", "k_width=30, var_u=
-1", "k_width=10, var_u=10","k_width=30, var_u=10"),[] 
- []
-
-
-Overfull \hbox (169.87473pt too wide) in paragraph at lines 648--649
+[5] [6] [7] [8] [9] [10] [11] [12] [13]
+Overfull \hbox (169.87473pt too wide) in paragraph at lines 698--699
 []\T1/ptm/m/n/10 Data for gen-eral vi-gnette. For gen-er-a-tion, see hid-den co
 de in vi-gnette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize
 _pipelines 
  []
 
-[13] [14] [15] [16] [17]
-Overfull \hbox (54.78088pt too wide) in paragraph at lines 888--888
- []\T1/zi4/m/n/9 theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,
-upper=theta_upper,init=theta_true)$par[] 
- []
-
-
-Overfull \hbox (32.27168pt too wide) in paragraph at lines 894--894
- []\T1/zi4/m/n/9 p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,t
-heta=theta0,k_width=kw0,var_u=vu0)[] 
- []
-
-
-Overfull \hbox (92.26555pt too wide) in paragraph at lines 920--920
- []\T1/zi4/m/n/9 exp_imp_em <- exp_imp_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_
-0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)[] 
- []
-
-[18] [19]
-Overfull \hbox (11.89682pt too wide) in paragraph at lines 1039--1040
+[14] [15] [16] [17] [18] [19] [20]
+Overfull \hbox (11.89682pt too wide) in paragraph at lines 1095--1096
 []\T1/ptm/m/n/10 Assumes cost func-tion is l(n;k1,N,theta) = k1 n + k2(n;theta)
  (N-n) with k2(n;theta)=k2(n;a,b,c)= a n^(-
  []
 
-[20]
-Overfull \hbox (59.27168pt too wide) in paragraph at lines 1072--1072
- []\T1/zi4/m/n/9 plot(0,type="n",ylim=c(0,1560),xlim=range(k1),xlab=expression(
-"k"[1]),ylab="Optimal holdout set size")[] 
- []
 
-
-Overfull \hbox (11.89682pt too wide) in paragraph at lines 1088--1089
+Overfull \hbox (11.89682pt too wide) in paragraph at lines 1145--1146
 []\T1/ptm/m/n/10 Assumes cost func-tion is l(n;k1,N,theta) = k1 n + k2(n;theta)
  (N-n) with k2(n;theta)=k2(n;a,b,c)= a n^(-
  []
 
-[21]
-Overfull \hbox (72.77168pt too wide) in paragraph at lines 1122--1122
- []\T1/zi4/m/n/9 plot(0,type="n",ylim=c(-2000,500),xlim=range(k1),xlab=expressi
-on("k"[1]),ylab="Optimal holdout set size")[] 
- []
-
-
-Overfull \hbox (5.28088pt too wide) in paragraph at lines 1125--1125
- []\T1/zi4/m/n/9 legend("bottomright",c(expression("n"["*"]),expression(paste(p
-artialdiff[k1],"n"["*"]))),[] 
- []
-
-[22] [23] [24] [25] [26]
-Overfull \hbox (151.08093pt too wide) in paragraph at lines 1453--1456
+[21] [22] [23] [24] [25] [26] [27]
+Overfull \hbox (151.08093pt too wide) in paragraph at lines 1513--1516
 []\T1/zi4/m/n/10 nset <-c(nset,n[i]) var_k2 <-c(var_k2,mean(var_k2)) k2 <-c(k2,
 rnorm(powerlaw(n[i],theta),variance=mean(var_k2))) 
  []
 
-[27] [28]
-Overfull \hbox (54.78088pt too wide) in paragraph at lines 1534--1534
+[28]
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 1594--1594
  []\T1/zi4/m/n/9 theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,
 upper=theta_upper,init=theta_true)$par[] 
  []
 
 
-Overfull \hbox (32.27168pt too wide) in paragraph at lines 1540--1540
+Overfull \hbox (32.27168pt too wide) in paragraph at lines 1600--1600
  []\T1/zi4/m/n/9 p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,t
 heta=theta0,k_width=kw0,var_u=vu0)[] 
  []
 
 
-Overfull \hbox (66.58577pt too wide) in paragraph at lines 1579--1580
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [29]
+Overfull \hbox (66.58577pt too wide) in paragraph at lines 1640--1641
 \T1/ptm/m/n/10 For gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline
  at https://github.com/jamesliley/OptHoldoutSize_pipelines 
  []
 
-[29]
-Overfull \hbox (114.76512pt too wide) in paragraph at lines 1596--1597
+
+Overfull \hbox (114.76512pt too wide) in paragraph at lines 1658--1659
 \T1/ptm/m/n/10 al-go-rithms. For gen-er-a-tion, see hid-den code in vi-gnette, 
 or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines 
  []
 
-[30]
-Overfull \hbox (117.70728pt too wide) in paragraph at lines 1658--1658
- []\T1/zi4/m/n/9 # Evaluate optimal holdout set size for a range of values of k
-1 and two values of N, some of which lead to infinite values[] 
- []
-
-
-Overfull \hbox (77.27168pt too wide) in paragraph at lines 1667--1667
- []\T1/zi4/m/n/9 plot(0,type="n",ylim=c(0,500),xlim=range(res1$k1),xlab=express
-ion("k"[1]),ylab="Optimal holdout set size")[] 
- []
-
-
-Overfull \hbox (44.27782pt too wide) in paragraph at lines 1671--1671
- []\T1/zi4/m/n/9 plot(0,type="n",ylim=c(1500,1600),xlim=range(res1$k1),xlab=exp
-ression("k"[1]),ylab="Minimum cost")[] 
- []
-
-[31]
-Overfull \hbox (189.8647pt too wide) in paragraph at lines 1732--1733
+[30] [31] [32]
+Overfull \hbox (189.8647pt too wide) in paragraph at lines 1800--1801
 []\T1/ptm/m/n/10 Object of class 'opthold-out-size_emul' with el-e-ments "cost"
  (min-i-mum cost),"size" (OHS),"nset","k2","var_k2","N","k1","var_u","k_width",
 "theta"
  []
 
-[32]
+[33]
+LaTeX Font Info:    Trying to load font information for TS1+zi4 on input line 1
+875.
+ (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/ts1zi4.fd
+File: ts1zi4.fd 2018/01/14 TS1/zi4 (Inconsolata)
+)
 LaTeX Font Info:    Font shape `TS1/zi4/m/n' will be
-(Font)              scaled to size 10.0pt on input line 1806.
- [33] [34] [35]
-Overfull \hbox (3.40727pt too wide) in paragraph at lines 1935--1938
+(Font)              scaled to size 10.0pt on input line 1875.
+
+[34] [35]
+Overfull \hbox (3.40727pt too wide) in paragraph at lines 2013--2016
 []\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model y_i
  = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
  []
 
 [36]
-Overfull \hbox (3.40727pt too wide) in paragraph at lines 1994--1997
+Overfull \hbox (3.40727pt too wide) in paragraph at lines 2073--2076
 []\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model y_i
  = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
  []
 
 [37] [38] [39]
+LaTeX Font Info:    Font shape `TS1/zi4/m/n' will be
+(Font)              scaled to size 9.0pt on input line 2191.
+
+Overfull \hbox (2.26555pt too wide) in paragraph at lines 2213--2213
+ []\T1/zi4/m/n/9 Vb=powersolve_se(Xobs,Yobs,method=\TS1/zi4/m/n/9 '\T1/zi4/m/n/
+9 bootstrap\TS1/zi4/m/n/9 '\T1/zi4/m/n/9 ,n_boot=200) # estimated SE matrix, bo
+otstrap[] 
+ []
+
+[40]
 Package textcomp Info: Symbol \textasciigrave not provided by
 (textcomp)             font family zi4 in TS1 encoding.
-(textcomp)             Default family used instead on input line 2187.
+(textcomp)             Default family used instead on input line 2266.
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 2
-187.
+266.
  (/usr/local/texlive/2021/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 
-2187.
+2266.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd
 File: ts1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 Package textcomp Info: Symbol \textasciigrave not provided by
 (textcomp)             font family zi4 in TS1 encoding.
-(textcomp)             Default family used instead on input line 2187.
- [40] [41]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmppANH7H/Rd2pdf1539
-c1ab66d5e/Rd2.ind [42] [43
+(textcomp)             Default family used instead on input line 2266.
+ [41] [42]
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpBo0opW/Rd2pdf164d
+f640da134/Rd2.ind [43] [44
 
-] [44
+] [45
 
 ])
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmppANH7H/Rd2pdf1539
-c1ab66d5e/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpBo0opW/Rd2pdf164d
+f640da134/Rd2.aux)
 Package rerunfilecheck Info: File `Rd2.out' has not changed.
 (rerunfilecheck)             Checksum: E252160C9AAE7892C0F69C913289BC88;5762.
  ) 
 Here is how much of TeX's memory you used:
- 9016 strings out of 478994
- 133637 string characters out of 5858183
+ 9019 strings out of 478994
+ 133668 string characters out of 5858183
  431551 words of memory out of 5000000
  26018 multiletter control sequences out of 15000+600000
  439181 words of font info for 65 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 88i,6n,90p,622b,618s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 88i,6n,90p,622b,616s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
 }{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/u
 sr/local/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texliv
@@ -758,10 +532,10 @@ live/2021/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/20
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/
 type1/urw/times/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/
 times/utmri8a.pfb>
-Output written on Rd2.pdf (44 pages, 184462 bytes).
+Output written on Rd2.pdf (45 pages, 186423 bytes).
 PDF statistics:
- 856 PDF objects out of 1000 (max. 8388607)
- 794 compressed objects within 8 object streams
- 330 named destinations out of 1000 (max. 500000)
+ 883 PDF objects out of 1000 (max. 8388607)
+ 819 compressed objects within 9 object streams
+ 333 named destinations out of 1000 (max. 500000)
  361 words of extra memory for PDF output out of 10000 (max. 10000000)
 

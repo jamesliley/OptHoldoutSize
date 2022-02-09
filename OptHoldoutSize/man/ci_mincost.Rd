@@ -56,7 +56,8 @@ If sigma (covariance matrix) is specified and method='bootstrap', a confidence i
 ## Set seed
 set.seed(574635)
 
-## We will assume that our observations of N, k1, and theta=(a,b,c) are distributed with mean mu_par and variance sigma_par
+## We will assume that our observations of N, k1, and theta=(a,b,c) are
+##  distributed with mean mu_par and variance sigma_par
 mu_par=c(N=10000,k1=0.35,A=3,B=1.5,C=0.1)
 sigma_par=cbind(
   c(100^2,       1,      0,       0,       0),
@@ -70,24 +71,32 @@ sigma_par=cbind(
 par_obs=rmnorm(500,mean=mu_par,varcov=sigma_par)
 
 # Minimum cost and asymptotic and empirical confidence intervals
-mincost=optimal_holdout_size(N=mean(par_obs[,1]),k1=mean(par_obs[,2]),theta=colMeans(par_obs[,3:5]))$cost
-ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,seed=12345,mode="asymptotic")
-ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,seed=12345,mode="empirical")
+mincost=optimal_holdout_size(N=mean(par_obs[,1]),k1=mean(par_obs[,2]),
+  theta=colMeans(par_obs[,3:5]))$cost
+ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,
+  seed=12345,mode="asymptotic")
+ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=0.05,
+  seed=12345,mode="empirical")
 
 
 # Assess cover at various m
 m_values=c(20,30,50,100,150,200,300,500,750,1000,1500)
 ntrial=5000
 alpha_trial=0.1 # use 90\% confidence intervals
-mincost_true=optimal_holdout_size(N=mu_par[1],k1=mu_par[2],theta=mu_par[3:5])$cost
+mincost_true=optimal_holdout_size(N=mu_par[1],k1=mu_par[2],
+  theta=mu_par[3:5])$cost
 
-## The matrices indicating cover take are included in this package but take around 30 minutes to generate. They are generated using the code below (including random seeds).
+## The matrices indicating cover take are included in this package but take
+##  around 30 minutes to generate. They are generated using the code below
+##  (including random seeds).
 data(ci_cover_cost_a_yn)
 data(ci_cover_cost_e_yn)
 
 if (!exists("ci_cover_cost_a_yn")) {
-  ci_cover_cost_a_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1 if ith asymptotic CI for jth value of m covers true mincost
-  ci_cover_cost_e_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1 if ith empirical CI for jth value of m covers true mincost
+  ci_cover_cost_a_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1
+  #  if ith asymptotic CI for jth value of m covers true mincost
+  ci_cover_cost_e_yn=matrix(NA,length(m_values),ntrial) # Entry [i,j] is 1
+  #  if ith empirical CI for jth value of m covers true mincost
 
   for (i in 1:length(m_values)) {
     m=m_values[i]
@@ -97,11 +106,15 @@ if (!exists("ci_cover_cost_a_yn")) {
 
       # Make m observations
       par_obs=rmnorm(m,mean=mu_par,varcov=sigma_par)
-      ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=alpha_trial,mode="asymptotic")
-      ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],alpha=alpha_trial,mode="empirical",n_boot=500)
+      ci_a=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],
+        alpha=alpha_trial,mode="asymptotic")
+      ci_e=ci_mincost(N=par_obs[,1],k1=par_obs[,2],theta=par_obs[,3:5],
+        alpha=alpha_trial,mode="empirical",n_boot=500)
 
-      if (mincost_true>ci_a[1] & mincost_true<ci_a[2]) ci_cover_cost_a_yn[i,j]=1 else ci_cover_cost_a_yn[i,j]=0
-      if (mincost_true>ci_e[1] & mincost_true<ci_e[2]) ci_cover_cost_e_yn[i,j]=1 else ci_cover_cost_e_yn[i,j]=0
+      if (mincost_true>ci_a[1] & mincost_true<ci_a[2])
+        ci_cover_cost_a_yn[i,j]=1 else ci_cover_cost_a_yn[i,j]=0
+      if (mincost_true>ci_e[1] & mincost_true<ci_e[2])
+        ci_cover_cost_e_yn[i,j]=1 else ci_cover_cost_e_yn[i,j]=0
     }
     print(paste0("Completed for m = ",m))
   }
@@ -118,9 +131,11 @@ zse_a=2*sqrt(cover_a*(1-cover_a)/ntrial)
 zse_e=2*sqrt(cover_e*(1-cover_e)/ntrial)
 
 
-# Draw plot. Convergence to 1-alpha cover is evident. Cover is not far from alpha even at small m.
+# Draw plot. Convergence to 1-alpha cover is evident. Cover is not far from
+#   alpha even at small m.
 
-plot(0,type="n",xlim=range(m_values),ylim=c(0.7,1),xlab=expression("n"[e]),ylab="Cover")
+plot(0,type="n",xlim=range(m_values),ylim=c(0.7,1),xlab=expression("m"),
+  ylab="Cover")
 
 # Asymptotic cover and 2*SE pointwise envelope
 polygon(c(m_values,rev(m_values)),c(cover_a+zse_a,rev(cover_a-zse_a)),
@@ -133,7 +148,8 @@ polygon(c(m_values,rev(m_values)),c(cover_e+zse_e,rev(cover_e-zse_e)),
 lines(m_values,cover_e,col="blue")
 
 abline(h=1-alpha_trial,col="red")
-legend("bottomright",c("Asym.","Emp.",expression(paste("1-",alpha))),lty=1,col=c("black","blue","red"))
+legend("bottomright",c("Asym.","Emp.",expression(paste("1-",alpha))),lty=1,
+  col=c("black","blue","red"))
 
 }
 \keyword{estimation}

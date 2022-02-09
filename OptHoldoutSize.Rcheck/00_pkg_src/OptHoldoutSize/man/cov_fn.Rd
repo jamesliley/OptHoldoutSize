@@ -27,7 +27,9 @@ Covariance function is parametrised by \code{var_u} (general variance) and \code
 }
 \examples{
 
-##' # We will sample from Gaussian processes GP(0,k(.,.)=cov_fn(.,.;var_u,theta)) at these values of n
+# We will sample from Gaussian processes
+#  GP(0,k(.,.)=cov_fn(.,.;var_u,theta))
+# at these values of n
 nvals=seq(1,300,length=100)
 
 # We will consider two theta values
@@ -37,10 +39,14 @@ kw1=10; kw2=30
 var1=1; var2=10
 
 # Covariance matrices
-cov11=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var1,k_width=kw1))
-cov12=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var1,k_width=kw2))
-cov21=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var2,k_width=kw1))
-cov22=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var2,k_width=kw2))
+cov11=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var1,
+  k_width=kw1))
+cov12=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var1,
+  k_width=kw2))
+cov21=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var2,
+  k_width=kw1))
+cov22=outer(nvals,nvals,function(n,ndash) cov_fn(n,ndash,var_u=var2,
+  k_width=kw2))
 
 # Dampen slightly to ensure positive definiteness
 damp=1e-5
@@ -58,12 +64,14 @@ y22=rmnorm(1,mean=0,varcov=cov22)
 
 # Plot
 rr=max(abs(c(y11,y12,y21,y22)))
-plot(0,xlim=range(nvals),ylim=c(-rr,rr+10),xlab="n",ylab=expression("GP(0,cov_fn(.,.;var_u,theta))"))
+plot(0,xlim=range(nvals),ylim=c(-rr,rr+10),xlab="n",
+  ylab=expression("GP(0,cov_fn(.,.;var_u,theta))"))
 lines(nvals,y11,lty=1,col="black")
 lines(nvals,y12,lty=2,col="black")
 lines(nvals,y21,lty=1,col="red")
 lines(nvals,y22,lty=2,col="red")
-legend("topright",c("k_width=10, var_u=1", "k_width=30, var_u=1", "k_width=10, var_u=10","k_width=30, var_u=10"),
+legend("topright",c("k_width=10, var_u=1", "k_width=30, var_u=1",
+  "k_width=10, var_u=10","k_width=30, var_u=10"),
   lty=c(1,2,1,2),col=c("black","black","red","red"))
 
 }

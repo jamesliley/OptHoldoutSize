@@ -191,7 +191,7 @@ r_alpha=0.2
 b_alpha=0.6
 
 
-par(mfrow=c(1,3))
+oldpar=par(mfrow=c(1,3))
 
 
 
@@ -202,7 +202,7 @@ l_n=colMeans(costs_tot_resample[1,,])
 l_sd=costs_sd[1, ]
 
 # Initialise plot for cost function
-par(mar=c(4,4,3,4))
+oldpar1=par(mar=c(4,4,3,4))
 plot(0, 0, type = "n",
      ylab = "L(n)",
      xlab = "Holdout set size (n)",
@@ -229,7 +229,7 @@ legend("topright", legend = c("L(n)", "SD"),
        ncol=1
 )
 
-
+par(oldpar1)
 
 
 
@@ -250,7 +250,7 @@ sc=mean(nobs-n_ho)
 
 
 # Initialise plot for k2 function
-par(mar=c(4,4,3,4))
+oldpar2=par(mar=c(4,4,3,4))
 yr_k2=range(k2n+3*sd_k2n*c(1,-1),na.rm=F)
 plot(0, 0, type = "n",
      ylab = expression(paste("k"[2],"(n)(N-n)")),
@@ -291,7 +291,7 @@ legend("topright", legend = c(expression(paste("k"[2],"(n)(N-n)")), "SD",
        ncol=2
 )
 
-
+par(oldpar2)
 
 
 
@@ -305,7 +305,7 @@ k1n=colMeans(costs_ho_resample)
 sd_k1n=colSds(costs_ho_resample)
 
 # Initialise plot for k2 function
-par(mar=c(4,4,3,4))
+oldpar3=par(mar=c(4,4,3,4))
 plot(0, 0, type = "n",
      ylab = expression(paste("k"[1],"n")),
      xlab = "Holdout set size (n)",
@@ -330,6 +330,9 @@ legend("topleft", legend = c(expression(paste("k"[1],"n")), "SD"),
        bty="n",bg="white",
        ncol=1
 )
+par(oldpar3)
+
+par(oldpar)
 
 ## ----echo=T,eval=F,fig.width=10,fig.height=4----------------------------------
 #  
@@ -347,7 +350,7 @@ legend("topleft", legend = c(expression(paste("k"[1],"n")), "SD"),
 #  b_alpha=0.6
 #  
 #  
-#  par(mfrow=c(1,3))
+#  oldpar=par(mfrow=c(1,3))
 #  
 #  
 #  
@@ -358,7 +361,7 @@ legend("topleft", legend = c(expression(paste("k"[1],"n")), "SD"),
 #  l_sd=costs_sd[1, ]
 #  
 #  # Initialise plot for cost function
-#  par(mar=c(4,4,3,4))
+#  oldpar1=par(mar=c(4,4,3,4))
 #  plot(0, 0, type = "n",
 #       ylab = "L(n)",
 #       xlab = "Holdout set size (n)",
@@ -385,7 +388,7 @@ legend("topleft", legend = c(expression(paste("k"[1],"n")), "SD"),
 #         ncol=1
 #  )
 #  
-#  
+#  par(oldpar1)
 #  
 #  
 #  
@@ -406,7 +409,7 @@ legend("topleft", legend = c(expression(paste("k"[1],"n")), "SD"),
 #  
 #  
 #  # Initialise plot for k2 function
-#  par(mar=c(4,4,3,4))
+#  oldpar2=par(mar=c(4,4,3,4))
 #  yr_k2=range(k2n+3*sd_k2n*c(1,-1),na.rm=F)
 #  plot(0, 0, type = "n",
 #       ylab = expression(paste("k"[2],"(n)(N-n)")),
@@ -447,7 +450,7 @@ legend("topleft", legend = c(expression(paste("k"[1],"n")), "SD"),
 #         ncol=2
 #  )
 #  
-#  
+#  par(oldpar2)
 #  
 #  
 #  
@@ -461,7 +464,7 @@ legend("topleft", legend = c(expression(paste("k"[1],"n")), "SD"),
 #  sd_k1n=colSds(costs_ho_resample)
 #  
 #  # Initialise plot for k2 function
-#  par(mar=c(4,4,3,4))
+#  oldpar3=par(mar=c(4,4,3,4))
 #  plot(0, 0, type = "n",
 #       ylab = expression(paste("k"[1],"n")),
 #       xlab = "Holdout set size (n)",
@@ -486,11 +489,14 @@ legend("topleft", legend = c(expression(paste("k"[1],"n")), "SD"),
 #         bty="n",bg="white",
 #         ncol=1
 #  )
+#  par(oldpar3)
+#  
+#  par(oldpar)
 
 ## ----echo=F,fig.width = 8,fig.height=8----------------------------------------
 data(data_example_simulation)
 
-par(mfrow=c(2,2))
+oldpar=par(mfrow=c(2,2))
 
 
 # Loop through values of 'families' and 'interactions'
@@ -519,7 +525,7 @@ for (xf in 1:length(families)) {
     b_alpha=0.6
 
     # Create figure
-    par(mar=c(4,4,3,4))
+    oldpar1=par(mar=c(4,4,3,4))
     plot(0, 0, type = "n",
          ylab = "L(n)",
          xlab = "Holdout set size (n)",
@@ -605,14 +611,17 @@ for (xf in 1:length(families)) {
            bty="n",bg="white",
            ncol=2
     )
+    par(oldpar1)
   }
 }
+
+par(oldpar)
 
 
 ## ----echo=T,eval=FALSE--------------------------------------------------------
 #  data(data_example_simulation)
 #  
-#  par(mfrow=c(2,2))
+#  oldpar=par(mfrow=c(2,2))
 #  
 #  
 #  # Loop through values of 'families' and 'interactions'
@@ -641,7 +650,7 @@ for (xf in 1:length(families)) {
 #      b_alpha=0.6
 #  
 #      # Create figure
-#      par(mar=c(4,4,3,4))
+#      oldpar1=par(mar=c(4,4,3,4))
 #      plot(0, 0, type = "n",
 #           ylab = "L(n)",
 #           xlab = "Holdout set size (n)",
@@ -727,7 +736,10 @@ for (xf in 1:length(families)) {
 #             bty="n",bg="white",
 #             ncol=2
 #      )
+#  
+#      par(oldpar1)
 #    }
 #  }
 #  
+#  par(oldpar)
 

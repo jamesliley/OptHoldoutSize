@@ -13,4 +13,5 @@ ohs_resample
 \description{
 This object contains data relating to the first plot in the vignette comparing emulation and parametric algorithms. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 }
-\keyword{data,aspre}
+\keyword{aspre}
+\keyword{data}

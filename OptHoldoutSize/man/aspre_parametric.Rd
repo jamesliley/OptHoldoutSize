@@ -13,4 +13,5 @@ aspre_parametric
 \description{
 This object contains data relating to parametric-based OHS estimation for the ASPRE model. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 }
-\keyword{data,aspre}
+\keyword{aspre}
+\keyword{data}

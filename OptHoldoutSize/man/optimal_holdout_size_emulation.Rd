@@ -53,4 +53,5 @@ This is essentially a wrapper for function \code{mu_fn()}.
 
 # See examples for mu_fn()
 }
-\keyword{estimation,emulation}
+\keyword{emulation}
+\keyword{estimation}

@@ -13,6 +13,9 @@
 
 \item{k2form}{Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form \verb{powerlaw(n,c(a,b,c))=a n^(-b) + c}.}
 }
+\value{
+No return value; draws a plot only.
+}
 \description{
 Plot estimated cost function, when parametric method is used for estimation.
 

@@ -48,4 +48,5 @@ powersolve(X[1:100],Y[1:100])$par
 powersolve(X[1:1000],Y[1:1000])$par
 powersolve(X[1:10000],Y[1:10000])$par
 }
-\keyword{estimation,aspre}
+\keyword{aspre}
+\keyword{estimation}

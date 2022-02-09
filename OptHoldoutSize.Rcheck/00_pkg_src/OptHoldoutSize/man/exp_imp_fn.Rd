@@ -79,13 +79,15 @@ var_k2_0=runif(nstart,vwmin,vwmax)
 k2_0=rnorm(nstart,mean=powerlaw(nset0,theta_true),sd=sqrt(var_k2_0))
 
 # We estimate theta from these three points
-theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,upper=theta_upper,init=theta_true)$par
+theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,upper=theta_upper,
+  init=theta_true)$par
 
 # We will estimate the posterior at these values of n
 n=seq(1000,N,length=1000)
 
 # Mean and variance
-p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,
+  var_u=vu0)
 p_var=psi_fn(n,nset=nset0,N=N,var_k2 = var_k2_0,k_width=kw0,var_u=vu0)
 
 # Plot
@@ -111,7 +113,8 @@ if (inc_legend) {
 }
 
 ## Add line corresponding to recommended new point
-exp_imp_em <- exp_imp_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,theta=theta0,k_width=kw0,var_u=vu0)
+exp_imp_em <- exp_imp_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,
+  theta=theta0,k_width=kw0,var_u=vu0)
 abline(v=n[which.max(exp_imp_em)])
 
 }

@@ -97,7 +97,7 @@ d_pf=density(ohs_resample[,"param_pFALSE"])
 d_ef=density(ohs_resample[,"emul_pFALSE"])
 
 
-par(mar=c(6,4,1,1))
+oldpar=par(mar=c(6,4,1,1))
 plot(0,type="n",xlim=c(0,5),ylim=c(8000,45000),xaxt="n",ylab="OHS",xlab="")
 axis(1,at=c(1.5,3.5),label=c("Par. satis.", "Par. unsatis."),las=2)
 
@@ -121,6 +121,8 @@ legend("bottomleft",
   c("Dens. param.","Dens. emul","Med. param","Med. emul","True OHS"),
   lty=c(NA,NA,2,2,1),lwd=c(NA,NA,2,2,1),bty="n",
   pch=c(16,16,NA,NA,NA),col=c(rgb(0,0,0,alpha=0.5),rgb(1,0,0,alpha=0.5),"black","red","gray"))
+
+par(oldpar)
 
 ## ----echo=TRUE,eval=FALSE-----------------------------------------------------
 #  n_var=1000 # Resample d this many times to estimate OHS variance
@@ -168,7 +170,7 @@ legend("bottomleft",
 #  d_ef=density(ohs_resample[,"emul_pFALSE"])
 #  
 #  
-#  par(mar=c(6,4,1,1))
+#  oldpar=par(mar=c(6,4,1,1))
 #  plot(0,type="n",xlim=c(0,5),ylim=c(8000,45000),xaxt="n",ylab="OHS",xlab="")
 #  axis(1,at=c(1.5,3.5),label=c("Par. satis.", "Par. unsatis."),las=2)
 #  
@@ -193,6 +195,7 @@ legend("bottomleft",
 #    lty=c(NA,NA,2,2,1),lwd=c(NA,NA,2,2,1),bty="n",
 #    pch=c(16,16,NA,NA,NA),col=c(rgb(0,0,0,alpha=0.5),rgb(1,0,0,alpha=0.5),"black","red","gray"))
 #  
+#  par(oldpar)
 
 ## ---- echo=FALSE,fig.width=10,fig.height=5------------------------------------
 
@@ -202,7 +205,7 @@ for (i in 1:length(data_nextpoint_par)) assign(names(data_nextpoint_par)[[i]],da
 
 # This used to run interactively, but CRAN does not allow this.
 np=51 # Number of points to show
-par(mfrow=c(1,2))
+oldpar=par(mfrow=c(1,2))
 yrange=c(0,100000)
 
 # Estimate parameters for parametric part of semi-parametric method
@@ -245,6 +248,7 @@ legend("topright",
 
 abline(v=nset_pFALSE[np+1])
 
+par(oldpar)
 
 ## ----echo=TRUE,eval=FALSE-----------------------------------------------------
 #  ## Choose an initial five training sizes at which to evaluate k2
@@ -329,7 +333,7 @@ abline(v=nset_pFALSE[np+1])
 #  
 #  np=50 # or set using interactive session
 #  
-#  par(mfrow=c(1,2))
+#  oldpar=par(mfrow=c(1,2))
 #  yrange=c(0,100000)
 #  
 #  # Estimate parameters for parametric part of semi-parametric method
@@ -372,8 +376,7 @@ abline(v=nset_pFALSE[np+1])
 #  
 #  abline(v=nset_pFALSE[np+1])
 #  
-#  
-#  
+#  par(oldpar)
 
 ## ---- echo=FALSE,fig.width=10,fig.height=5------------------------------------
 
@@ -383,7 +386,7 @@ for (i in 1:length(data_nextpoint_em)) assign(names(data_nextpoint_em)[[i]],data
 
 
 np=51 # number of points to plot
-par(mfrow=c(1,2))
+oldpar=par(mfrow=c(1,2))
 yrange=c(0,100000)
 
 # Mean and variance of emulator for cost function, parametric assumptions satisfied
@@ -445,7 +448,7 @@ legend("topright",
 
 abline(v=nset_pFALSE[np+1])
 
-
+par(oldpar)
 
 ## ----echo=TRUE,eval=FALSE-----------------------------------------------------
 #  ## Choose an initial five training sizes at which to evaluate k2
@@ -531,7 +534,7 @@ abline(v=nset_pFALSE[np+1])
 #  
 #  np=50 # or set using interactive session
 #  
-#  par(mfrow=c(1,2))
+#  oldpar=par(mfrow=c(1,2))
 #  yrange=c(0,100000)
 #  
 #  # Mean and variance of emulator for cost function, parametric assumptions satisfied
@@ -593,7 +596,7 @@ abline(v=nset_pFALSE[np+1])
 #  
 #  abline(v=nset_pFALSE[np+1])
 #  
-#  
+#  par(oldpar)
 
 ## ----echo=F-------------------------------------------------------------------
 
@@ -616,7 +619,7 @@ ymax=80000 # Y axis range
 plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
 
   # Set up plot parameters
-  par(mar=c(1,4,4,0.1))
+  oldpar=par(mar=c(1,4,4,0.1))
   layout(mat=rbind(matrix(1,4,4),matrix(2,2,4)))
 
 
@@ -663,6 +666,7 @@ plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
   lines(1:n_iter,ci1[2,]-ci1[1,],col="black")
   lines(1:n_iter,ci2[2,]-ci2[1,],col="red")
 
+  par(oldpar)
 }
 
 
@@ -687,7 +691,7 @@ true_ohs_pTRUE=nc[which.min(k1*nc + true_k2_pTRUE(nc)*(N-nc))]
 true_ohs_pFALSE=nc[which.min(k1*nc + true_k2_pFALSE(nc)*(N-nc))]
 
 
-par(mfrow=c(2,2))
+oldpar0=par(mfrow=c(2,2))
 plot_ci_convergence("Params. satis, param. alg.",
   c("Rand. next n","Syst. next n"),M111,M112,true_ohs_pTRUE)
 plot_ci_convergence("Params. not satis, param. alg.",
@@ -697,6 +701,7 @@ plot_ci_convergence("Params. satis, emul. alg.",
   c("Rand. next n","Syst. next n"),M121,M122,true_ohs_pTRUE)
 plot_ci_convergence("Params. not satis, emul. alg.",
   c("Rand. next n","Syst. next n"),M221,M222,true_ohs_pFALSE)
+par(oldpar0)
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  # Function to resample values of d and regenerate OHS given nset and var_k2
@@ -815,7 +820,7 @@ plot_ci_convergence("Params. not satis, emul. alg.",
 #  plot_ci_convergence=function(title,key,M1,M2,ohs_true) {
 #  
 #    # Set up plot parameters
-#    par(mar=c(1,4,4,0.1))
+#    oldpar=par(mar=c(1,4,4,0.1))
 #    layout(mat=rbind(matrix(1,4,4),matrix(2,2,4)))
 #  
 #    # Number of estimates
@@ -864,6 +869,7 @@ plot_ci_convergence("Params. not satis, emul. alg.",
 #    lines(1:n_iterx,ci1[2,]-ci1[1,],col="black")
 #    lines(1:n_iterx,ci2[2,]-ci2[1,],col="red")
 #  
+#    par(oldpar)
 #  }
 #  
 #  
@@ -888,7 +894,7 @@ plot_ci_convergence("Params. not satis, emul. alg.",
 #  true_ohs_pFALSE=nc[which.min(k1*nc + true_k2_pFALSE(nc)*(N-nc))]
 #  
 #  
-#  par(mfrow=c(2,2))
+#  oldpar0=par(mfrow=c(2,2))
 #  plot_ci_convergence("Params. satis, param. alg.",
 #    c("Rand. next n","Syst. next n"),M111,M112,true_ohs_pTRUE)
 #  plot_ci_convergence("Params. not satis, param. alg.",
@@ -899,4 +905,5 @@ plot_ci_convergence("Params. not satis, emul. alg.",
 #  plot_ci_convergence("Params. not satis, emul. alg.",
 #    c("Rand. next n","Syst. next n"),M221,M222,true_ohs_pFALSE)
 #  
+#  par(oldpar)
 

@@ -40,7 +40,8 @@ This calls the function \code{optimize} from package \code{stats}.
 }
 \examples{
 
-# Evaluate optimal holdout set size for a range of values of k1 and two values of N, some of which lead to infinite values
+# Evaluate optimal holdout set size for a range of values of k1 and two values of
+#   N, some of which lead to infinite values
 N1=10000; N2=12000
 k1=seq(0.1,0.5,length=20)
 A=3; B=1.5; C=0.15; theta=c(A,B,C)
@@ -48,14 +49,18 @@ A=3; B=1.5; C=0.15; theta=c(A,B,C)
 res1=optimal_holdout_size(N1,k1,theta)
 res2=optimal_holdout_size(N2,k1,theta)
 
-par(mfrow=c(1,2))
-plot(0,type="n",ylim=c(0,500),xlim=range(res1$k1),xlab=expression("k"[1]),ylab="Optimal holdout set size")
+oldpar=par(mfrow=c(1,2))
+plot(0,type="n",ylim=c(0,500),xlim=range(res1$k1),xlab=expression("k"[1]),
+  ylab="Optimal holdout set size")
   lines(res1$k1,res1$size,col="black")
   lines(res2$k1,res2$size,col="red")
   legend("topright",as.character(c(N1,N2)),title="N:",col=c("black","red"),lty=1)
-plot(0,type="n",ylim=c(1500,1600),xlim=range(res1$k1),xlab=expression("k"[1]),ylab="Minimum cost")
+plot(0,type="n",ylim=c(1500,1600),xlim=range(res1$k1),xlab=expression("k"[1]),
+  ylab="Minimum cost")
   lines(res1$k1,res1$cost,col="black")
   lines(res2$k1,res2$cost,col="red")
   legend("topleft",as.character(c(N1,N2)),title="N:",col=c("black","red"),lty=1)
+
+par(oldpar)
 }
 \keyword{estimation}

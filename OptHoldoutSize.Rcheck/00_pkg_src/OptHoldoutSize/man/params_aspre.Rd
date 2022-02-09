@@ -13,4 +13,5 @@ params_aspre
 \description{
 Distribution of covariates for ASPRE dataset; see Rolnik, 2017, NEJM
 }
-\keyword{data,aspre}
+\keyword{aspre}
+\keyword{data}

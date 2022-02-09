@@ -30,7 +30,8 @@ A=3; B=1.5; C=0.15; theta=c(A,B,C)
 mincost=optimal_holdout_size(N,k1,theta)
 grad_mincost=grad_mincost_powerlaw(N,k1,theta)
 
-plot(0,type="n",ylim=c(0,1560),xlim=range(k1),xlab=expression("k"[1]),ylab="Optimal holdout set size")
+plot(0,type="n",ylim=c(0,1560),xlim=range(k1),xlab=expression("k"[1]),
+  ylab="Optimal holdout set size")
 lines(mincost$k1,mincost$cost,col="black")
 lines(mincost$k1,grad_mincost[,2],col="red")
 legend(0.2,800,c(expression(paste("l(n"["*"],")")),

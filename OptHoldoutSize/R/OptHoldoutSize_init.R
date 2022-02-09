@@ -76,49 +76,49 @@ logistic=function(x) -log((1/x)-1)
 ##'
 ##' @description This object contains data relating to the vignette comparing emulation and parametric algorithms. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "ohs_array"
 
 ##' Data for vignette showing general example
 ##'
 ##' @description Data for general vignette. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "data_example_simulation"
 
 ##' Data for vignette on algorithm comparison
 ##'
 ##' @description This object contains data relating to the first plot in the vignette comparing emulation and parametric algorithms. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "ohs_resample"
 
 ##' Data for example on asymptotic confidence interval for OHS.
 ##'
 ##' @description Data for example for asymptotic confidence interval for OHS. For generation, see example.
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "ci_cover_a_yn"
 
 ##' Data for example on empirical confidence interval for OHS.
 ##'
 ##' @description Data for example for empirical confidence interval for OHS. For generation, see example.
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "ci_cover_e_yn"
 
 ##' Data for example on asymptotic confidence interval for min cost.
 ##'
 ##' @description Data for example for asymptotic confidence interval for min cost. For generation, see example.
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "ci_cover_cost_a_yn"
 
 ##' Data for example on empirical confidence interval for min cost.
 ##'
 ##' @description Data for example for empirical confidence interval for min cost. For generation, see example.
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "ci_cover_cost_e_yn"
 
 
@@ -127,7 +127,7 @@ logistic=function(x) -log((1/x)-1)
 ##'
 ##' @description Data containing 'next point selected' information for parametric algorithm in vignette comparing emulation and parametric algorithms. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "data_nextpoint_par"
 
 
@@ -135,7 +135,7 @@ logistic=function(x) -log((1/x)-1)
 ##'
 ##' @description Data containing 'next point selected' information for emulation algorithm in vignette comparing emulation and parametric algorithms. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "data_nextpoint_em"
 
 
@@ -144,7 +144,7 @@ logistic=function(x) -log((1/x)-1)
 ##'
 ##' @description This object contains data relating to parametric-based OHS estimation for the ASPRE model. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "aspre_parametric"
 
 
@@ -152,14 +152,14 @@ logistic=function(x) -log((1/x)-1)
 ##'
 ##' @description This object contains data relating to emulation-based OHS estimation for the ASPRE model. For generation, see hidden code in vignette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "aspre_emulation"
 
 ##' Parameters of reported ASPRE dataset
 ##'
 ##' @description Distribution of covariates for ASPRE dataset; see Rolnik, 2017, NEJM
 ##' @docType data
-##' @keywords data,aspre
+##' @keywords data aspre
 "params_aspre"
 
 

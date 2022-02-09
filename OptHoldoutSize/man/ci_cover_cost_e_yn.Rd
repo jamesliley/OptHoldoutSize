@@ -13,4 +13,5 @@ ci_cover_cost_e_yn
 \description{
 Data for example for empirical confidence interval for min cost. For generation, see example.
 }
-\keyword{data,aspre}
+\keyword{aspre}
+\keyword{data}

@@ -13,4 +13,5 @@ ci_cover_a_yn
 \description{
 Data for example for asymptotic confidence interval for OHS. For generation, see example.
 }
-\keyword{data,aspre}
+\keyword{aspre}
+\keyword{data}

@@ -43,7 +43,7 @@
 ##' res1=optimal_holdout_size(N1,k1,theta)
 ##' res2=optimal_holdout_size(N2,k1,theta)
 ##'
-##' par(mfrow=c(1,2))
+##' oldpar=par(mfrow=c(1,2))
 ##' plot(0,type="n",ylim=c(0,500),xlim=range(res1$k1),xlab=expression("k"[1]),
 ##'   ylab="Optimal holdout set size")
 ##'   lines(res1$k1,res1$size,col="black")
@@ -54,6 +54,8 @@
 ##'   lines(res1$k1,res1$cost,col="black")
 ##'   lines(res2$k1,res2$cost,col="red")
 ##'   legend("topleft",as.character(c(N1,N2)),title="N:",col=c("black","red"),lty=1)
+##'
+##' par(oldpar)
 optimal_holdout_size=function(
   N,
   k1,
@@ -127,6 +129,7 @@ optimal_holdout_size=function(
 ##' @param x Object of type `optholdoutsize`
 ##' @param ... Other arguments passed to `plot()` and `lines()`
 ##' @param k2form Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
+##' @return No return value; draws a plot only.
 ##' @examples
 ##'
 ##' # Simple example
@@ -179,7 +182,7 @@ plot.optholdoutsize=function(x,...,k2form=powerlaw) {
 ##'
 ##' @export
 ##' @name optimal_holdout_size_emulation
-##' @keywords estimation,emulation
+##' @keywords estimation emulation
 ##' @description Compute optimal holdout size for updating a predictive score given a set of training set sizes and estimates of mean cost per sample at those training set sizes.
 ##'
 ##' This is essentially a wrapper for function `mu_fn()`.
@@ -238,6 +241,7 @@ optimal_holdout_size_emulation= function(nset,k2,var_k2,N,k1,
 ##' @param x Object of type `optholdoutsize_emul`
 ##' @param ... Other arguments passed to `plot()`
 ##' @param k2form Function governing expected cost to an individual sample given a predictive score fitted to n samples. Must take two arguments: n (number of samples) and theta (parameters). Defaults to a power-law form ``powerlaw(n,c(a,b,c))=a n^(-b) + c``.
+##' @return No return value; draws a plot only.
 ##' @examples
 ##'
 ##' # Simple example
@@ -964,7 +968,7 @@ grad_mincost_powerlaw=function(
 ##'  ``y_i = a x_i^-b + c + e_i``;
 ##'  ``e_i~N(0,y_var_i)``
 ##'
-##' @keywords estimation,aspre
+##' @keywords estimation aspre
 ##' @param x X values
 ##' @param y Y values
 ##' @param init Initial values of (a,b,c) to start. Default c(20000,2,0.1)
@@ -1018,7 +1022,7 @@ powersolve=function(x,y,init=c(20000,2,0.1),y_var=rep(1,length(y)),estimate_s=FA
 ##'
 ##' Slower than a single call to ``powersolve()``
 ##'
-##' @keywords estimation,aspre
+##' @keywords estimation aspre
 ##' @param x X values
 ##' @param y Y values
 ##' @param y_var Optional parameter giving sampling variance of each y value. Defaults to 1.
@@ -1079,7 +1083,7 @@ powersolve_general=function(x,y,y_var=rep(1,length(x)),...) {
 ##'
 ##' ``Var[MLE(a,b,c)]``.
 ##'
-##' @keywords estimation,aspre
+##' @keywords estimation aspre
 ##' @param x X values (typically training set sizes)
 ##' @param y Y values (typically observed cost per individual/sample)
 ##' @param method One of 'fisher' (for asymptotic variance via Fisher Information) or 'bootstrap' (for Bootstrap)
@@ -1103,7 +1107,7 @@ powersolve_general=function(x,y,y_var=rep(1,length(x)),...) {
 ##' Xobs=X[obs]; Yobs=Y[obs]
 ##'
 ##' # True covariance matrix of MLE of a,b,c on these x values
-##' ntest=1000
+##' ntest=100
 ##' abc_mat_xfix=matrix(0,ntest,3)
 ##' abc_mat_xvar=matrix(0,ntest,3)
 ##' E1=A_true*(Xobs^(-B_true)) + C_true
@@ -1120,7 +1124,7 @@ powersolve_general=function(x,y,y_var=rep(1,length(x)),...) {
 ##' Vf=powersolve_se(Xobs,Yobs,method='fisher') # estimated SE matrix, asymptotic
 ##'
 ##' Ve2=var(abc_mat_xvar) # empirical variance of MLE(a,b,c)
-##' Vb=powersolve_se(Xobs,Yobs,method='bootstrap') # estimated SE matrix, bootstrap
+##' Vb=powersolve_se(Xobs,Yobs,method='bootstrap',n_boot=200) # estimated SE matrix, bootstrap
 ##'
 ##' cat("Empirical variance of MLE(a,b,c)|X\n")
 ##' print(Ve1)
