@@ -1,6 +1,6 @@
 Package: OptHoldoutSize
 Title: Estimation of Optimal Size for a Holdout Set for Updating a Predictive Score
-Version: 0.1.0.0
+Version: 0.1.0.1
 Authors@R: 
   c(person(given = "Sami",
            family = "Haidar-Wehbe",
@@ -28,11 +28,11 @@ Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.0), matrixStats, mnormt, mvtnorm, ranger, mle.tools
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
+RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2022-02-18 10:04:11 UTC; vwbw55
+Packaged: 2025-04-08 15:28:00 UTC; vwbw55
 Author: Sami Haidar-Wehbe [aut],
   Sam Emerson [aut] (<https://orcid.org/0000-0002-8379-2781>),
   Louis Aslett [aut] (<https://orcid.org/0000-0003-2211-233X>),

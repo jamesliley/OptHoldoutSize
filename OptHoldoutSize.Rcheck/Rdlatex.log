@@ -1,22 +1,33 @@
 Hmm ... looks like a package
+Converting parsed Rd's to LaTeX ....
+Creating pdf output from LaTeX ...
 
 This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
 LaTeX2e <2020-10-01> patch level 4
-L3 programming layer <2021-02-18>
-(./Rd2.tex
+L3 programming layer <2021-02-18> (./Rd2.tex
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/book.cls
 Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/bk10.clo))
 (/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/iftex.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/tools/longtable.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/tools/bm.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/alltt.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/tools/verbatim.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/url/url.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/textcomp.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/jknapltx/mathrsfs.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/fontenc.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/times.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/zi4.sty
@@ -30,7 +41,6 @@ Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
 (/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-def/pdftex.def))
 (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref.sty
 (/usr/local/texlive/2021/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/iftex.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
 (/usr/local/texlive/2021/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
 (/usr/local/texlive/2021/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
@@ -53,17 +63,7 @@ Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
 (/usr/local/texlive/2021/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 
 (/usr/local/texlive/2021/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
-)))
-
-Package hyperref Warning: Option `hyperindex' has already been used,
-(hyperref)                setting the option has no effect on input line 377.
-
-
-Package hyperref Warning: Option `pagebackref' has already been used,
-(hyperref)                setting the option has no effect on input line 377.
-
-) (/usr/local/texlive/2021/texmf-dist/tex/latex/base/makeidx.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/inputenc.sty)
+)))) (/usr/local/texlive/2021/texmf-dist/tex/latex/base/makeidx.sty)
 Writing index file Rd2.idx
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
@@ -75,76 +75,106 @@ No file Rd2.aux.
 (/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
 ty)) (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1phv.fd) [1{/usr/local/te
-xlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (106.56616pt too wide) in paragraph at lines 81--82
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/jknapltx/ursfs.fd) [1{/usr/local/
+texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (106.56616pt too wide) in paragraph at lines 80--81
 []\T1/ptm/m/n/10 Full AS-PRE model from https://www.nejm.org/doi/suppl/10.1056/
 NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf 
 
-Overfull \hbox (36.78708pt too wide) in paragraph at lines 94--95
+Overfull \hbox (36.78708pt too wide) in paragraph at lines 93--94
 []\T1/ptm/m/n/10 matrix, as-sumed to be out-put of sim_random_aspre with pa-ram
 -e-ter params=params_aspre
 [2]
-Overfull \hbox (50.94576pt too wide) in paragraph at lines 123--124
+Overfull \hbox (50.94576pt too wide) in paragraph at lines 121--122
 \T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
 https://github.com/jamesliley/OptHoldoutSize_pipelines 
 [3]
-Overfull \hbox (50.94576pt too wide) in paragraph at lines 196--197
+Overfull \hbox (50.94576pt too wide) in paragraph at lines 192--193
 \T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
 https://github.com/jamesliley/OptHoldoutSize_pipelines 
-[4] [5] [6] [7]
+[4] [5] [6]
+Overfull \hbox (8.90863pt too wide) in paragraph at lines 311--312
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 k2(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[7]
 Underfull \vbox (badness 10000) has occurred while \output is active [8]
-[9] [10]
+[9]
+Overfull \hbox (8.90863pt too wide) in paragraph at lines 473--474
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 k2(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[10]
 Underfull \vbox (badness 10000) has occurred while \output is active [11]
 [12]
-Overfull \hbox (169.87473pt too wide) in paragraph at lines 698--699
+Overfull \hbox (169.87473pt too wide) in paragraph at lines 686--687
 []\T1/ptm/m/n/10 Data for gen-eral vi-gnette. For gen-er-a-tion, see hid-den co
 de in vi-gnette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize
 _pipelines 
 [13] [14] [15] [16] [17] [18] [19]
-Overfull \hbox (11.89682pt too wide) in paragraph at lines 1095--1096
-[]\T1/ptm/m/n/10 Assumes cost func-tion is l(n;k1,N,theta) = k1 n + k2(n;theta)
- (N-n) with k2(n;theta)=k2(n;a,b,c)= a n^(-
+Overfull \hbox (104.47871pt too wide) in paragraph at lines 1075--1076
+[]\T1/ptm/m/n/10 Assumes cost func-tion is \T1/zi4/m/n/10 l(n;k1,N,theta) = k1 
+n + k2(n;theta) (N-n) \T1/ptm/m/n/10 with \T1/zi4/m/n/10 k2(n;theta)=k2(n;a,b,c
+)= a n^(-b) + c 
 [20]
-Overfull \hbox (11.89682pt too wide) in paragraph at lines 1145--1146
-[]\T1/ptm/m/n/10 Assumes cost func-tion is l(n;k1,N,theta) = k1 n + k2(n;theta)
- (N-n) with k2(n;theta)=k2(n;a,b,c)= a n^(-
+Overfull \hbox (104.47871pt too wide) in paragraph at lines 1124--1125
+[]\T1/ptm/m/n/10 Assumes cost func-tion is \T1/zi4/m/n/10 l(n;k1,N,theta) = k1 
+n + k2(n;theta) (N-n) \T1/ptm/m/n/10 with \T1/zi4/m/n/10 k2(n;theta)=k2(n;a,b,c
+)= a n^(-b) + c 
 [21] [22] [23] [24] [25] [26]
-Overfull \hbox (151.08093pt too wide) in paragraph at lines 1513--1516
-[]\T1/zi4/m/n/10 nset <-c(nset,n[i]) var_k2 <-c(var_k2,mean(var_k2)) k2 <-c(k2,
-rnorm(powerlaw(n[i],theta),variance=mean(var_k2))) 
+Overfull \hbox (158.58093pt too wide) in paragraph at lines 1486--1489
+[]\T1/zi4/m/n/10 nset <- c(nset,n[i]) var_k2 <- c(var_k2,mean(var_k2)) k2 <- c(
+k2,rnorm(powerlaw(n[i],theta),variance=mean(var_k2))) 
 [27] [28]
-Overfull \hbox (54.78088pt too wide) in paragraph at lines 1594--1594
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 1567--1567
  []\T1/zi4/m/n/9 theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,
 upper=theta_upper,init=theta_true)$par[] 
 
-Overfull \hbox (32.27168pt too wide) in paragraph at lines 1600--1600
+Overfull \hbox (32.27168pt too wide) in paragraph at lines 1573--1573
  []\T1/zi4/m/n/9 p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,t
 heta=theta0,k_width=kw0,var_u=vu0)[] 
 
-Overfull \hbox (66.58577pt too wide) in paragraph at lines 1640--1641
+Overfull \hbox (66.58577pt too wide) in paragraph at lines 1612--1613
 \T1/ptm/m/n/10 For gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline
  at https://github.com/jamesliley/OptHoldoutSize_pipelines 
 [29]
-Overfull \hbox (114.76512pt too wide) in paragraph at lines 1658--1659
+Overfull \hbox (114.76512pt too wide) in paragraph at lines 1629--1630
 \T1/ptm/m/n/10 al-go-rithms. For gen-er-a-tion, see hid-den code in vi-gnette, 
 or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines 
-[30] [31]
-Overfull \hbox (189.8647pt too wide) in paragraph at lines 1800--1801
+
+Overfull \hbox (25.61786pt too wide) in paragraph at lines 1647--1648
+[]\T1/ptm/m/n/10 Evaluates em-pir-i-cal min-imi-sa-tion of cost func-tion \T1/z
+i4/m/n/10 l(n;k1,N,theta) = k1 n + k2form(n;theta) (N-n)\T1/ptm/m/n/10 . 
+[30]
+Overfull \hbox (38.90863pt too wide) in paragraph at lines 1675--1676
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 powerlaw(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[31]
+Overfull \hbox (189.8647pt too wide) in paragraph at lines 1769--1770
 []\T1/ptm/m/n/10 Object of class 'opthold-out-size_emul' with el-e-ments "cost"
  (min-i-mum cost),"size" (OHS),"nset","k2","var_k2","N","k1","var_u","k_width",
 "theta"
 [32] (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
-[33] [34] [35]
-Overfull \hbox (3.40727pt too wide) in paragraph at lines 2013--2016
-[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model y_i
- = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
+[33]
+Overfull \hbox (38.90863pt too wide) in paragraph at lines 1852--1853
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 powerlaw(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[34]
+Overfull \hbox (38.90863pt too wide) in paragraph at lines 1899--1900
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 powerlaw(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[35]
+Overfull \hbox (21.8175pt too wide) in paragraph at lines 1976--1979
+[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model \T1
+/zi4/m/n/10 y_i = a x_i^-b + c + e_i\T1/ptm/m/n/10 ; []\T1/zi4/m/n/10 e_i~N(0,y
+_var_i) 
 [36]
-Overfull \hbox (3.40727pt too wide) in paragraph at lines 2073--2076
-[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model y_i
- = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
+Overfull \hbox (21.8175pt too wide) in paragraph at lines 2035--2038
+[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model \T1
+/zi4/m/n/10 y_i = a x_i^-b + c + e_i\T1/ptm/m/n/10 ; []\T1/zi4/m/n/10 e_i~N(0,y
+_var_i) 
 [37] [38]
-Overfull \hbox (2.26555pt too wide) in paragraph at lines 2213--2213
+Overfull \hbox (2.26555pt too wide) in paragraph at lines 2174--2174
  []\T1/zi4/m/n/9 Vb=powersolve_se(Xobs,Yobs,method=\TS1/zi4/m/n/9 '\T1/zi4/m/n/
 9 bootstrap\TS1/zi4/m/n/9 '\T1/zi4/m/n/9 ,n_boot=200) # estimated SE matrix, bo
 otstrap[] 
@@ -152,8 +182,8 @@ otstrap[]
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [40] [41]
 No file Rd2.ind.
 [42]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.aux)
 
 Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -167,183 +197,10 @@ ist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/d
 vips/inconsolata/i4-t1-0.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/pu
 blic/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2021/texmf-dist/fonts
 /type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2021/texmf-dist/fonts/t
-ype1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/ur
-w/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/ut
-mr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><
-/usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (42 pages, 166153 bytes).
-Transcript written on Rd2.log.
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-LaTeX2e <2020-10-01> patch level 4
-L3 programming layer <2021-02-18>
-(./Rd2.tex
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/book.cls
-Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/bk10.clo))
-(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/ifthen.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/longtable.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/bm.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/alltt.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/verbatim.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/url/url.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/textcomp.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/fontenc.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/times.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/zi4.sty
-`inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/xkeyval/xkeyval.sty
-(/usr/local/texlive/2021/texmf-dist/tex/generic/xkeyval/xkeyval.tex
-(/usr/local/texlive/2021/texmf-dist/tex/generic/xkeyval/xkvutils.tex
-(/usr/local/texlive/2021/texmf-dist/tex/generic/xkeyval/keyval.tex)))))
-(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/color.sty
-(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-cfg/color.cfg)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-def/pdftex.def))
-(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref.sty
-(/usr/local/texlive/2021/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/iftex.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
-(/usr/local/texlive/2021/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
-(/usr/local/texlive/2021/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/generic/pdfescape/pdfescape.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/hycolor/hycolor.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/auxhook/auxhook.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/kvoptions/kvoptions.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/pd1enc.def)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def
-) (/usr/local/texlive/2021/texmf-dist/tex/generic/intcalc/intcalc.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/generic/etexcmds/etexcmds.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/puenc.def)
-(/usr/local/texlive/2021/texmf-dist/tex/generic/bitset/bitset.sty
-(/usr/local/texlive/2021/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/atbegshi-ltx.sty))
-(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hpdftex.def
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/atveryend-ltx.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
-
-(/usr/local/texlive/2021/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
-)))
-
-Package hyperref Warning: Option `hyperindex' has already been used,
-(hyperref)                setting the option has no effect on input line 377.
-
-
-Package hyperref Warning: Option `pagebackref' has already been used,
-(hyperref)                setting the option has no effect on input line 377.
-
-) (/usr/local/texlive/2021/texmf-dist/tex/latex/base/makeidx.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/inputenc.sty)
-Writing index file Rd2.idx
-(/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1ptm.fd)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.aux)
-(/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-) (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
-(/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
-ty))
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.out)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.out)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/p
-dftex.map}]) [2]
-Overfull \hbox (106.56616pt too wide) in paragraph at lines 81--82
-[]\T1/ptm/m/n/10 Full AS-PRE model from https://www.nejm.org/doi/suppl/10.1056/
-NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf 
-
-Overfull \hbox (36.78708pt too wide) in paragraph at lines 94--95
-[]\T1/ptm/m/n/10 matrix, as-sumed to be out-put of sim_random_aspre with pa-ram
--e-ter params=params_aspre
-
-Overfull \hbox (50.94576pt too wide) in paragraph at lines 123--124
-\T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
-https://github.com/jamesliley/OptHoldoutSize_pipelines 
-[3] [4]
-Overfull \hbox (50.94576pt too wide) in paragraph at lines 196--197
-\T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
-https://github.com/jamesliley/OptHoldoutSize_pipelines 
-[5] [6] [7] [8] [9] [10] [11] [12] [13]
-Overfull \hbox (169.87473pt too wide) in paragraph at lines 698--699
-[]\T1/ptm/m/n/10 Data for gen-eral vi-gnette. For gen-er-a-tion, see hid-den co
-de in vi-gnette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize
-_pipelines 
-[14] [15] [16] [17] [18] [19] [20]
-Overfull \hbox (11.89682pt too wide) in paragraph at lines 1095--1096
-[]\T1/ptm/m/n/10 Assumes cost func-tion is l(n;k1,N,theta) = k1 n + k2(n;theta)
- (N-n) with k2(n;theta)=k2(n;a,b,c)= a n^(-
-
-Overfull \hbox (11.89682pt too wide) in paragraph at lines 1145--1146
-[]\T1/ptm/m/n/10 Assumes cost func-tion is l(n;k1,N,theta) = k1 n + k2(n;theta)
- (N-n) with k2(n;theta)=k2(n;a,b,c)= a n^(-
-[21] [22] [23] [24] [25] [26] [27]
-Overfull \hbox (151.08093pt too wide) in paragraph at lines 1513--1516
-[]\T1/zi4/m/n/10 nset <-c(nset,n[i]) var_k2 <-c(var_k2,mean(var_k2)) k2 <-c(k2,
-rnorm(powerlaw(n[i],theta),variance=mean(var_k2))) 
-[28]
-Overfull \hbox (54.78088pt too wide) in paragraph at lines 1594--1594
- []\T1/zi4/m/n/9 theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,
-upper=theta_upper,init=theta_true)$par[] 
-
-Overfull \hbox (32.27168pt too wide) in paragraph at lines 1600--1600
- []\T1/zi4/m/n/9 p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,t
-heta=theta0,k_width=kw0,var_u=vu0)[] 
-
-Underfull \vbox (badness 10000) has occurred while \output is active [29]
-Overfull \hbox (66.58577pt too wide) in paragraph at lines 1640--1641
-\T1/ptm/m/n/10 For gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline
- at https://github.com/jamesliley/OptHoldoutSize_pipelines 
-
-Overfull \hbox (114.76512pt too wide) in paragraph at lines 1658--1659
-\T1/ptm/m/n/10 al-go-rithms. For gen-er-a-tion, see hid-den code in vi-gnette, 
-or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines 
-[30] [31] [32]
-Overfull \hbox (189.8647pt too wide) in paragraph at lines 1800--1801
-[]\T1/ptm/m/n/10 Object of class 'opthold-out-size_emul' with el-e-ments "cost"
- (min-i-mum cost),"size" (OHS),"nset","k2","var_k2","N","k1","var_u","k_width",
-"theta"
-[33] (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
-[34] [35]
-Overfull \hbox (3.40727pt too wide) in paragraph at lines 2013--2016
-[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model y_i
- = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
-[36]
-Overfull \hbox (3.40727pt too wide) in paragraph at lines 2073--2076
-[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model y_i
- = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
-[37] [38] [39]
-Overfull \hbox (2.26555pt too wide) in paragraph at lines 2213--2213
- []\T1/zi4/m/n/9 Vb=powersolve_se(Xobs,Yobs,method=\TS1/zi4/m/n/9 '\T1/zi4/m/n/
-9 bootstrap\TS1/zi4/m/n/9 '\T1/zi4/m/n/9 ,n_boot=200) # estimated SE matrix, bo
-otstrap[] 
-[40] (/usr/local/texlive/2021/texmf-dist/tex/latex/base/t1cmtt.fd)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [41] [42]
-No file Rd2.ind.
-[43]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.aux) )
-(see the transcript file for additional information){/usr/local/texlive/2021/te
-xmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/local/texlive/2021/tex
-mf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/local/texlive/2021/texmf-d
-ist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/d
-vips/inconsolata/i4-t1-0.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/pu
-blic/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2021/texmf-dist/fonts
-/type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2021/texmf-dist/fonts/t
-ype1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/ur
-w/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/ut
-mr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><
-/usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (43 pages, 172523 bytes).
+ype1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/t
+imes/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8
+a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (42 pages, 163726 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2021] (kpathsea + Thai support).
 Scanning input file Rd2.idx....done (98 entries accepted, 0 rejected).
@@ -355,19 +212,28 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 LaTeX2e <2020-10-01> patch level 4
-L3 programming layer <2021-02-18>
-(./Rd2.tex
+L3 programming layer <2021-02-18> (./Rd2.tex
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/book.cls
 Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/bk10.clo))
 (/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/iftex.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/tools/longtable.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/tools/bm.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/alltt.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/tools/verbatim.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/url/url.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/textcomp.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/jknapltx/mathrsfs.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/fontenc.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/times.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/zi4.sty
@@ -381,7 +247,6 @@ Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
 (/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-def/pdftex.def))
 (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref.sty
 (/usr/local/texlive/2021/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/iftex.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
 (/usr/local/texlive/2021/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
 (/usr/local/texlive/2021/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
@@ -404,112 +269,131 @@ Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
 (/usr/local/texlive/2021/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 
 (/usr/local/texlive/2021/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
-)))
-
-Package hyperref Warning: Option `hyperindex' has already been used,
-(hyperref)                setting the option has no effect on input line 377.
-
-
-Package hyperref Warning: Option `pagebackref' has already been used,
-(hyperref)                setting the option has no effect on input line 377.
-
-) (/usr/local/texlive/2021/texmf-dist/tex/latex/base/makeidx.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/inputenc.sty)
+)))) (/usr/local/texlive/2021/texmf-dist/tex/latex/base/makeidx.sty)
 Writing index file Rd2.idx
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.aux)
 (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
 ty))
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.out)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.out)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/p
-dftex.map}]) [2]
-Overfull \hbox (106.56616pt too wide) in paragraph at lines 81--82
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/jknapltx/ursfs.fd)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pd
+ftex.map}]) [2]
+Overfull \hbox (106.56616pt too wide) in paragraph at lines 80--81
 []\T1/ptm/m/n/10 Full AS-PRE model from https://www.nejm.org/doi/suppl/10.1056/
 NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf 
 
-Overfull \hbox (36.78708pt too wide) in paragraph at lines 94--95
+Overfull \hbox (36.78708pt too wide) in paragraph at lines 93--94
 []\T1/ptm/m/n/10 matrix, as-sumed to be out-put of sim_random_aspre with pa-ram
 -e-ter params=params_aspre
 
-Overfull \hbox (50.94576pt too wide) in paragraph at lines 123--124
+Overfull \hbox (50.94576pt too wide) in paragraph at lines 121--122
 \T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
 https://github.com/jamesliley/OptHoldoutSize_pipelines 
 [3] [4]
-Overfull \hbox (50.94576pt too wide) in paragraph at lines 196--197
+Overfull \hbox (50.94576pt too wide) in paragraph at lines 192--193
 \T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
 https://github.com/jamesliley/OptHoldoutSize_pipelines 
-[5] [6] [7] [8] [9] [10] [11] [12] [13]
-Overfull \hbox (169.87473pt too wide) in paragraph at lines 698--699
+[5] [6]
+Overfull \hbox (8.90863pt too wide) in paragraph at lines 311--312
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 k2(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[7] [8] [9]
+Overfull \hbox (8.90863pt too wide) in paragraph at lines 473--474
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 k2(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[10] [11] [12] [13]
+Overfull \hbox (169.87473pt too wide) in paragraph at lines 686--687
 []\T1/ptm/m/n/10 Data for gen-eral vi-gnette. For gen-er-a-tion, see hid-den co
 de in vi-gnette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize
 _pipelines 
 [14] [15] [16] [17] [18] [19] [20]
-Overfull \hbox (11.89682pt too wide) in paragraph at lines 1095--1096
-[]\T1/ptm/m/n/10 Assumes cost func-tion is l(n;k1,N,theta) = k1 n + k2(n;theta)
- (N-n) with k2(n;theta)=k2(n;a,b,c)= a n^(-
+Overfull \hbox (104.47871pt too wide) in paragraph at lines 1075--1076
+[]\T1/ptm/m/n/10 Assumes cost func-tion is \T1/zi4/m/n/10 l(n;k1,N,theta) = k1 
+n + k2(n;theta) (N-n) \T1/ptm/m/n/10 with \T1/zi4/m/n/10 k2(n;theta)=k2(n;a,b,c
+)= a n^(-b) + c 
 
-Overfull \hbox (11.89682pt too wide) in paragraph at lines 1145--1146
-[]\T1/ptm/m/n/10 Assumes cost func-tion is l(n;k1,N,theta) = k1 n + k2(n;theta)
- (N-n) with k2(n;theta)=k2(n;a,b,c)= a n^(-
+Overfull \hbox (104.47871pt too wide) in paragraph at lines 1124--1125
+[]\T1/ptm/m/n/10 Assumes cost func-tion is \T1/zi4/m/n/10 l(n;k1,N,theta) = k1 
+n + k2(n;theta) (N-n) \T1/ptm/m/n/10 with \T1/zi4/m/n/10 k2(n;theta)=k2(n;a,b,c
+)= a n^(-b) + c 
 [21] [22] [23] [24] [25] [26] [27]
-Overfull \hbox (151.08093pt too wide) in paragraph at lines 1513--1516
-[]\T1/zi4/m/n/10 nset <-c(nset,n[i]) var_k2 <-c(var_k2,mean(var_k2)) k2 <-c(k2,
-rnorm(powerlaw(n[i],theta),variance=mean(var_k2))) 
+Overfull \hbox (158.58093pt too wide) in paragraph at lines 1486--1489
+[]\T1/zi4/m/n/10 nset <- c(nset,n[i]) var_k2 <- c(var_k2,mean(var_k2)) k2 <- c(
+k2,rnorm(powerlaw(n[i],theta),variance=mean(var_k2))) 
 [28]
-Overfull \hbox (54.78088pt too wide) in paragraph at lines 1594--1594
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 1567--1567
  []\T1/zi4/m/n/9 theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,
 upper=theta_upper,init=theta_true)$par[] 
 
-Overfull \hbox (32.27168pt too wide) in paragraph at lines 1600--1600
+Overfull \hbox (32.27168pt too wide) in paragraph at lines 1573--1573
  []\T1/zi4/m/n/9 p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,t
 heta=theta0,k_width=kw0,var_u=vu0)[] 
 
 Underfull \vbox (badness 10000) has occurred while \output is active [29]
-Overfull \hbox (66.58577pt too wide) in paragraph at lines 1640--1641
+Overfull \hbox (66.58577pt too wide) in paragraph at lines 1612--1613
 \T1/ptm/m/n/10 For gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline
  at https://github.com/jamesliley/OptHoldoutSize_pipelines 
 
-Overfull \hbox (114.76512pt too wide) in paragraph at lines 1658--1659
+Overfull \hbox (114.76512pt too wide) in paragraph at lines 1629--1630
 \T1/ptm/m/n/10 al-go-rithms. For gen-er-a-tion, see hid-den code in vi-gnette, 
 or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines 
-[30] [31] [32]
-Overfull \hbox (189.8647pt too wide) in paragraph at lines 1800--1801
+[30]
+Overfull \hbox (25.61786pt too wide) in paragraph at lines 1647--1648
+[]\T1/ptm/m/n/10 Evaluates em-pir-i-cal min-imi-sa-tion of cost func-tion \T1/z
+i4/m/n/10 l(n;k1,N,theta) = k1 n + k2form(n;theta) (N-n)\T1/ptm/m/n/10 . 
+
+Overfull \hbox (38.90863pt too wide) in paragraph at lines 1675--1676
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 powerlaw(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[31] [32]
+Overfull \hbox (189.8647pt too wide) in paragraph at lines 1769--1770
 []\T1/ptm/m/n/10 Object of class 'opthold-out-size_emul' with el-e-ments "cost"
  (min-i-mum cost),"size" (OHS),"nset","k2","var_k2","N","k1","var_u","k_width",
 "theta"
 [33] (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
-[34] [35]
-Overfull \hbox (3.40727pt too wide) in paragraph at lines 2013--2016
-[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model y_i
- = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
+Overfull \hbox (38.90863pt too wide) in paragraph at lines 1852--1853
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 powerlaw(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[34]
+Overfull \hbox (38.90863pt too wide) in paragraph at lines 1899--1900
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 powerlaw(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[35]
+Overfull \hbox (21.8175pt too wide) in paragraph at lines 1976--1979
+[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model \T1
+/zi4/m/n/10 y_i = a x_i^-b + c + e_i\T1/ptm/m/n/10 ; []\T1/zi4/m/n/10 e_i~N(0,y
+_var_i) 
 [36]
-Overfull \hbox (3.40727pt too wide) in paragraph at lines 2073--2076
-[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model y_i
- = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
+Overfull \hbox (21.8175pt too wide) in paragraph at lines 2035--2038
+[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model \T1
+/zi4/m/n/10 y_i = a x_i^-b + c + e_i\T1/ptm/m/n/10 ; []\T1/zi4/m/n/10 e_i~N(0,y
+_var_i) 
 [37] [38] [39]
-Overfull \hbox (2.26555pt too wide) in paragraph at lines 2213--2213
+Overfull \hbox (2.26555pt too wide) in paragraph at lines 2174--2174
  []\T1/zi4/m/n/9 Vb=powersolve_se(Xobs,Yobs,method=\TS1/zi4/m/n/9 '\T1/zi4/m/n/
 9 bootstrap\TS1/zi4/m/n/9 '\T1/zi4/m/n/9 ,n_boot=200) # estimated SE matrix, bo
 otstrap[] 
 [40] (/usr/local/texlive/2021/texmf-dist/tex/latex/base/t1cmtt.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [41] [42]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.ind [43] [44] [45])
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.ind [43] [44] [45])
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.aux)
 
 Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -524,11 +408,10 @@ vips/inconsolata/i4-t1-0.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/pu
 blic/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2021/texmf-dist/fonts
 /type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/
 type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2021/texmf-dist/fonts/ty
-pe1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw
-/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utm
-r8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></
-usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (45 pages, 185877 bytes).
+pe1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/ti
+mes/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a
+.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (45 pages, 183575 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2021] (kpathsea + Thai support).
 Scanning input file Rd2.idx....done (98 entries accepted, 0 rejected).
@@ -540,19 +423,28 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 LaTeX2e <2020-10-01> patch level 4
-L3 programming layer <2021-02-18>
-(./Rd2.tex
+L3 programming layer <2021-02-18> (./Rd2.tex
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/book.cls
 Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/bk10.clo))
 (/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/iftex.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/tools/longtable.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/tools/bm.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/alltt.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/tools/verbatim.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/url/url.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/textcomp.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/jknapltx/mathrsfs.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/fontenc.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/times.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/zi4.sty
@@ -566,7 +458,6 @@ Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
 (/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-def/pdftex.def))
 (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref.sty
 (/usr/local/texlive/2021/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/iftex.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
 (/usr/local/texlive/2021/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
 (/usr/local/texlive/2021/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
@@ -589,112 +480,131 @@ Document Class: book 2020/04/10 v1.4m Standard LaTeX document class
 (/usr/local/texlive/2021/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 
 (/usr/local/texlive/2021/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
-)))
-
-Package hyperref Warning: Option `hyperindex' has already been used,
-(hyperref)                setting the option has no effect on input line 377.
-
-
-Package hyperref Warning: Option `pagebackref' has already been used,
-(hyperref)                setting the option has no effect on input line 377.
-
-) (/usr/local/texlive/2021/texmf-dist/tex/latex/base/makeidx.sty)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/base/inputenc.sty)
+)))) (/usr/local/texlive/2021/texmf-dist/tex/latex/base/makeidx.sty)
 Writing index file Rd2.idx
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.aux)
 (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
 ty))
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.out)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.out)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
-(/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/p
-dftex.map}]) [2]
-Overfull \hbox (106.56616pt too wide) in paragraph at lines 81--82
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/jknapltx/ursfs.fd)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pd
+ftex.map}]) [2]
+Overfull \hbox (106.56616pt too wide) in paragraph at lines 80--81
 []\T1/ptm/m/n/10 Full AS-PRE model from https://www.nejm.org/doi/suppl/10.1056/
 NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf 
 
-Overfull \hbox (36.78708pt too wide) in paragraph at lines 94--95
+Overfull \hbox (36.78708pt too wide) in paragraph at lines 93--94
 []\T1/ptm/m/n/10 matrix, as-sumed to be out-put of sim_random_aspre with pa-ram
 -e-ter params=params_aspre
 
-Overfull \hbox (50.94576pt too wide) in paragraph at lines 123--124
+Overfull \hbox (50.94576pt too wide) in paragraph at lines 121--122
 \T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
 https://github.com/jamesliley/OptHoldoutSize_pipelines 
 [3] [4]
-Overfull \hbox (50.94576pt too wide) in paragraph at lines 196--197
+Overfull \hbox (50.94576pt too wide) in paragraph at lines 192--193
 \T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
 https://github.com/jamesliley/OptHoldoutSize_pipelines 
-[5] [6] [7] [8] [9] [10] [11] [12] [13]
-Overfull \hbox (169.87473pt too wide) in paragraph at lines 698--699
+[5] [6]
+Overfull \hbox (8.90863pt too wide) in paragraph at lines 311--312
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 k2(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[7] [8] [9]
+Overfull \hbox (8.90863pt too wide) in paragraph at lines 473--474
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 k2(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[10] [11] [12] [13]
+Overfull \hbox (169.87473pt too wide) in paragraph at lines 686--687
 []\T1/ptm/m/n/10 Data for gen-eral vi-gnette. For gen-er-a-tion, see hid-den co
 de in vi-gnette, or in pipeline at https://github.com/jamesliley/OptHoldoutSize
 _pipelines 
 [14] [15] [16] [17] [18] [19] [20]
-Overfull \hbox (11.89682pt too wide) in paragraph at lines 1095--1096
-[]\T1/ptm/m/n/10 Assumes cost func-tion is l(n;k1,N,theta) = k1 n + k2(n;theta)
- (N-n) with k2(n;theta)=k2(n;a,b,c)= a n^(-
+Overfull \hbox (104.47871pt too wide) in paragraph at lines 1075--1076
+[]\T1/ptm/m/n/10 Assumes cost func-tion is \T1/zi4/m/n/10 l(n;k1,N,theta) = k1 
+n + k2(n;theta) (N-n) \T1/ptm/m/n/10 with \T1/zi4/m/n/10 k2(n;theta)=k2(n;a,b,c
+)= a n^(-b) + c 
 
-Overfull \hbox (11.89682pt too wide) in paragraph at lines 1145--1146
-[]\T1/ptm/m/n/10 Assumes cost func-tion is l(n;k1,N,theta) = k1 n + k2(n;theta)
- (N-n) with k2(n;theta)=k2(n;a,b,c)= a n^(-
+Overfull \hbox (104.47871pt too wide) in paragraph at lines 1124--1125
+[]\T1/ptm/m/n/10 Assumes cost func-tion is \T1/zi4/m/n/10 l(n;k1,N,theta) = k1 
+n + k2(n;theta) (N-n) \T1/ptm/m/n/10 with \T1/zi4/m/n/10 k2(n;theta)=k2(n;a,b,c
+)= a n^(-b) + c 
 [21] [22] [23] [24] [25] [26] [27]
-Overfull \hbox (151.08093pt too wide) in paragraph at lines 1513--1516
-[]\T1/zi4/m/n/10 nset <-c(nset,n[i]) var_k2 <-c(var_k2,mean(var_k2)) k2 <-c(k2,
-rnorm(powerlaw(n[i],theta),variance=mean(var_k2))) 
+Overfull \hbox (158.58093pt too wide) in paragraph at lines 1486--1489
+[]\T1/zi4/m/n/10 nset <- c(nset,n[i]) var_k2 <- c(var_k2,mean(var_k2)) k2 <- c(
+k2,rnorm(powerlaw(n[i],theta),variance=mean(var_k2))) 
 [28]
-Overfull \hbox (54.78088pt too wide) in paragraph at lines 1594--1594
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 1567--1567
  []\T1/zi4/m/n/9 theta0=powersolve(nset0,k2_0,y_var=var_k2_0,lower=theta_lower,
 upper=theta_upper,init=theta_true)$par[] 
 
-Overfull \hbox (32.27168pt too wide) in paragraph at lines 1600--1600
+Overfull \hbox (32.27168pt too wide) in paragraph at lines 1573--1573
  []\T1/zi4/m/n/9 p_mu=mu_fn(n,nset=nset0,k2=k2_0,var_k2 = var_k2_0, N=N,k1=k1,t
 heta=theta0,k_width=kw0,var_u=vu0)[] 
 
 Underfull \vbox (badness 10000) has occurred while \output is active [29]
-Overfull \hbox (66.58577pt too wide) in paragraph at lines 1640--1641
+Overfull \hbox (66.58577pt too wide) in paragraph at lines 1612--1613
 \T1/ptm/m/n/10 For gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline
  at https://github.com/jamesliley/OptHoldoutSize_pipelines 
 
-Overfull \hbox (114.76512pt too wide) in paragraph at lines 1658--1659
+Overfull \hbox (114.76512pt too wide) in paragraph at lines 1629--1630
 \T1/ptm/m/n/10 al-go-rithms. For gen-er-a-tion, see hid-den code in vi-gnette, 
 or in pipeline at https://github.com/jamesliley/OptHoldoutSize_pipelines 
-[30] [31] [32]
-Overfull \hbox (189.8647pt too wide) in paragraph at lines 1800--1801
+[30]
+Overfull \hbox (25.61786pt too wide) in paragraph at lines 1647--1648
+[]\T1/ptm/m/n/10 Evaluates em-pir-i-cal min-imi-sa-tion of cost func-tion \T1/z
+i4/m/n/10 l(n;k1,N,theta) = k1 n + k2form(n;theta) (N-n)\T1/ptm/m/n/10 . 
+
+Overfull \hbox (38.90863pt too wide) in paragraph at lines 1675--1676
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 powerlaw(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[31] [32]
+Overfull \hbox (189.8647pt too wide) in paragraph at lines 1769--1770
 []\T1/ptm/m/n/10 Object of class 'opthold-out-size_emul' with el-e-ments "cost"
  (min-i-mum cost),"size" (OHS),"nset","k2","var_k2","N","k1","var_u","k_width",
 "theta"
 [33] (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
-[34] [35]
-Overfull \hbox (3.40727pt too wide) in paragraph at lines 2013--2016
-[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model y_i
- = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
+Overfull \hbox (38.90863pt too wide) in paragraph at lines 1852--1853
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 powerlaw(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[34]
+Overfull \hbox (38.90863pt too wide) in paragraph at lines 1899--1900
+\T1/ptm/m/n/10 theta (pa-ram-e-ters). De-faults to a power-law form \T1/zi4/m/n
+/10 powerlaw(n,c(a,b,c))=a n^(-b) + c\T1/ptm/m/n/10 . 
+[35]
+Overfull \hbox (21.8175pt too wide) in paragraph at lines 1976--1979
+[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model \T1
+/zi4/m/n/10 y_i = a x_i^-b + c + e_i\T1/ptm/m/n/10 ; []\T1/zi4/m/n/10 e_i~N(0,y
+_var_i) 
 [36]
-Overfull \hbox (3.40727pt too wide) in paragraph at lines 2073--2076
-[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model y_i
- = a x_i^-b + c + e_i; \T1/zi4/m/n/10 e_i~N(0,y_var_i) 
+Overfull \hbox (21.8175pt too wide) in paragraph at lines 2035--2038
+[]\T1/ptm/m/n/10 Find least-squares so-lu-tion: MLE of (a,b,c) un-der model \T1
+/zi4/m/n/10 y_i = a x_i^-b + c + e_i\T1/ptm/m/n/10 ; []\T1/zi4/m/n/10 e_i~N(0,y
+_var_i) 
 [37] [38] [39]
-Overfull \hbox (2.26555pt too wide) in paragraph at lines 2213--2213
+Overfull \hbox (2.26555pt too wide) in paragraph at lines 2174--2174
  []\T1/zi4/m/n/9 Vb=powersolve_se(Xobs,Yobs,method=\TS1/zi4/m/n/9 '\T1/zi4/m/n/
 9 bootstrap\TS1/zi4/m/n/9 '\T1/zi4/m/n/9 ,n_boot=200) # estimated SE matrix, bo
 otstrap[] 
 [40] (/usr/local/texlive/2021/texmf-dist/tex/latex/base/t1cmtt.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [41] [42]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.ind [43] [44] [45])
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/Rtmp5yheN4/Rd2pdfeb4c
-105f581c/Rd2.aux) )
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.ind [43] [44] [45])
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
+1eb043d/Rd2.aux) )
 (see the transcript file for additional information){/usr/local/texlive/2021/te
 xmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/local/texlive/2021/tex
 mf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/local/texlive/2021/texmf-d
@@ -703,12 +613,11 @@ vips/inconsolata/i4-t1-0.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/pu
 blic/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2021/texmf-dist/fonts
 /type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2021/texmf-dist/fonts/
 type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2021/texmf-dist/fonts/ty
-pe1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw
-/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utm
-r8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></
-usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (45 pages, 186570 bytes).
+pe1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/ti
+mes/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a
+.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (45 pages, 184241 bytes).
 Transcript written on Rd2.log.
 Saving output to ‘OptHoldoutSize-manual.pdf’ ...
 Done
-You may want to clean up by 'rm -Rf /var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T//Rtmp5yheN4/Rd2pdfeb4c105f581c'
+You may want to clean up by 'rm -Rf /var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T//RtmpN5I3E5/Rd2pdf87b11eb043d'

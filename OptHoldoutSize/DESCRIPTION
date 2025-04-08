@@ -1,6 +1,6 @@
 Package: OptHoldoutSize
 Title: Estimation of Optimal Size for a Holdout Set for Updating a Predictive Score
-Version: 0.1.0.0
+Version: 0.1.0.1
 Authors@R: 
   c(person(given = "Sami",
            family = "Haidar-Wehbe",
@@ -28,7 +28,7 @@ Encoding: UTF-8
 LazyData: true
 Depends: matrixStats,mnormt,mvtnorm,ranger,mle.tools
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
 Suggests: 
     knitr, rmarkdown
 VignetteBuilder: knitr
+RoxygenNote: 7.3.2
