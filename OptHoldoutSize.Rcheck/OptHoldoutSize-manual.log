@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.12.20)  8 APR 2025 16:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.12.20)  8 APR 2025 16:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -332,8 +332,8 @@ File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count283
 \l__pdf_internal_box=\box53
 )
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
-1eb043d/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
+90c672/Rd2.aux)
 \openout1 = `Rd2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
@@ -386,10 +386,10 @@ LaTeX Info: Redefining \ref on input line 8.
 LaTeX Info: Redefining \pageref on input line 8.
 LaTeX Info: Redefining \nameref on input line 8.
 
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
-1eb043d/Rd2.out)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
-1eb043d/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
+90c672/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
+90c672/Rd2.out)
 \@outlinefile=\write4
 \openout4 = `Rd2.out'.
 
@@ -425,8 +425,8 @@ LaTeX Font Info:    Trying to load font information for U+rsfs on input line 32
 (/usr/local/texlive/2021/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
-1eb043d/Rd2.toc [1
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
+90c672/Rd2.toc [1
 
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}])
@@ -608,20 +608,20 @@ Package textcomp Info: Symbol \textasciigrave not provided by
 (textcomp)             font family zi4 in TS1 encoding.
 (textcomp)             Default family used instead on input line 2226.
  [41] [42]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
-1eb043d/Rd2.ind [43] [44
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
+90c672/Rd2.ind [43] [44
 
 ] [45
 
 ])
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpN5I3E5/Rd2pdf87b1
-1eb043d/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
+90c672/Rd2.aux)
 Package rerunfilecheck Info: File `Rd2.out' has not changed.
 (rerunfilecheck)             Checksum: E252160C9AAE7892C0F69C913289BC88;5762.
  ) 
 Here is how much of TeX's memory you used:
  10094 strings out of 478994
- 145920 string characters out of 5858183
+ 145907 string characters out of 5858183
  442991 words of memory out of 5000000
  27053 multiletter control sequences out of 15000+600000
  438485 words of font info for 74 fonts, out of 8000000 for 9000

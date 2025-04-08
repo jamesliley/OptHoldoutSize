@@ -32,9 +32,9 @@ Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2025-04-08 15:28:00 UTC; vwbw55
+Packaged: 2025-04-08 15:38:39 UTC; vwbw55
 Author: Sami Haidar-Wehbe [aut],
   Sam Emerson [aut] (<https://orcid.org/0000-0002-8379-2781>),
   Louis Aslett [aut] (<https://orcid.org/0000-0003-2211-233X>),
   James Liley [cre, aut] (<https://orcid.org/0000-0002-0049-8238>)
-Built: R 4.4.3; ; 2025-04-08 15:28:42 UTC; unix
+Built: R 4.4.3; ; 2025-04-08 15:39:54 UTC; unix
