@@ -182,8 +182,8 @@ otstrap[]
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [40] [41]
 No file Rd2.ind.
 [42]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.aux)
 
 Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -200,7 +200,7 @@ blic/inconsolata/Inconsolata-zi4r.pfb></usr/local/texlive/2021/texmf-dist/fonts
 ype1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/t
 imes/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8
 a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (42 pages, 163726 bytes).
+Output written on Rd2.pdf (42 pages, 163777 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2021] (kpathsea + Thai support).
 Scanning input file Rd2.idx....done (98 entries accepted, 0 rejected).
@@ -273,26 +273,26 @@ For additional information on amsmath, use the `?' option.
 Writing index file Rd2.idx
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.aux)
 (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
 ty))
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.out)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.out)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/jknapltx/ursfs.fd)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdf
-tex.map}]) [2]
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/
+pdftex.map}]) [2]
 Overfull \hbox (106.56616pt too wide) in paragraph at lines 80--81
 []\T1/ptm/m/n/10 Full AS-PRE model from https://www.nejm.org/doi/suppl/10.1056/
 NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf 
@@ -390,10 +390,10 @@ Overfull \hbox (2.26555pt too wide) in paragraph at lines 2174--2174
 otstrap[] 
 [40] (/usr/local/texlive/2021/texmf-dist/tex/latex/base/t1cmtt.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [41] [42]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.ind [43] [44] [45])
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.ind [43] [44] [45])
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.aux)
 
 Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -411,7 +411,7 @@ type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2021/texmf-dist/fonts/ty
 pe1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/ti
 mes/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a
 .pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (45 pages, 183575 bytes).
+Output written on Rd2.pdf (45 pages, 183637 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2021] (kpathsea + Thai support).
 Scanning input file Rd2.idx....done (98 entries accepted, 0 rejected).
@@ -484,26 +484,26 @@ For additional information on amsmath, use the `?' option.
 Writing index file Rd2.idx
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.aux)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.aux)
 (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty)
 (/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
 ty))
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.out)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.out)
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.out)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/jknapltx/ursfs.fd)
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdf
-tex.map}]) [2]
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.toc [1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/
+pdftex.map}]) [2]
 Overfull \hbox (106.56616pt too wide) in paragraph at lines 80--81
 []\T1/ptm/m/n/10 Full AS-PRE model from https://www.nejm.org/doi/suppl/10.1056/
 NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf 
@@ -511,11 +511,11 @@ NEJMoa1704559/suppl_file/nejmoa1704559_appendix.pdf
 Overfull \hbox (36.78708pt too wide) in paragraph at lines 93--94
 []\T1/ptm/m/n/10 matrix, as-sumed to be out-put of sim_random_aspre with pa-ram
 -e-ter params=params_aspre
-
+[3]
 Overfull \hbox (50.94576pt too wide) in paragraph at lines 121--122
 \T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
 https://github.com/jamesliley/OptHoldoutSize_pipelines 
-[3] [4]
+[4]
 Overfull \hbox (50.94576pt too wide) in paragraph at lines 192--193
 \T1/ptm/m/n/10 gen-er-a-tion, see hid-den code in vi-gnette, or in pipeline at 
 https://github.com/jamesliley/OptHoldoutSize_pipelines 
@@ -601,10 +601,10 @@ Overfull \hbox (2.26555pt too wide) in paragraph at lines 2174--2174
 otstrap[] 
 [40] (/usr/local/texlive/2021/texmf-dist/tex/latex/base/t1cmtt.fd)
 (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmtt.fd) [41] [42]
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.ind [43] [44] [45])
-(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpXnN3NK/Rd2pdfea5b
-90c672/Rd2.aux) )
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.ind [43] [44] [45])
+(/private/var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T/RtmpopmtGJ/Rd2pdf1160
+f3bc76b01/Rd2.aux) )
 (see the transcript file for additional information){/usr/local/texlive/2021/te
 xmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/local/texlive/2021/tex
 mf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/local/texlive/2021/texmf-d
@@ -616,8 +616,8 @@ type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2021/texmf-dist/fonts/ty
 pe1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/ti
 mes/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmr8a
 .pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (45 pages, 184241 bytes).
+Output written on Rd2.pdf (45 pages, 184246 bytes).
 Transcript written on Rd2.log.
 Saving output to ‘OptHoldoutSize-manual.pdf’ ...
 Done
-You may want to clean up by 'rm -Rf /var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T//RtmpXnN3NK/Rd2pdfea5b90c672'
+You may want to clean up by 'rm -Rf /var/folders/tr/sybyd51n7jx27k9mvh563hq80000gq/T//RtmpopmtGJ/Rd2pdf1160f3bc76b01'
