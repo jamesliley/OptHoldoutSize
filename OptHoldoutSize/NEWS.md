@@ -12,3 +12,7 @@ This version attempts to correct some problems with R markdown leading to vignet
 
 Vignettes are now rendered as PDF, not HTML, since HTML rendering did not consistently format symbols.
 
+## OptHoldoutSize version 0.1.2
+
+This version removes dependence on mle.tools
+

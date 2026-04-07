@@ -17,7 +17,6 @@
 #' @import matrixStats
 #' @import mnormt
 #' @import mvtnorm
-#' @import mle.tools
 #' @import ranger
 #' @import stats
 #' @import graphics
