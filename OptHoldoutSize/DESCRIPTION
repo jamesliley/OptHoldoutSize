@@ -1,6 +1,6 @@
 Package: OptHoldoutSize
 Title: Estimation of Optimal Size for a Holdout Set for Updating a Predictive Score
-Version: 0.1.0.1
+Version: 0.1.0.2
 Authors@R: 
   c(person(given = "Sami",
            family = "Haidar-Wehbe",

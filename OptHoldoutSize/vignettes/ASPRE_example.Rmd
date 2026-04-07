@@ -49,7 +49,6 @@ set.seed(seed)
 # Libraries
 library(mvtnorm)
 library(matrixStats)
-library(mle.tools)
 library(OptHoldoutSize)
 
 # Save plot to file, or not
